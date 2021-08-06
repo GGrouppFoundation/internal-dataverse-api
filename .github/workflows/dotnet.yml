@@ -17,7 +17,17 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
+    - name: Add local nuget source
+      run: dotnet nuget add source ./nuget
+    - name: Restore DataverseApi.Abstractions
       run: dotnet restore ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj
-    - name: Build
+    - name: Build DataverseApi.Abstractions
       run: dotnet build ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj --no-restore
+    - name: Pack DataverseApi.Abstractions
+      run: dotnet pack ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj --no-restore -o ./nuget
+    - name: Restore DataverseApi
+      run: dotnet restore ./src/DataverseApi/DataverseApi.csproj
+    - name: Build DataverseApi
+      run: dotnet build ./src/DataverseApi/DataverseApi.csproj --no-restore
+    - name: Pack DataverseApi
+      run: dotnet pack ./src/DataverseApi/DataverseApi.csproj --no-restore -o ./nuget
