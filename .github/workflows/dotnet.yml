@@ -20,7 +20,7 @@ jobs:
     - name: Create local nuget directory
       run: mkdir ngt
     - name: Add local nuget source
-      run: dotnet nuget add source ngt
+      run: dotnet nuget add source ../../ngt
     - name: Restore DataverseApi.Abstractions
       run: dotnet restore ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj
     - name: Build DataverseApi.Abstractions
