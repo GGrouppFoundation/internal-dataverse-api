@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
+    <RootNamespace>GGroupp</RootNamespace>
+    <AssemblyName>GGroupp.Internal.DataverseApi.Abstractions</AssemblyName>
+    <Version>1.0.0-build.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PrimeFuncPack.Core.Failure" Version="1.1.1" />
+    <PackageReference Include="PrimeFuncPack.Core.Result" Version="1.1.1" />
+  </ItemGroup>
+
+</Project>
