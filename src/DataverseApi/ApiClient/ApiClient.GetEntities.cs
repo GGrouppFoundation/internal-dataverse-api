@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GGroupp
 {
-    internal sealed partial class DataverseApiClient
+    partial class DataverseApiClient
     {
         public ValueTask<Result<DataverseEntitiesGetOut<TEntityJson>, Failure<int>>> GetEntitiesAsync<TEntityJson>(
             DataverseEntitiesGetIn input, CancellationToken cancellationToken = default)
