@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Add local nuget source
-      run: dotnet nuget add source ./nuget
+      run: dotnet nuget add source nuget
     - name: Restore DataverseApi.Abstractions
       run: dotnet restore ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj
     - name: Build DataverseApi.Abstractions
