@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
+    <RootNamespace>GGroupp</RootNamespace>
+    <AssemblyName>GGroupp.Internal.DataverseApi</AssemblyName>
+    <Version>1.0.0-build.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GGroupp.Internal.DataverseApi.Abstractions" Version="1.0.0-build.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
+    <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="1.1.0" />
+  </ItemGroup>
+
+</Project>
