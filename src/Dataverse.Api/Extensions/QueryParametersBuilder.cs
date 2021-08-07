@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     internal static class QueryParametersBuilder
     {
-        public static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues) // BuildParamValues
+        public static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
             =>
             paramValues.Where(
                 v => string.IsNullOrEmpty(v) is false)

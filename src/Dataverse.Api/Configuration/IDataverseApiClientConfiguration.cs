@@ -1,6 +1,6 @@
 #nullable enable
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     public interface IDataverseApiClientConfiguration
     {

@@ -1,2 +1,2 @@
-# internal-dataverse-api
+# infra-dataverse-api
 A client for the dataverse API

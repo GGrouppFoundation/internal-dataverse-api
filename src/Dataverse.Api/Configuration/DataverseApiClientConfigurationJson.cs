@@ -2,7 +2,7 @@
 
 using System;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     public sealed record DataverseApiClientConfigurationJson : IDataverseApiClientConfiguration
     {

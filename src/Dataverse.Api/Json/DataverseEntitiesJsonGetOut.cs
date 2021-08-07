@@ -2,7 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     internal sealed record DataverseEntitiesJsonGetOut<TEntityJson>
     {
