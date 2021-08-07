@@ -46,4 +46,4 @@ jobs:
       run: dotnet pack ./src/DataverseApi/DataverseApi.csproj --no-restore -o ~/nuget
       
     - name: Push Packages
-      run: nuget push "../../../nuget/*.nupkg" -Source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -ApiKey ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} -SkipDuplicate
+      run: nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
