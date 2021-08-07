@@ -25,7 +25,7 @@ jobs:
       run: dotnet nuget add source ~/nuget
 
     - name: Add GGroupp NuGet Source
-      run: dotnet nuget add source https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json -n ggroupp -u devops@ggroupp.ru -p 3fbgqv6jqpqweufctjopv6wxddbwzf3ww75a57cmtdxuzhv2sa4a
+      run: dotnet nuget add source https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json -n ggroupp -u devops@ggroupp.ru -p 3fbgqv6jqpqweufctjopv6wxddbwzf3ww75a57cmtdxuzhv2sa4a --store-password-in-clear-text
 
     - name: Restore DataverseApi.Abstractions
       run: dotnet restore ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj
