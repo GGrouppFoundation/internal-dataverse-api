@@ -49,4 +49,4 @@ jobs:
       run: cd ~/nuget
       
     - name: Push Packages
-      run: nuget push "*.nupkg" -s https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json
+      run: dotnet nuget push "*.nupkg" -s https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json
