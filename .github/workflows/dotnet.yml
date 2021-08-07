@@ -44,9 +44,6 @@ jobs:
 
     - name: Pack DataverseApi
       run: dotnet pack ./src/DataverseApi/DataverseApi.csproj --no-restore -o ~/nuget
-    
-    - name: Change Directory
-      run: cd ~/nuget
       
     - name: Push Packages
-      run: dotnet nuget push "*.nupkg" -s https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json
+      run: dotnet nuget push "~/nuget/*.nupkg" -s https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json
