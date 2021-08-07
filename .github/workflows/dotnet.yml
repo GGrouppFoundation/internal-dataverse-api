@@ -3,6 +3,9 @@ name: .NET
 on:
   push:
     branches: [ main ]
+    
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
@@ -44,4 +47,5 @@ jobs:
       run: dotnet pack ./src/DataverseApi/DataverseApi.csproj --no-restore -o ~/nuget
       
     - name: Push Packages
+      if: ${{ github.event_name == 'push' }}
       run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
