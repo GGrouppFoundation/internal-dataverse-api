@@ -3,7 +3,7 @@
 using System.Net.Http;
 using PrimeFuncPack;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     public static class DataVerseApiClientDependencyExtensions
     {

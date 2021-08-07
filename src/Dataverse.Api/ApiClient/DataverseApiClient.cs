@@ -3,7 +3,7 @@
 using System;
 using System.Net.Http;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     internal sealed partial class DataverseApiClient : IDataverseApiClient
     {

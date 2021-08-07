@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     public sealed record DataverseEntitiesGetOut<TEntityJson>
     {

@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     internal static class HttpClientFactory
     {

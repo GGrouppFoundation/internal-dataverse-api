@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GGroupp
+namespace GGroupp.Infra
 {
     public interface IDataverseEntitiesGetSupplier
     {
