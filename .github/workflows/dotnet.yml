@@ -18,6 +18,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+        
+     # Add NuGet Sources
 
     - name: Create Local NuGet Directory
       run: mkdir ~/nuget
@@ -28,23 +30,29 @@ jobs:
     - name: Add GGroupp NuGet Source
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
+    # Dataverse.Api.Abstractions
+    
     - name: Restore Dataverse.Api.Abstractions
-      run: dotnet restore ./src/Dataverse.Api.Abstractions/Dataverse.Api.Abstractions.csproj
+      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.csproj
 
     - name: Build Dataverse.Api.Abstractions
-      run: dotnet build ./src/Dataverse.Api.Abstractions/Dataverse.Api.Abstractions.csproj --no-restore
+      run: dotnet build ./src/*/Dataverse.Api.Abstractions.csproj --no-restore
 
     - name: Pack Dataverse.Api.Abstractions
-      run: dotnet pack ./src/Dataverse.Api.Abstractions/Dataverse.Api.Abstractions.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.csproj --no-restore -o ~/nuget
+      
+    # Dataverse.Api
 
     - name: Restore Dataverse.Api
-      run: dotnet restore ./src/Dataverse.Api/Dataverse.Api.csproj
+      run: dotnet restore ./src/*/Dataverse.Api.csproj
 
     - name: Build Dataverse.Api
-      run: dotnet build ./src/Dataverse.Api/Dataverse.Api.csproj --no-restore
+      run: dotnet build ./src/*/Dataverse.Api.csproj --no-restore
 
     - name: Pack Dataverse.Api
-      run: dotnet pack ./src/Dataverse.Api/Dataverse.Api.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/Dataverse.Api.csproj --no-restore -o ~/nuget
+      
+    # Push
       
     - name: Push Packages
       if: ${{ github.event_name == 'push' }}
