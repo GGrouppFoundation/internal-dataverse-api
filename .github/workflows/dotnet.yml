@@ -25,7 +25,7 @@ jobs:
       run: dotnet nuget add source ~/nuget
 
     - name: Add GGroupp NuGet Source
-      run: dotnet nuget add source https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json -n ggroupp -u devops@ggroupp.ru -p 3fbgqv6jqpqweufctjopv6wxddbwzf3ww75a57cmtdxuzhv2sa4a --store-password-in-clear-text
+      run: dotnet nuget add source -Name ggroupp -Source https://pkgs.dev.azure.com/ggroupp/_packaging/ggroupp-nuget/nuget/v3/index.json -username devops@ggroupp.ru -password 3fbgqv6jqpqweufctjopv6wxddbwzf3ww75a57cmtdxuzhv2sa4a
 
     - name: Restore DataverseApi.Abstractions
       run: dotnet restore ./src/DataverseApi.Abstractions/DataverseApi.Abstractions.csproj
@@ -46,7 +46,7 @@ jobs:
       run: dotnet pack ./src/DataverseApi/DataverseApi.csproj --no-restore -o ~/nuget
       
     - name: Push DataverseApi.Abstractions
-      run: nuget push -source ggroupp -ApiKey az ~/nuget/GGroupp.Internal.DataverseApi.Abstractions
+      run: nuget push -Source ggroupp -ApiKey az ~/nuget/GGroupp.Internal.DataverseApi.Abstractions
 
     - name: Push DataverseApi
-      run: nuget push -source ggroupp -ApiKey az ~/nuget/GGroupp.Internal.DataverseApi
+      run: nuget push -Source ggroupp -ApiKey az ~/nuget/GGroupp.Internal.DataverseApi
