@@ -36,10 +36,10 @@ jobs:
       run: dotnet restore ./src/*/Dataverse.Api.Abstractions.csproj
 
     - name: Build Dataverse.Api.Abstractions
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.csproj --no-restore
+      run: dotnet build ./src/*/Dataverse.Api.Abstractions.csproj --no-restore  -c Release
 
     - name: Pack Dataverse.Api.Abstractions
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.csproj --no-restore -o ~/nuget  -c Release
       
     # Dataverse.Api
 
@@ -47,10 +47,10 @@ jobs:
       run: dotnet restore ./src/*/Dataverse.Api.csproj
 
     - name: Build Dataverse.Api
-      run: dotnet build ./src/*/Dataverse.Api.csproj --no-restore
+      run: dotnet build ./src/*/Dataverse.Api.csproj --no-restore  -c Release
 
     - name: Pack Dataverse.Api
-      run: dotnet pack ./src/*/Dataverse.Api.csproj --no-restore -o ~/nuget
+      run: dotnet pack ./src/*/Dataverse.Api.csproj --no-restore -o ~/nuget  -c Release
       
     # Push
       
