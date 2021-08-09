@@ -11,31 +11,35 @@ namespace GGroupp.Infra
 {
     partial class DataverseApiClient
     {
-        public ValueTask<Result<DataverseEntitiesGetOut<TEntityJson>, Failure<int>>> GetEntitiesAsync<TEntityJson>(
-            DataverseEntitiesGetIn input, CancellationToken cancellationToken = default)
+        public ValueTask<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>> GetEntityAsync<TEntityJson>(
+            DataverseEntityGetIn input, CancellationToken cancellationToken = default)
         {
             _ = input ?? throw new ArgumentNullException(nameof(input));
             if(cancellationToken.IsCancellationRequested)
             {
-                return ValueTask.FromCanceled<Result<DataverseEntitiesGetOut<TEntityJson>, Failure<int>>>(cancellationToken);
+                return ValueTask.FromCanceled<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>>(cancellationToken);
             }
 
-            return InternalGetEntitiesAsync<TEntityJson>(input, cancellationToken);
+            return InternalGetEntityAsync<TEntityJson>(input, cancellationToken);
         }
 
-        private async ValueTask<Result<DataverseEntitiesGetOut<TEntityJson>, Failure<int>>> InternalGetEntitiesAsync<TEntityJson>(
-            DataverseEntitiesGetIn input, CancellationToken cancellationToken)
+        private async ValueTask<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>> InternalGetEntityAsync<TEntityJson>(
+            DataverseEntityGetIn input, CancellationToken cancellationToken)
         {
             var httpClient = await HttpClientFactory.CreateHttpClientAsync(clientConfiguration, messageHandler); 
-            var entitiesGetUrl = BuildEntitiesGetUrl(input);
+            var entitiesGetUrl = BuildEntityGetUrl(input);
 
             var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 
             if (response.IsSuccessStatusCode)
             {
-                var output = JsonSerializer.Deserialize<DataverseEntitiesJsonGetOut<TEntityJson>>(body);
-                return new DataverseEntitiesGetOut<TEntityJson>(output?.Value);
+                DataverseEntityJsonGetOut<TEntityJson>? output = new DataverseEntityJsonGetOut<TEntityJson>()
+                {
+                    Value = JsonSerializer.Deserialize<TEntityJson>(body)
+                };
+               
+                return new DataverseEntityGetOut<TEntityJson>(output.Value);
             }
             if(response.Content.Headers.ContentType?.MediaType != MediaTypeNames.Application.Json)
             {
@@ -45,18 +49,17 @@ namespace GGroupp.Infra
             var failureJson = JsonSerializer.Deserialize<DataverseFailureJson>(body);
             return MapDataverseFailureJson(failureJson);
         }
-        
-        private static string BuildEntitiesGetUrl(DataverseEntitiesGetIn input)
+
+        private static string BuildEntityGetUrl(DataverseEntityGetIn input)
             =>
             Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
                 new Dictionary<string, string>
-                { 
-                    ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields),
-                    ["$filter"] = input.Filter
+                {
+                    ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
                 })
             .Pipe(
                 QueryParametersBuilder.BuildQueryString)
             .Pipe(
-                queryString => input.EntityPluralName + queryString);
+                queryString => $"{input.EntityPluralName}({input.EntityId}){queryString}");
     }
 }

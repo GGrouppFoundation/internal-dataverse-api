@@ -2,7 +2,7 @@
 
 namespace GGroupp.Infra
 {
-    public interface IDataverseApiClient : IDataverseEntitiesGetSupplier
+    public interface IDataverseApiClient : IDataverseEntitiesGetSupplier, IDataverseEntityGetSupplier
     {
     }
 }
