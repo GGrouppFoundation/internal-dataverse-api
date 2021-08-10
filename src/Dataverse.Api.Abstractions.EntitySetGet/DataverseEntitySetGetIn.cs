@@ -6,19 +6,19 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra
 {
-    public sealed record DataverseEntitiesGetIn
+    public sealed record DataverseEntitySetGetIn
     {
-        public DataverseEntitiesGetIn(
-            [AllowNull] string entitiesName,
+        public DataverseEntitySetGetIn(
+            [AllowNull] string entitySetName,
             [AllowNull] IReadOnlyCollection<string> selectFields,
             [AllowNull] string filter)
         {
-            EntitiesName = entitiesName ?? string.Empty;
+            EntitySetName = entitySetName ?? string.Empty;
             SelectFields = selectFields ?? Array.Empty<string>();
             Filter = filter ?? string.Empty;
         }
 
-        public string EntitiesName { get; }
+        public string EntitySetName { get; }
 
         public IReadOnlyCollection<string> SelectFields { get; }
 

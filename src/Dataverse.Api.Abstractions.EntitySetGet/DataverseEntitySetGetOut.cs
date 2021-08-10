@@ -6,9 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra
 {
-    public sealed record DataverseEntitiesGetOut<TEntityJson>
+    public sealed record DataverseEntitySetGetOut<TEntityJson>
     {
-        public DataverseEntitiesGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
+        public DataverseEntitySetGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
             =>
             Value = value ?? Array.Empty<TEntityJson>();
 
