@@ -29,7 +29,7 @@ namespace GGroupp.Infra
 
             var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
             var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            var result = await response.ReadDataverseResultAsync<DataverseEntityGetJsonGetOut<TEntityJson>>(cancellationToken);
+            var result = await response.ReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TEntityJson>>(cancellationToken);
 
             return result.MapSuccess(e => new DataverseEntitySetGetOut<TEntityJson>(e?.Value));
         }
