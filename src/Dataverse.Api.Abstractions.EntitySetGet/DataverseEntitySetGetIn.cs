@@ -6,9 +6,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra
 {
-    public sealed record DataverseEntitiesGetIn
+    public sealed record DataverseEntitySetGetIn
     {
-        public DataverseEntitiesGetIn(
+        public DataverseEntitySetGetIn(
             [AllowNull] string entityPluralName,
             [AllowNull] IReadOnlyCollection<string> selectFields,
             [AllowNull] string filter)

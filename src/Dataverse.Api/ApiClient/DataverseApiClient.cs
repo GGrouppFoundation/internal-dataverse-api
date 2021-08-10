@@ -2,15 +2,11 @@
 
 using System;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace GGroupp.Infra
 {
     internal sealed partial class DataverseApiClient : IDataverseApiClient
     {
-        private const string LoginMsOnlineServiceBaseUrl = "https://login.microsoftonline.com/";
-
         public static DataverseApiClient Create(HttpMessageHandler messageHandler, IDataverseApiClientConfiguration clientConfiguration)
             =>
             new(
@@ -26,14 +22,5 @@ namespace GGroupp.Infra
             this.messageHandler = messageHandler;
             this.clientConfiguration = clientConfiguration;
         }
-
-        private static Failure<int> MapDataverseFailureJson(DataverseFailureJson? failureJson)
-            =>
-            Pipeline.Pipe(
-                failureJson?.Error?.Code)
-            .Pipe(
-                code => string.IsNullOrEmpty(code) ? default : Convert.ToInt32(code, 16))
-            .Pipe(
-                code => Failure.Create(code, failureJson?.Error?.Message));
     }
 }

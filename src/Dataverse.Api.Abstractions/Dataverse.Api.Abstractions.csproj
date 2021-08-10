@@ -5,12 +5,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>1.1.0-build.1</Version>
+	<Version>1.1.1-build.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PrimeFuncPack.Core.Failure" Version="1.1.1" />
-    <PackageReference Include="PrimeFuncPack.Core.Result" Version="1.1.1" />
+    <PackageReference Include="Dataverse.Api.Abstractions.EntityGet" Version="1.1.1-build.1" />
+    <PackageReference Include="Dataverse.Api.Abstractions.EntitySetGet" Version="1.1.1-build.1" />
   </ItemGroup>
 
 </Project>

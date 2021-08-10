@@ -2,8 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Mime;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,28 +24,13 @@ namespace GGroupp.Infra
         private async ValueTask<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>> InternalGetEntityAsync<TEntityJson>(
             DataverseEntityGetIn input, CancellationToken cancellationToken)
         {
-            var httpClient = await HttpClientFactory.CreateHttpClientAsync(clientConfiguration, messageHandler); 
+            var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration); 
             var entitiesGetUrl = BuildEntityGetUrl(input);
 
             var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-            var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+            var result = await response.ReadDataverseResultAsync<TEntityJson>(cancellationToken).ConfigureAwait(false);
 
-            if (response.IsSuccessStatusCode)
-            {
-                DataverseEntityJsonGetOut<TEntityJson>? output = new DataverseEntityJsonGetOut<TEntityJson>()
-                {
-                    Value = JsonSerializer.Deserialize<TEntityJson>(body)
-                };
-               
-                return new DataverseEntityGetOut<TEntityJson>(output.Value);
-            }
-            if(response.Content.Headers.ContentType?.MediaType != MediaTypeNames.Application.Json)
-            {
-                return Failure.Create<int>(default, body);
-            }
-
-            var failureJson = JsonSerializer.Deserialize<DataverseFailureJson>(body);
-            return MapDataverseFailureJson(failureJson);
+            return result.MapSuccess(e => new DataverseEntityGetOut<TEntityJson>(e));
         }
 
         private static string BuildEntityGetUrl(DataverseEntityGetIn input)

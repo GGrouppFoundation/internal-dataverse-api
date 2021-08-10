@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra
 {
-    internal sealed record DataverseEntityJsonGetOut<TEntityJson>
+    internal sealed record DataverseEntityGetJsonGetOut<TEntityJson>
     {
         [JsonPropertyName("value")]
-        public TEntityJson? Value { get; init; }
+        public TEntityJson[]? Value { get; init; }
     }
 }
