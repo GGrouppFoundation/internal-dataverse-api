@@ -32,24 +32,24 @@ jobs:
 
     # Dataverse.Api.Abstractions.EntityGet
     
-    - name: Restore Dataverse.Api.Abstractions
+    - name: Restore Dataverse.Api.Abstractions.EntityGet
       run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj
 
-    - name: Build Dataverse.Api.Abstractions
+    - name: Build Dataverse.Api.Abstractions.EntityGet
       run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj --no-restore  -c Release
 
-    - name: Pack Dataverse.Api.Abstractions
+    - name: Pack Dataverse.Api.Abstractions.EntityGet
       run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj --no-restore -o ~/nuget  -c Release
       
     # Dataverse.Api.Abstractions.EntitySetGet
     
-    - name: Restore Dataverse.Api.Abstractions
+    - name: Restore Dataverse.Api.Abstractions.EntitySetGet
       run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj
 
-    - name: Build Dataverse.Api.Abstractions
+    - name: Build Dataverse.Api.Abstractions.EntitySetGet
       run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj --no-restore  -c Release
 
-    - name: Pack Dataverse.Api.Abstractions
+    - name: Pack Dataverse.Api.Abstractions.EntitySetGet
       run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj --no-restore -o ~/nuget  -c Release
       
     # Dataverse.Api.Abstractions
