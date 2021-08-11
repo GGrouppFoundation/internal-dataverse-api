@@ -5,13 +5,14 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="1.1.2"/>
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="1.1.2"/>
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="1.2.0"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="1.0.0"/>
   </ItemGroup>
 
 </Project>
