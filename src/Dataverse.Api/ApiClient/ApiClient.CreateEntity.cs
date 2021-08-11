@@ -29,11 +29,11 @@ namespace GGroupp.Infra
         {
             var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration);
 
-            var entitiesGetUrl = BuildEntityCreateUrl(input);
+            var entitiyCreateUrl = BuildEntityCreateUrl(input);
 
-            using HttpContent content = BuildEntityCreateContent(input);
+            using var content = BuildEntityCreateContent(input);
 
-            var response = await httpClient.PostAsync(entitiesGetUrl, content, cancellationToken).ConfigureAwait(false);
+            var response = await httpClient.PostAsync(entitiyCreateUrl, content, cancellationToken).ConfigureAwait(false);
             var result = await response.ReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);
 
             return result.MapSuccess(e => new DataverseEntityCreateOut<TResponseJson>(e));
@@ -53,15 +53,15 @@ namespace GGroupp.Infra
 
         private static HttpContent BuildEntityCreateContent<TRequestJson>(DataverseEntityCreateIn<TRequestJson> input)
             =>
-            Pipeline.Pipe<StringContent>(
+            Pipeline.Pipe(
                 new StringContent(
-                    JsonSerializer.Serialize(input.RequestJson),
+                    JsonSerializer.Serialize(input.EntityData),
                     Encoding.UTF8,
                     "application/json"))
-            .Pipe( sc =>
+            .Pipe(contetnt =>
                 {
-                    sc.Headers.Add("Prefer", "return=representation");
-                    return sc;
+                    contetnt.Headers.Add("Prefer", "return=representation");
+                    return contetnt;
                 });
     }
 }

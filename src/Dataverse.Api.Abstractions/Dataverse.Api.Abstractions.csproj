@@ -5,7 +5,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-	<Version>1.2.0</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

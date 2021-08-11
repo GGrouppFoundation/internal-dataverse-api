@@ -11,18 +11,17 @@ namespace GGroupp.Infra
         public DataverseEntityCreateIn(
             [AllowNull] string entityPluralName,
             [AllowNull] IReadOnlyCollection<string> selectFields,
-            TRequestJson requestJson
-            )
+            TRequestJson entityData)
         {
             EntityPluralName = entityPluralName ?? string.Empty;
             SelectFields = selectFields ?? Array.Empty<string>();
-            RequestJson = requestJson;
+            EntityData = entityData;
         }
 
         public string EntityPluralName { get; }
 
         public IReadOnlyCollection<string> SelectFields { get; }
 
-        public TRequestJson RequestJson { get; }
+        public TRequestJson EntityData { get; }
     }
 }
