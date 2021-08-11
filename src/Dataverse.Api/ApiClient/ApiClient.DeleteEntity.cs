@@ -25,12 +25,10 @@ namespace GGroupp.Infra
         {
             var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration);
 
-            var entitiyCreateUrl = $"{input.EntityPluralName}({input.EntityId})";
+            var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityId})";
 
-            var response = await httpClient.DeleteAsync(entitiyCreateUrl, cancellationToken).ConfigureAwait(false);
-            var result = await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
-
-            return result;
+            var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
+            return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
         }  
     }
 }

@@ -8,8 +8,8 @@ namespace GGroupp.Infra
     public sealed record DataverseEntityDeleteIn
     {
         public DataverseEntityDeleteIn(
-            Guid entityId,
-            [AllowNull] string entityPluralName)
+            [AllowNull] string entityPluralName,
+            Guid entityId)
         {
             EntityId = entityId;
             EntityPluralName = entityPluralName ?? string.Empty;
