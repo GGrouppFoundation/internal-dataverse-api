@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
@@ -57,7 +58,7 @@ namespace GGroupp.Infra
                 new StringContent(
                     JsonSerializer.Serialize(input.EntityData),
                     Encoding.UTF8,
-                    "application/json"))
+                    MediaTypeNames.Application.Json))
             .Pipe(contetnt =>
                 {
                     contetnt.Headers.Add("Prefer", "return=representation");

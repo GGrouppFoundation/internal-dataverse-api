@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="1.2.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="1.2.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="1.2.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="1.1.2"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="1.1.2"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="1.2.0"/>
   </ItemGroup>
 
 </Project>
