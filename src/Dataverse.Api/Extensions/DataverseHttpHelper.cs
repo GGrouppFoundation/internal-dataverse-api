@@ -36,10 +36,12 @@ namespace GGroupp.Infra
             new(LoginMsOnlineServiceBaseUrl + tenantId);
 
         public async static ValueTask<Result<T?, Failure<int>>> ReadDataverseResultAsync<T>(
-            this HttpResponseMessage response, CancellationToken cancellationToken)
+            this HttpResponseMessage response, CancellationToken cancellationToken) 
             => 
             (response, await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false))switch
             {
+                var (resp, body) when resp.IsSuccessStatusCode && typeof(T) == typeof(Unit)
+                    => default(T),
                 var (resp, body) when resp.IsSuccessStatusCode
                     => JsonSerializer.Deserialize<T>(body),
                 var (resp, body) when resp.Content.Headers.ContentType?.MediaType != MediaTypeNames.Application.Json 
