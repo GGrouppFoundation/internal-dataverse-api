@@ -5,11 +5,11 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api</AssemblyName>
-    <Version>1.1.2</Version>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="1.1.2" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="1.2.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="1.1.0" />
   </ItemGroup>
