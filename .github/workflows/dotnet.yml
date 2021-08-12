@@ -30,6 +30,17 @@ jobs:
     - name: Add GGroupp NuGet Source
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
+    # Dataverse.Api.Abstractions.EntityUpdate
+    
+    - name: Restore Dataverse.Api.Abstractions.EntityUpdate
+      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj
+
+    - name: Build Dataverse.Api.Abstractions.EntityUpdate
+      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj --no-restore  -c Release
+
+    - name: Pack Dataverse.Api.Abstractions.EntityUpdate
+      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj --no-restore -o ~/nuget  -c Release
+
     # Dataverse.Api.Abstractions.EntityDelete
     
     - name: Restore Dataverse.Api.Abstractions.EntityDelete
