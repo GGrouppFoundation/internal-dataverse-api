@@ -2,10 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,7 +28,7 @@ namespace GGroupp.Infra
 
             var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
 
-            using var content = BuildEntityUpdateContent(input);
+            using var content = DataverseHttpHelper.BuildResponseJsonBody(input.EntityData);
 
             var response = await httpClient.PatchAsync(entitiyUpdateUrl, content, cancellationToken).ConfigureAwait(false);
             var result = await response.ReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);
@@ -51,18 +47,5 @@ namespace GGroupp.Infra
                 QueryParametersBuilder.BuildQueryString)
             .Pipe(
                 queryString => $"{input.EntityPluralName}({input.EntityId}){queryString}");
-
-        private static HttpContent BuildEntityUpdateContent<TRequestJson>(DataverseEntityUpdateIn<TRequestJson> input)
-            =>
-            Pipeline.Pipe(
-                new StringContent(
-                    JsonSerializer.Serialize(input.EntityData),
-                    Encoding.UTF8,
-                    MediaTypeNames.Application.Json))
-            .Pipe(contetnt =>
-                {
-                    contetnt.Headers.Add("Prefer", "return=representation");
-                    return contetnt;
-                });
     }
 }

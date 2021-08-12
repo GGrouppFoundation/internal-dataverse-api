@@ -58,5 +58,18 @@ namespace GGroupp.Infra
                 code => string.IsNullOrEmpty(code) ? default : Convert.ToInt32(code, 16))
             .Pipe(
                 code => Failure.Create(code, failureJson?.Error?.Message));
+
+        public static HttpContent BuildResponseJsonBody<TRequestJson>(TRequestJson input)
+            =>
+            Pipeline.Pipe(
+                new StringContent(
+                    JsonSerializer.Serialize(input),
+                    System.Text.Encoding.UTF8,
+                    MediaTypeNames.Application.Json))
+            .Pipe(contetnt =>
+                {
+                    contetnt.Headers.Add("Prefer", "return=representation");
+                    return contetnt;
+                });
     }
 }
