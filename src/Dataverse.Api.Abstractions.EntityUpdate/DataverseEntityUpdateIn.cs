@@ -11,8 +11,8 @@ namespace GGroupp.Infra
         public DataverseEntityUpdateIn(
             [AllowNull] string entityPluralName,
             Guid entityId,
-            [AllowNull] IReadOnlyCollection<string> selectFields,
-            TRequestJson entityData)
+            TRequestJson entityData,
+            [AllowNull] IReadOnlyCollection<string> selectFields)
         {
             EntityPluralName = entityPluralName ?? string.Empty;
             EntityId = entityId;
