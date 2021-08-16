@@ -9,7 +9,7 @@ namespace GGroupp.Infra
     {
         public DataverseEntityDeleteIn(
             [AllowNull] string entityPluralName,
-            Guid entityId)
+            IDataverseEntityKey entityId)
         {
             EntityId = entityId;
             EntityPluralName = entityPluralName ?? string.Empty;
@@ -17,6 +17,6 @@ namespace GGroupp.Infra
 
         public string EntityPluralName { get; }
 
-        public Guid EntityId { get; }
+        public IDataverseEntityKey EntityId { get; }
     }
 }
