@@ -30,16 +30,24 @@ jobs:
     - name: Add GGroupp NuGet Source
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
-    # Dataverse.Api.Abstractions.EntityKey
+    # Dataverse.Api.Core.EntityKey.Tests
     
-    - name: Restore Dataverse.Api.Abstractions.EntityKey
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityKey.csproj
+    - name: Restore Dataverse.Api.Core.EntityKey
+      run: dotnet restore ./src/*/Dataverse.Api.Core.EntityKey.Tests.csproj
 
-    - name: Build Dataverse.Api.Abstractions.EntityKey
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityKey.csproj --no-restore  -c Release
+    - name: Test Dataverse.Api.Core.EntityKey.Tests
+      run: dotnet test ./src/*/Dataverse.Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
 
-    - name: Pack Dataverse.Api.Abstractions.EntityKey
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityKey.csproj --no-restore -o ~/nuget  -c Release
+    # Dataverse.Api.Core.EntityKey
+    
+    - name: Restore Dataverse.Api.Core.EntityKey
+      run: dotnet restore ./src/*/Dataverse.Api.Core.EntityKey.csproj
+
+    - name: Build Dataverse.Api.Core.EntityKey
+      run: dotnet build ./src/*/Dataverse.Api.Core.EntityKey.csproj --no-restore  -c Release
+
+    - name: Pack Dataverse.Api.Core.EntityKey
+      run: dotnet pack ./src/*/Dataverse.Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
 
     # Dataverse.Api.Abstractions.EntityUpdate
     

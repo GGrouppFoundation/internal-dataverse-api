@@ -10,18 +10,18 @@ namespace GGroupp.Infra
     {
         public DataverseEntityGetIn(
             [AllowNull] string entityPluralName,
-            IDataverseEntityKey entityId,
+            IDataverseEntityKey entityKey,
             [AllowNull] IReadOnlyCollection<string> selectFields)
         {
             EntityPluralName = entityPluralName ?? string.Empty;
             SelectFields = selectFields ?? Array.Empty<string>();
-            EntityId = entityId;
+            EntityKey = entityKey;
         }
 
         public string EntityPluralName { get; }
 
         public IReadOnlyCollection<string> SelectFields { get; }
 
-        public IDataverseEntityKey EntityId { get; }
+        public IDataverseEntityKey EntityKey { get; }
     }
 }

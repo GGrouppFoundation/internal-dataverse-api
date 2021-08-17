@@ -9,14 +9,14 @@ namespace GGroupp.Infra
     {
         public DataverseEntityDeleteIn(
             [AllowNull] string entityPluralName,
-            IDataverseEntityKey entityId)
+            IDataverseEntityKey entityKey)
         {
-            EntityId = entityId;
+            EntityKey = entityKey;
             EntityPluralName = entityPluralName ?? string.Empty;
         }
 
         public string EntityPluralName { get; }
 
-        public IDataverseEntityKey EntityId { get; }
+        public IDataverseEntityKey EntityKey{ get; }
     }
 }

@@ -7,16 +7,11 @@ using System.Net;
 
 namespace GGroupp.Infra
 {
-    public sealed record DataverseEntityKey : IDataverseEntityKey
+    public sealed record DataverseAlternateKey : IDataverseEntityKey
     {
-        public DataverseEntityKey(Guid entityId)
-        {
-            Value = entityId.ToString();
-        }
-
         public string Value { get; }
 
-        public DataverseEntityKey(IReadOnlyCollection<KeyValuePair<string, string>> idArguments)
+        public DataverseAlternateKey(IReadOnlyCollection<KeyValuePair<string, string>> idArguments)
         {
             var args = idArguments?.Where(kv => string.IsNullOrEmpty(kv.Value) is false) ?? Array.Empty<KeyValuePair<string, string>>();
             Value = BuildIdArgs(args);

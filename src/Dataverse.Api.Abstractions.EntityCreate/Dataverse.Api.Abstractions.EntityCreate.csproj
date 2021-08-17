@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-	  <RootNamespace>GGroupp.Infra</RootNamespace>
-	  <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate</AssemblyName>
-	  <Version>1.2.0</Version>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Infra</RootNamespace>
+    <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate</AssemblyName>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

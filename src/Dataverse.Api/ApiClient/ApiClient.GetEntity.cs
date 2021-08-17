@@ -43,6 +43,6 @@ namespace GGroupp.Infra
             .Pipe(
                 QueryParametersBuilder.BuildQueryString)
             .Pipe(
-                queryString => $"{input.EntityPluralName}({input.EntityId.Value}){queryString}");
+                queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
     }
 }

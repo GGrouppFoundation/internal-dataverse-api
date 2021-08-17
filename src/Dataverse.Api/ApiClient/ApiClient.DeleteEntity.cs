@@ -25,7 +25,7 @@ namespace GGroupp.Infra
         {
             var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration);
 
-            var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityId.Value})";
+            var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityKey.Value})";
 
             var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
             return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
