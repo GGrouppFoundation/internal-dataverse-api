@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Infra</RootNamespace>
+    <AssemblyName>GGroupp.Infra.Dataverse.Api.Core.EntityKey</AssemblyName>
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+
+</Project>

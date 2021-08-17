@@ -10,12 +10,12 @@ namespace GGroupp.Infra
     {
         public DataverseEntityUpdateIn(
             [AllowNull] string entityPluralName,
-            Guid entityId,
-            TRequestJson entityData,
-            [AllowNull] IReadOnlyCollection<string> selectFields)
+            IDataverseEntityKey entityKey,
+            [AllowNull] IReadOnlyCollection<string> selectFields,
+            TRequestJson entityData)
         {
             EntityPluralName = entityPluralName ?? string.Empty;
-            EntityId = entityId;
+            EntityKey = entityKey;
             SelectFields = selectFields ?? Array.Empty<string>();
             EntityData = entityData;
         }
@@ -26,6 +26,6 @@ namespace GGroupp.Infra
 
         public TRequestJson EntityData { get; }
 
-        public Guid EntityId { get; }
+        public IDataverseEntityKey EntityKey { get; }
     }
 }
