@@ -17,7 +17,7 @@ namespace GGroupp.Infra
             Value = BuildIdArgs(args);
         }
 
-        public static string BuildIdArgs(IEnumerable<KeyValuePair<string, string>> args)
+        private static string BuildIdArgs(IEnumerable<KeyValuePair<string, string>> args)
             =>
             string.Join(',', args.Select(kv => WebUtility.UrlEncode($"{kv.Key}={kv.Value}")));
     }
