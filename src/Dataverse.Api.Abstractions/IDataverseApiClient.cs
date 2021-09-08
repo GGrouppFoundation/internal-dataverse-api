@@ -1,10 +1,7 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public interface IDataverseApiClient : 
+    IDataverseEntitySetGetSupplier, IDataverseEntityGetSupplier, IDataverseEntityCreateSupplier, 
+    IDataverseEntityDeleteSupplier, IDataverseEntityUpdateSupplier
 {
-    public interface IDataverseApiClient : 
-        IDataverseEntitySetGetSupplier, IDataverseEntityGetSupplier, IDataverseEntityCreateSupplier, 
-        IDataverseEntityDeleteSupplier, IDataverseEntityUpdateSupplier
-    {
-    }
 }

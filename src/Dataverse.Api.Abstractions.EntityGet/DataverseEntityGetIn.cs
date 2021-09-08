@@ -1,27 +1,24 @@
-#nullable enable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public sealed record DataverseEntityGetIn
 {
-    public sealed record DataverseEntityGetIn
+    public DataverseEntityGetIn(
+        [AllowNull] string entityPluralName,
+        IDataverseEntityKey entityKey,
+        [AllowNull] IReadOnlyCollection<string> selectFields)
     {
-        public DataverseEntityGetIn(
-            [AllowNull] string entityPluralName,
-            IDataverseEntityKey entityKey,
-            [AllowNull] IReadOnlyCollection<string> selectFields)
-        {
-            EntityPluralName = entityPluralName ?? string.Empty;
-            SelectFields = selectFields ?? Array.Empty<string>();
-            EntityKey = entityKey;
-        }
-
-        public string EntityPluralName { get; }
-
-        public IReadOnlyCollection<string> SelectFields { get; }
-
-        public IDataverseEntityKey EntityKey { get; }
+        EntityPluralName = entityPluralName ?? string.Empty;
+        SelectFields = selectFields ?? Array.Empty<string>();
+        EntityKey = entityKey;
     }
+
+    public string EntityPluralName { get; }
+
+    public IReadOnlyCollection<string> SelectFields { get; }
+
+    public IDataverseEntityKey EntityKey { get; }
 }

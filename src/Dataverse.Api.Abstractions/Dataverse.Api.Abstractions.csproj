@@ -1,19 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>1.4.0</Version>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="1.1.4"/>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="1.1.2"/>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="1.2.0"/>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="1.0.2"/>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="1.0.2"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="2.0.0"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="2.0.0"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="2.0.0"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="2.0.0"/>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="2.0.0"/>
   </ItemGroup>
 
 </Project>

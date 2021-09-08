@@ -1,14 +1,11 @@
-#nullable enable
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public interface IDataverseEntitySetGetSupplier
 {
-    public interface IDataverseEntitySetGetSupplier
-    {
-        ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> GetEntitySetAsync<TEntityJson>(
-            DataverseEntitySetGetIn input, CancellationToken cancellationToken = default);
-    }
+    ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> GetEntitySetAsync<TEntityJson>(
+        DataverseEntitySetGetIn input, CancellationToken cancellationToken = default);
 }

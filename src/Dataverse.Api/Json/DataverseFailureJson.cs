@@ -1,12 +1,9 @@
-#nullable enable
-
 using System.Text.Json.Serialization;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+internal sealed record DataverseFailureJson
 {
-    internal sealed record DataverseFailureJson
-    {
-        [JsonPropertyName("error")]
-        public DataverseFailureInfoJson? Error { get; init; }
-    }
+    [JsonPropertyName("error")]
+    public DataverseFailureInfoJson? Error { get; init; }
 }

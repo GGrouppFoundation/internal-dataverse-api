@@ -1,13 +1,10 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public sealed record DataverseEntityGetOut<TEntityJson>
 {
-    public sealed record DataverseEntityGetOut<TEntityJson>
-    {
-        public DataverseEntityGetOut(TEntityJson? value)
-            =>
-            Value = value;
+    public DataverseEntityGetOut(TEntityJson? value)
+        =>
+        Value = value;
 
-        public TEntityJson? Value { get; }
-    }
+    public TEntityJson? Value { get; }
 }

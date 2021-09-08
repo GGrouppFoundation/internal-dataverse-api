@@ -1,17 +1,14 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public interface IDataverseApiClientConfiguration
 {
-    public interface IDataverseApiClientConfiguration
-    {
-        string ServiceUrl { get; }
+    string ServiceUrl { get; }
 
-        string ApiVersion { get; }
+    string ApiVersion { get; }
 
-        string AuthTenantId { get; }
+    string AuthTenantId { get; }
 
-        string AuthClientId { get; }
+    string AuthClientId { get; }
 
-        string AuthClientSecret { get; }
-    }
+    string AuthClientSecret { get; }
 }

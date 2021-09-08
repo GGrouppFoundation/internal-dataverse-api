@@ -1,14 +1,11 @@
-#nullable enable
-
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public interface IDataverseEntityDeleteSupplier
 {
-    public interface IDataverseEntityDeleteSupplier
-    {
-        ValueTask<Result<Unit, Failure<int>>> DeleteEntityAsync(
-            DataverseEntityDeleteIn input, CancellationToken cancellationToken = default);
-    }
+    ValueTask<Result<Unit, Failure<int>>> DeleteEntityAsync(
+        DataverseEntityDeleteIn input, CancellationToken cancellationToken = default);
 }

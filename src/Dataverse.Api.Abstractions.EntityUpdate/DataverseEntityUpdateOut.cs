@@ -1,13 +1,10 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public sealed record DataverseEntityUpdateOut<TResponseJson>
 {
-    public sealed record DataverseEntityUpdateOut<TResponseJson>
-    {
-        public DataverseEntityUpdateOut(TResponseJson? value)
-            =>
-            Value = value;
+    public DataverseEntityUpdateOut(TResponseJson? value)
+        =>
+        Value = value;
 
-        public TResponseJson? Value { get; }
-    }
+    public TResponseJson? Value { get; }
 }
