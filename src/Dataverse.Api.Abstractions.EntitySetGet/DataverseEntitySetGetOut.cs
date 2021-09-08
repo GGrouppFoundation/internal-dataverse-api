@@ -1,17 +1,14 @@
-#nullable enable
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp.Infra
-{
-    public sealed record DataverseEntitySetGetOut<TEntityJson>
-    {
-        public DataverseEntitySetGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
-            =>
-            Value = value ?? Array.Empty<TEntityJson>();
+namespace GGroupp.Infra;
 
-        public IReadOnlyCollection<TEntityJson> Value { get; }
-    }
+public sealed record DataverseEntitySetGetOut<TEntityJson>
+{
+    public DataverseEntitySetGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
+        =>
+        Value = value ?? Array.Empty<TEntityJson>();
+
+    public IReadOnlyCollection<TEntityJson> Value { get; }
 }

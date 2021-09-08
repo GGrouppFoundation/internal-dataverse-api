@@ -1,9 +1,6 @@
-#nullable enable
+namespace GGroupp.Infra;
 
-namespace GGroupp.Infra
+public interface IDataverseEntityKey
 {
-    public interface IDataverseEntityKey
-    {
-        string Value { get; }
-    }
+    string Value { get; }
 }

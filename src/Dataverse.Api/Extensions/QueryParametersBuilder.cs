@@ -1,40 +1,37 @@
-#nullable enable
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+internal static class QueryParametersBuilder
 {
-    internal static class QueryParametersBuilder
+    public static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
+        =>
+        paramValues.Where(
+            v => string.IsNullOrEmpty(v) is false)
+        .Pipe(
+            values => string.Join(',', values));
+
+    public static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {
-        public static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
-            =>
-            paramValues.Where(
-                v => string.IsNullOrEmpty(v) is false)
-            .Pipe(
-                values => string.Join(',', values));
+        var queryStringBuilder = new StringBuilder();
 
-        public static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
+        foreach(var queryParam in queryParams.Where(kv => string.IsNullOrEmpty(kv.Value) is false))
         {
-            var queryStringBuilder = new StringBuilder();
-
-            foreach(var queryParam in queryParams.Where(kv => string.IsNullOrEmpty(kv.Value) is false))
+            if(queryStringBuilder.Length > 0)
             {
-                if(queryStringBuilder.Length > 0)
-                {
-                    queryStringBuilder.Append('&');
-                }
-                else
-                {
-                    queryStringBuilder.Append('?');
-                }
-
-                queryStringBuilder.Append(queryParam.Key).Append('=').Append(queryParam.Value);
+                queryStringBuilder.Append('&');
+            }
+            else
+            {
+                queryStringBuilder.Append('?');
             }
 
-            return queryStringBuilder.ToString();
+            queryStringBuilder.Append(queryParam.Key).Append('=').Append(queryParam.Value);
         }
+
+        return queryStringBuilder.ToString();
     }
 }

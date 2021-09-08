@@ -1,22 +1,19 @@
-#nullable enable
-
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp.Infra
+namespace GGroupp.Infra;
+
+public sealed record DataverseEntityDeleteIn
 {
-    public sealed record DataverseEntityDeleteIn
+    public DataverseEntityDeleteIn(
+        [AllowNull] string entityPluralName,
+        IDataverseEntityKey entityKey)
     {
-        public DataverseEntityDeleteIn(
-            [AllowNull] string entityPluralName,
-            IDataverseEntityKey entityKey)
-        {
-            EntityKey = entityKey;
-            EntityPluralName = entityPluralName ?? string.Empty;
-        }
-
-        public string EntityPluralName { get; }
-
-        public IDataverseEntityKey EntityKey{ get; }
+        EntityKey = entityKey;
+        EntityPluralName = entityPluralName ?? string.Empty;
     }
+
+    public string EntityPluralName { get; }
+
+    public IDataverseEntityKey EntityKey{ get; }
 }

@@ -1,8 +1,6 @@
-﻿#nullable enable
+﻿namespace GGroupp.Infra.Dataverse.Api.Core.EntityKey.Tests;
 
-namespace GGroupp.Infra.Dataverse.Api.Core.EntityKey.Tests
+public sealed partial class DataverseAlternateKeyTest
 {
-    public sealed partial class DataverseAlternateKeyTest
-    {
-    }
 }
+
