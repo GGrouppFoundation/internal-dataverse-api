@@ -126,5 +126,5 @@ jobs:
     # Push
       
     - name: Push Packages
-      if: ${{ github.event_name == 'push' }}
+      if: ${{ github.ref == 'refs/heads/main' }}
       run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
