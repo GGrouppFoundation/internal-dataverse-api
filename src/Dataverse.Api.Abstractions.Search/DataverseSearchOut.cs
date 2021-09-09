@@ -9,6 +9,7 @@ public sealed record DataverseSearchOut
         TotalRecordCount = totalRecordCount;
         Value = value;
     }
+
     public int TotalRecordCount { get; }
 
     public IReadOnlyCollection<DataverseSearchItem> Value { get; }
