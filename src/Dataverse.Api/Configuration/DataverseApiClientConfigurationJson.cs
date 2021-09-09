@@ -8,6 +8,10 @@ public sealed record DataverseApiClientConfigurationJson : IDataverseApiClientCo
 
     public string? ApiVersion { get; init; }
 
+    public string? ApiType { get; init; }
+    
+    public string? ApiSearchType { get; init; }
+
     public string? AuthTenantId { get; init; }
 
     public string? AuthClientId { get; init; }
@@ -23,4 +27,8 @@ public sealed record DataverseApiClientConfigurationJson : IDataverseApiClientCo
     string IDataverseApiClientConfiguration.AuthClientId => AuthClientId.OrEmpty();
 
     string IDataverseApiClientConfiguration.AuthClientSecret => AuthClientSecret.OrEmpty();
+
+    string IDataverseApiClientConfiguration.ApiType => ApiType.OrEmpty();
+
+    string IDataverseApiClientConfiguration.ApiSearchType => ApiSearchType.OrEmpty();
 }

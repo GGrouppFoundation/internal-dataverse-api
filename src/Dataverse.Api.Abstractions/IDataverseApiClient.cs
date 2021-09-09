@@ -2,6 +2,6 @@ namespace GGroupp.Infra;
 
 public interface IDataverseApiClient : 
     IDataverseEntitySetGetSupplier, IDataverseEntityGetSupplier, IDataverseEntityCreateSupplier, 
-    IDataverseEntityDeleteSupplier, IDataverseEntityUpdateSupplier
+    IDataverseEntityDeleteSupplier, IDataverseEntityUpdateSupplier, IDataverseSearchSupplier
 {
 }

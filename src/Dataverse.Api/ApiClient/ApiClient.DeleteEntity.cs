@@ -8,15 +8,13 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<Unit, Failure<int>>> DeleteEntityAsync(
         DataverseEntityDeleteIn input, CancellationToken cancellationToken = default)
-    {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
-        if (cancellationToken.IsCancellationRequested)
+        =>
+        (input, cancellationToken.IsCancellationRequested) switch
         {
-            return ValueTask.FromCanceled<Result<Unit, Failure<int>>>(cancellationToken);
-        }
-
-        return InternalDeleteEntityAsync(input, cancellationToken);
-    }
+            (null, _) => throw new ArgumentNullException(nameof(input)),
+            (_, true) => ValueTask.FromCanceled<Result<Unit, Failure<int>>>(cancellationToken),
+            _ => InternalDeleteEntityAsync(input, cancellationToken)
+        };
 
     private async ValueTask<Result<Unit, Failure<int>>> InternalDeleteEntityAsync(
         DataverseEntityDeleteIn input, CancellationToken cancellationToken = default)

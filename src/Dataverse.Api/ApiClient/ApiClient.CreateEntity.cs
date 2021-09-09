@@ -9,15 +9,13 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>> CreateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
-    {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
-        if (cancellationToken.IsCancellationRequested)
+        =>
+        (input, cancellationToken.IsCancellationRequested) switch
         {
-            return ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken);
-        }
-
-        return InternalCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
-    }
+            (null, _) => throw new ArgumentNullException(nameof(input)),
+            (_, true) => ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken),
+            _ => InternalCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken)
+        };
 
     private async ValueTask<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>> InternalCreateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
@@ -26,7 +24,7 @@ partial class DataverseApiClient
 
         var entitiyCreateUrl = BuildEntityCreateUrl(input);
 
-        using var content = DataverseHttpHelper.BuildResponseJsonBody(input.EntityData);
+        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
 
         var response = await httpClient.PostAsync(entitiyCreateUrl, content, cancellationToken).ConfigureAwait(false);
         var result = await response.ReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);

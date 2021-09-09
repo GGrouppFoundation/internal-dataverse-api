@@ -9,15 +9,13 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> GetEntitySetAsync<TEntityJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken = default)
-    {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
-        if(cancellationToken.IsCancellationRequested)
+        =>
+        (input, cancellationToken.IsCancellationRequested) switch
         {
-            return ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken);
-        }
-
-        return InternalGetEntitySetAsync<TEntityJson>(input, cancellationToken);
-    }
+            (null, _) => throw new ArgumentNullException(nameof(input)),
+            (_, true) => ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken),
+            _ => InternalGetEntitySetAsync<TEntityJson>(input, cancellationToken)
+        };
 
     private async ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> InternalGetEntitySetAsync<TEntityJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
