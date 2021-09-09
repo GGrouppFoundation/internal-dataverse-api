@@ -115,5 +115,4 @@ internal static class DataverseHttpHelper
                         item.ObjectId)).ToArray() ?? Array.Empty<DataverseSearchItem>())
         .Pipe(
            items => new DataverseSearchOut(@out?.TotalRecordCount ?? default, items));
-
 }
