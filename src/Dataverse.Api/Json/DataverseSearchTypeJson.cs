@@ -5,4 +5,3 @@ internal enum DataverseSearchTypeJson
     simple,
     full
 }
-
