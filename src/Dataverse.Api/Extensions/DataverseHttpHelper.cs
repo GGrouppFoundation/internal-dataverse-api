@@ -83,10 +83,10 @@ internal static class DataverseHttpHelper
                 JsonSerializer.Serialize(input, jsonSerializerOptions),
                 System.Text.Encoding.UTF8,
                 MediaTypeNames.Application.Json))
-        .Pipe(contetnt =>
+        .Pipe(
+            contetnt =>
             {
                 contetnt.Headers.Add("Prefer", "return=representation");
-
                 return contetnt;
             });
 
