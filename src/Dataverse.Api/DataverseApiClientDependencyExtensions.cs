@@ -3,7 +3,7 @@ using PrimeFuncPack;
 
 namespace GGroupp.Infra;
 
-public static class DataVerseApiClientDependencyExtensions
+public static class DataverseApiClientDependencyExtensions
 {
     public static Dependency<IDataverseApiClient> UseDataverseApiClient<TMessageHandler, TConfiguration>(
         this Dependency<TMessageHandler, TConfiguration> dependency)
