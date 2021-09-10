@@ -9,18 +9,20 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntityUpdateOut<TResponseJson>, Failure<int>>> UpdateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityUpdateIn<TRequestJson> input, CancellationToken cancellationToken = default)
-        =>
-        (input, cancellationToken.IsCancellationRequested) switch
-        {
-            (null, _) => throw new ArgumentNullException(nameof(input)),
-            (_, true) => ValueTask.FromCanceled<Result<DataverseEntityUpdateOut<TResponseJson>, Failure<int>>>(cancellationToken),
-            _ => InternalUpdateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken)
-        };
+    {
+        _ = input ?? throw new ArgumentNullException(nameof(input));
+
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<Result<DataverseEntityUpdateOut<TResponseJson>, Failure<int>>>(cancellationToken) :
+            InternalUpdateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
+    }
 
     private async ValueTask<Result<DataverseEntityUpdateOut<TResponseJson>, Failure<int>>> InternalUpdateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityUpdateIn<TRequestJson> input, CancellationToken cancellationToken = default)
     {
-        var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration);
+        var httpClient = await DataverseHttpHelper
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, cancellationToken)
+            .ConfigureAwait(false);
 
         var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
 

@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
+using static System.FormattableString;
 
 namespace GGroupp.Infra;
 
@@ -13,16 +14,32 @@ internal static class DataverseHttpHelper
 {
     private const string LoginMsOnlineServiceBaseUrl = "https://login.microsoftonline.com/";
 
+    private static readonly JsonSerializerOptions jsonSerializerOptions;
+
+    static DataverseHttpHelper()
+        =>
+        jsonSerializerOptions = new()
+        {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+        };
+
     public static async Task<HttpClient> CreateHttpClientAsync(
-        HttpMessageHandler messageHandler, IDataverseApiClientConfiguration clientConfiguration)
+        HttpMessageHandler messageHandler, 
+        IDataverseApiClientConfiguration clientConfiguration,
+        CancellationToken cancellationToken = default)
     {
+        if(cancellationToken.IsCancellationRequested)
+        {
+            return await Task.FromCanceled<HttpClient>(cancellationToken).ConfigureAwait(false);
+        }
+
         var authContext = CreateAuthenticationContext(clientConfiguration.AuthTenantId);
         var credential = new ClientCredential(clientConfiguration.AuthClientId, clientConfiguration.AuthClientSecret);
 
         var client = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(
-                $"{clientConfiguration.ServiceUrl}/api/{clientConfiguration.ApiType}/v{clientConfiguration.ApiVersion}/{clientConfiguration.ApiSearchType}")
+                Invariant($"{clientConfiguration.ServiceUrl}/api/{clientConfiguration.ApiType}/v{clientConfiguration.ApiVersion}/{clientConfiguration.ApiSearchType}"))
         };
 
         var authTokenResult = await authContext.AcquireTokenAsync(clientConfiguration.ServiceUrl, credential).ConfigureAwait(false);
@@ -63,12 +80,7 @@ internal static class DataverseHttpHelper
         =>
         Pipeline.Pipe(
             new StringContent(
-                JsonSerializer.Serialize(
-                    input, 
-                    new JsonSerializerOptions() 
-                    { 
-                        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull 
-                    }),
+                JsonSerializer.Serialize(input, jsonSerializerOptions),
                 System.Text.Encoding.UTF8,
                 MediaTypeNames.Application.Json))
         .Pipe(contetnt =>
@@ -80,7 +92,7 @@ internal static class DataverseHttpHelper
 
     public static DataverseSearchJsonIn MapDataverseSearchIn(this DataverseSearchIn input)
         =>
-        new DataverseSearchJsonIn(input.Search)
+        new(input.Search)
         { 
             Entities = input.Entities,
             Facets = input.Facets,
@@ -91,17 +103,17 @@ internal static class DataverseHttpHelper
             OrderBy = input.OrderBy,
             SearchMode = input.SearchMode switch
             {
-                DataverseSearchMode.all => DataverseSearchModeJson.all,
-                DataverseSearchMode.any => DataverseSearchModeJson.any,
+                DataverseSearchMode.All => DataverseSearchModeJson.All,
+                DataverseSearchMode.Any => DataverseSearchModeJson.Any,
                 null => null,
-                _ => throw new ArgumentException(nameof(input.SearchMode))
+                var unexpected => throw new ArgumentOutOfRangeException(nameof(input), unexpected, $"{nameof(input.SearchMode)} value is unexpected.")
             },
             SearchType = input.SearchType switch
             {
-                DataverseSearchType.full => DataverseSearchTypeJson.full,
-                DataverseSearchType.simple => DataverseSearchTypeJson.simple,
+                DataverseSearchType.Full => DataverseSearchTypeJson.Full,
+                DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
                 null => null,
-                _ => throw new ArgumentException(nameof(input.SearchType))
+                var unexpected => throw new ArgumentOutOfRangeException(nameof(input), unexpected, $"{nameof(input.SearchType)} value is unexpected.")
             }
         };
 
@@ -111,8 +123,8 @@ internal static class DataverseHttpHelper
            @out?.Value?.Select(
                     item => new DataverseSearchItem(
                         item.SearchScore,
-                        item.EntityName.OrEmpty(),
-                        item.ObjectId)).ToArray() ?? Array.Empty<DataverseSearchItem>())
+                        item.EntityName,
+                        item.ObjectId)).ToArray())
         .Pipe(
            items => new DataverseSearchOut(@out?.TotalRecordCount ?? default, items));
 }

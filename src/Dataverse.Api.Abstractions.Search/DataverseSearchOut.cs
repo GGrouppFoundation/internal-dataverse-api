@@ -1,13 +1,15 @@
-﻿namespace GGroupp.Infra;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace GGroupp.Infra;
 
 public sealed record DataverseSearchOut
 {
     public DataverseSearchOut(
         int totalRecordCount,
-        IReadOnlyCollection<DataverseSearchItem> value)
+        [AllowNull] IReadOnlyCollection<DataverseSearchItem> value)
     {
         TotalRecordCount = totalRecordCount;
-        Value = value;
+        Value = value ?? Array.Empty<DataverseSearchItem>();
     }
 
     public int TotalRecordCount { get; }

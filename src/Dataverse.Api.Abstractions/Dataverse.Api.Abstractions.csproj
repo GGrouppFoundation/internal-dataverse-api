@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -6,7 +6,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors> 
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>2.0.1</Version>
+    <Version>2.0.3</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +15,7 @@
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="2.0.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="2.0.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="2.0.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="1.0.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,6 @@
 
 internal enum DataverseSearchTypeJson
 {
-    simple,
-    full
+    Simple,
+    Full
 }

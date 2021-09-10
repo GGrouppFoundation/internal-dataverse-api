@@ -2,7 +2,7 @@
 
 namespace GGroupp.Infra;
 
-internal record DataverseSearchJsonOut
+internal sealed record DataverseSearchJsonOut
 {
     [JsonPropertyName("totalrecordcount")]
     public int TotalRecordCount { get; init; }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
@@ -6,11 +7,11 @@ public sealed record DataverseSearchItem
 {
     public DataverseSearchItem(
         double searchScore,
-        string entityName,
+        [AllowNull] string entityName,
         Guid objectId)
     {
         SearchScore = searchScore;
-        EntityName = entityName;    
+        EntityName = entityName ?? string.Empty;    
         ObjectId = objectId;
     }
 

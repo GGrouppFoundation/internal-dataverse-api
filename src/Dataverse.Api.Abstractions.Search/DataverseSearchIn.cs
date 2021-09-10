@@ -5,7 +5,8 @@ namespace GGroupp.Infra;
 public sealed record DataverseSearchIn
 {
     public DataverseSearchIn(string searchString)
-        => Search = searchString;
+        => 
+        Search = searchString ?? string.Empty;
 
     public string Search { get; }
 

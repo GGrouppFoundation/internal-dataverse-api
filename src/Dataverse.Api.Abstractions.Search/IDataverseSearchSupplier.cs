@@ -7,5 +7,6 @@ namespace GGroupp.Infra;
 public interface IDataverseSearchSupplier
 {
     ValueTask<Result<DataverseSearchOut, Failure<int>>> SearchAsync(
-        DataverseSearchIn input, CancellationToken cancellationToken = default);
+        DataverseSearchIn input, 
+        CancellationToken cancellationToken = default);
 }

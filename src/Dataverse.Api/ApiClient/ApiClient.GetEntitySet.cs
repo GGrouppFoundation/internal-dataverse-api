@@ -9,18 +9,21 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> GetEntitySetAsync<TEntityJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken = default)
-        =>
-        (input, cancellationToken.IsCancellationRequested) switch
-        {
-            (null, _) => throw new ArgumentNullException(nameof(input)),
-            (_, true) => ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken),
-            _ => InternalGetEntitySetAsync<TEntityJson>(input, cancellationToken)
-        };
+    {
+        _ = input ?? throw new ArgumentNullException(nameof(input));
+
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken) :
+            InternalGetEntitySetAsync<TEntityJson>(input, cancellationToken);
+    }
 
     private async ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> InternalGetEntitySetAsync<TEntityJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
-        var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration); 
+        var httpClient = await DataverseHttpHelper
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, cancellationToken)
+            .ConfigureAwait(false); 
+
         var entitiesGetUrl = BuildEntitySetGetUrl(input);
 
         var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
