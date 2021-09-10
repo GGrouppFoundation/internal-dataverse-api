@@ -11,6 +11,7 @@ partial class DataverseApiClient
             ValueTask.FromCanceled<Result<DataverseSearchOut, Failure<int>>>(cancellationToken) : 
             InnerSearchAsync(input, cancellationToken);
     }
+    
     private async ValueTask<Result<DataverseSearchOut, Failure<int>>> InnerSearchAsync(
         DataverseSearchIn input, CancellationToken cancellationToken = default)
     {
