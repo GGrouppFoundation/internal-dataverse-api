@@ -46,6 +46,17 @@ jobs:
     - name: Pack Dataverse.Api.Core.EntityKey
       run: dotnet pack ./src/*/Dataverse.Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
 
+    # Dataverse.Api.Abstractions.Search
+    
+    - name: Restore Dataverse.Api.Abstractions.Search
+      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.Search.csproj
+
+    - name: Build Dataverse.Api.Abstractions.Search
+      run: dotnet build ./src/*/Dataverse.Api.Abstractions.Search.csproj --no-restore  -c Release
+
+    - name: Pack Dataverse.Api.Core.Search
+      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.Search.csproj --no-restore -o ~/nuget  -c Release
+
     # Dataverse.Api.Abstractions.EntityUpdate
     
     - name: Restore Dataverse.Api.Abstractions.EntityUpdate

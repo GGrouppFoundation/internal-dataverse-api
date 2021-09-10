@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Infra</RootNamespace>
+    <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.Search</AssemblyName>
+    <Version>1.0.2</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PrimeFuncPack.Core.Failure" Version="1.1.1" />
+    <PackageReference Include="PrimeFuncPack.Core.Result" Version="1.1.1" />
+  </ItemGroup>
+
+</Project>

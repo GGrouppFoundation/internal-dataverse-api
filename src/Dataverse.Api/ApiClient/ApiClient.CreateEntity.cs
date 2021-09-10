@@ -11,24 +11,24 @@ partial class DataverseApiClient
         DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
-        if (cancellationToken.IsCancellationRequested)
-        {
-            return ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken);
-        }
 
-        return InternalCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested ?
+            ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken) :
+            InternalCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
     }
 
     private async ValueTask<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>> InternalCreateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
     {
-        var httpClient = await DataverseHttpHelper.CreateHttpClientAsync(messageHandler, clientConfiguration);
+        var httpClient = await DataverseHttpHelper
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, cancellationToken)
+            .ConfigureAwait(false);
 
-        var entitiyCreateUrl = BuildEntityCreateUrl(input);
+        var entityCreateUrl = BuildEntityCreateUrl(input);
 
-        using var content = DataverseHttpHelper.BuildResponseJsonBody(input.EntityData);
+        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
 
-        var response = await httpClient.PostAsync(entitiyCreateUrl, content, cancellationToken).ConfigureAwait(false);
+        var response = await httpClient.PostAsync(entityCreateUrl, content, cancellationToken).ConfigureAwait(false);
         var result = await response.ReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityCreateOut<TResponseJson>(e));
