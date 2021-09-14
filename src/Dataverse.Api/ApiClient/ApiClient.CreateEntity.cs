@@ -21,7 +21,7 @@ partial class DataverseApiClient
         DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, cancellationToken)
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiType: ApiTypeData)
             .ConfigureAwait(false);
 
         var entityCreateUrl = BuildEntityCreateUrl(input);

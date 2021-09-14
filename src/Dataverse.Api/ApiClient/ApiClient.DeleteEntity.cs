@@ -20,7 +20,7 @@ partial class DataverseApiClient
         DataverseEntityDeleteIn input, CancellationToken cancellationToken = default)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, cancellationToken)
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiType: ApiTypeData)
             .ConfigureAwait(false);
 
         var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityKey.Value})";
