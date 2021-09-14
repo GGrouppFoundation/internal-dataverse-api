@@ -23,23 +23,19 @@ internal static class DataverseHttpHelper
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-    public static async Task<HttpClient> CreateHttpClientAsync(
+    internal static async Task<HttpClient> CreateHttpClientAsync(
         HttpMessageHandler messageHandler, 
         IDataverseApiClientConfiguration clientConfiguration,
-        CancellationToken cancellationToken = default)
+        string apiType,
+        string? apiSearchType = null)
     {
-        if(cancellationToken.IsCancellationRequested)
-        {
-            return await Task.FromCanceled<HttpClient>(cancellationToken).ConfigureAwait(false);
-        }
-
         var authContext = CreateAuthenticationContext(clientConfiguration.AuthTenantId);
         var credential = new ClientCredential(clientConfiguration.AuthClientId, clientConfiguration.AuthClientSecret);
 
         var client = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(
-                Invariant($"{clientConfiguration.ServiceUrl}/api/{clientConfiguration.ApiType}/v{clientConfiguration.ApiVersion}/{clientConfiguration.ApiSearchType}"))
+                Invariant($"{clientConfiguration.ServiceUrl}/api/{apiType}/v{clientConfiguration.ApiVersion}/{apiSearchType.OrEmpty()}"))
         };
 
         var authTokenResult = await authContext.AcquireTokenAsync(clientConfiguration.ServiceUrl, credential).ConfigureAwait(false);
