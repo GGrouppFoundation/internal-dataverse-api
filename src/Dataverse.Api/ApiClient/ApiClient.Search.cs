@@ -16,7 +16,7 @@ partial class DataverseApiClient
         DataverseSearchIn input, CancellationToken cancellationToken = default)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiType: ApiTypeSearch, apiSearchType: ApiSearchType)
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionSearch, apiType: ApiTypeSearch, apiSearchType: ApiSearchType)
             .ConfigureAwait(false);
 
         var requestMessage = new HttpRequestMessage()

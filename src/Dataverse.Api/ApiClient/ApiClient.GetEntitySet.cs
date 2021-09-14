@@ -21,7 +21,7 @@ partial class DataverseApiClient
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiType: ApiTypeData)
+            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionData, apiType: ApiTypeData)
             .ConfigureAwait(false); 
 
         var entitiesGetUrl = BuildEntitySetGetUrl(input);

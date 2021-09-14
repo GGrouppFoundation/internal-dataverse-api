@@ -26,6 +26,7 @@ internal static class DataverseHttpHelper
     internal static async Task<HttpClient> CreateHttpClientAsync(
         HttpMessageHandler messageHandler, 
         IDataverseApiClientConfiguration clientConfiguration,
+        string apiVersion,
         string apiType,
         string? apiSearchType = null)
     {
@@ -35,7 +36,7 @@ internal static class DataverseHttpHelper
         var client = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(
-                Invariant($"{clientConfiguration.ServiceUrl}/api/{apiType}/v{clientConfiguration.ApiVersion}/{apiSearchType.OrEmpty()}"))
+                Invariant($"{clientConfiguration.ServiceUrl}/api/{apiType}/v{apiVersion}/{apiSearchType.OrEmpty()}"))
         };
 
         var authTokenResult = await authContext.AcquireTokenAsync(clientConfiguration.ServiceUrl, credential).ConfigureAwait(false);
@@ -97,20 +98,8 @@ internal static class DataverseHttpHelper
             Skip = input.Skip,
             Top = input.Top,
             OrderBy = input.OrderBy,
-            SearchMode = input.SearchMode switch
-            {
-                DataverseSearchMode.All => DataverseSearchModeJson.All,
-                DataverseSearchMode.Any => DataverseSearchModeJson.Any,
-                null => null,
-                var unexpected => throw new ArgumentOutOfRangeException(nameof(input), unexpected, $"{nameof(input.SearchMode)} value is unexpected.")
-            },
-            SearchType = input.SearchType switch
-            {
-                DataverseSearchType.Full => DataverseSearchTypeJson.Full,
-                DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
-                null => null,
-                var unexpected => throw new ArgumentOutOfRangeException(nameof(input), unexpected, $"{nameof(input.SearchType)} value is unexpected.")
-            }
+            SearchMode = input.SearchMode?.ToDataverseSearchModeJson(),
+            SearchType = input.SearchType?.ToDataverseSearchTypeJson()
         };
 
     public static DataverseSearchOut MapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
@@ -123,4 +112,20 @@ internal static class DataverseHttpHelper
                         item.ObjectId)).ToArray())
         .Pipe(
            items => new DataverseSearchOut(@out?.TotalRecordCount ?? default, items));
+
+    private static DataverseSearchModeJson ToDataverseSearchModeJson(this DataverseSearchMode searchMode)
+        =>
+        searchMode switch
+        {
+            DataverseSearchMode.Any => DataverseSearchModeJson.Any,
+            _ => DataverseSearchModeJson.All
+        };
+
+    private static DataverseSearchTypeJson ToDataverseSearchTypeJson(this DataverseSearchType searchType)
+        =>
+        searchType switch
+        {
+            DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
+            _ => DataverseSearchTypeJson.Full
+        };
 }
