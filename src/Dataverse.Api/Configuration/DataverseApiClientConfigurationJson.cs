@@ -6,8 +6,6 @@ public sealed record DataverseApiClientConfigurationJson : IDataverseApiClientCo
 {
     public string? ServiceUrl { get; init; }
 
-    public string? ApiVersion { get; init; }
-
     public string? AuthTenantId { get; init; }
 
     public string? AuthClientId { get; init; }
@@ -15,8 +13,6 @@ public sealed record DataverseApiClientConfigurationJson : IDataverseApiClientCo
     public string? AuthClientSecret { get; init; }
 
     string IDataverseApiClientConfiguration.ServiceUrl => ServiceUrl.OrEmpty();
-
-    string IDataverseApiClientConfiguration.ApiVersion => ApiVersion.OrEmpty();
 
     string IDataverseApiClientConfiguration.AuthTenantId => AuthTenantId.OrEmpty();
 

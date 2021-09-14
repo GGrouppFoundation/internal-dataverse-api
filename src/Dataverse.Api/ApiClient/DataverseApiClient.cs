@@ -5,7 +5,11 @@ namespace GGroupp.Infra;
 
 internal sealed partial class DataverseApiClient : IDataverseApiClient
 {
+    private const string ApiVersionData = "9.0";
+
     private const string ApiTypeData = "data";
+
+    private const string ApiVersionSearch = "1.0";
 
     private const string ApiTypeSearch = "search";
 
