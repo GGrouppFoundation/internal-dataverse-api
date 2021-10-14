@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
@@ -12,4 +15,7 @@ internal sealed record DataverseSearchJsonItem
 
     [JsonPropertyName("@search.objectid")]
     public Guid ObjectId { get; init; }
+
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
 }

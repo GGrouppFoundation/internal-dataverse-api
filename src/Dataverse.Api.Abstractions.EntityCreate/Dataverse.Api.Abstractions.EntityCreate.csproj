@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate</AssemblyName>
-    <Version>2.0.1</Version>
+    <Version>2.0.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
