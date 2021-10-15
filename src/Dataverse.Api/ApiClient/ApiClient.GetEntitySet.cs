@@ -34,11 +34,18 @@ partial class DataverseApiClient
     
     private static string BuildEntitySetGetUrl(DataverseEntitySetGetIn input)
         =>
-        Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
+        Pipeline.Pipe(
             new Dictionary<string, string>
             { 
                 ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields),
                 ["$filter"] = input.Filter
+            })
+        .Pipe<Dictionary<string, string>,IReadOnlyCollection<KeyValuePair<string, string>>>(
+            parameters =>
+            {
+                if (input.Top.HasValue)
+                    parameters.Add("$top", input.Top.ToString() ?? string.Empty);
+                return parameters;
             })
         .Pipe(
             QueryParametersBuilder.BuildQueryString)
