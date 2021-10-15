@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text.Json;
@@ -107,11 +110,23 @@ internal static class DataverseHttpHelper
        Pipeline.Pipe(
            @out?.Value?.Select(
                     item => new DataverseSearchItem(
-                        item.SearchScore,
-                        item.EntityName,
-                        item.ObjectId)).ToArray())
+                            searchScore: item.SearchScore,
+                            entityName: item.EntityName,
+                            objectId: item.ObjectId,
+                            extensionData: MapJsonElementDictionary(item.ExtensionData ?? new())))
+                        .ToArray())
         .Pipe(
            items => new DataverseSearchOut(@out?.TotalRecordCount ?? default, items));
+
+    private static ReadOnlyDictionary<string, DataverseSearchJsonValue> MapJsonElementDictionary(
+        Dictionary<string, JsonElement> jsonElemntDictonary)
+        =>
+        new(
+            jsonElemntDictonary
+            .ToDictionary<KeyValuePair<string,JsonElement>, string, DataverseSearchJsonValue>( 
+                kv => kv.Key,
+                kv => new(kv.Value)));
+   
 
     private static DataverseSearchModeJson ToDataverseSearchModeJson(this DataverseSearchMode searchMode)
         =>
