@@ -9,11 +9,13 @@ public sealed record DataverseEntitySetGetIn
     public DataverseEntitySetGetIn(
         [AllowNull] string entitySetName,
         [AllowNull] IReadOnlyCollection<string> selectFields,
-        [AllowNull] string filter)
+        [AllowNull] string filter,
+        int? top = null)
     {
         EntitySetName = entitySetName ?? string.Empty;
         SelectFields = selectFields ?? Array.Empty<string>();
         Filter = filter ?? string.Empty;
+        Top = top;
     }
 
     public string EntitySetName { get; }
@@ -21,4 +23,6 @@ public sealed record DataverseEntitySetGetIn
     public IReadOnlyCollection<string> SelectFields { get; }
 
     public string Filter { get; }
+
+    public int? Top { get; }
 }
