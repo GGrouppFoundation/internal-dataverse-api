@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,7 +45,9 @@ partial class DataverseApiClient
             parameters =>
             {
                 if (input.Top.HasValue)
-                    parameters.Add("$top", input.Top.ToString() ?? string.Empty);
+                {
+                    parameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
+                }
                 return parameters;
             })
         .Pipe(
