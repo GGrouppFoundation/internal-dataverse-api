@@ -1,6 +1,6 @@
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityCreateOut<TResponseJson>
+public readonly record struct DataverseEntityCreateOut<TResponseJson>
 {
     public DataverseEntityCreateOut(TResponseJson? value)
         =>

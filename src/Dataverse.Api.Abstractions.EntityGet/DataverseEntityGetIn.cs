@@ -4,21 +4,21 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityGetIn
+public sealed record class DataverseEntityGetIn
 {
     public DataverseEntityGetIn(
-        [AllowNull] string entityPluralName,
+        string entityPluralName,
         IDataverseEntityKey entityKey,
         [AllowNull] IReadOnlyCollection<string> selectFields)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
-        SelectFields = selectFields ?? Array.Empty<string>();
         EntityKey = entityKey;
+        SelectFields = selectFields ?? Array.Empty<string>();
     }
 
     public string EntityPluralName { get; }
 
-    public IReadOnlyCollection<string> SelectFields { get; }
-
     public IDataverseEntityKey EntityKey { get; }
+
+    public IReadOnlyCollection<string> SelectFields { get; }
 }

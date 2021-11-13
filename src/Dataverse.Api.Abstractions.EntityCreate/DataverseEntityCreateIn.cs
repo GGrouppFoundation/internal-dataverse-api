@@ -4,10 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityCreateIn<TRequestJson>
+public sealed record class DataverseEntityCreateIn<TRequestJson>
 {
     public DataverseEntityCreateIn(
-        [AllowNull] string entityPluralName,
+        string entityPluralName,
         [AllowNull] IReadOnlyCollection<string> selectFields,
         TRequestJson entityData)
     {

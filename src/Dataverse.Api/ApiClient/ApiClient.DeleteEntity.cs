@@ -11,21 +11,25 @@ partial class DataverseApiClient
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<Result<Unit, Failure<int>>>(cancellationToken) :
-            InternalDeleteEntityAsync(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<Result<Unit, Failure<int>>>(cancellationToken)
+            : InnerDeleteEntityAsync(input, cancellationToken);
     }
 
-    private async ValueTask<Result<Unit, Failure<int>>> InternalDeleteEntityAsync(
-        DataverseEntityDeleteIn input, CancellationToken cancellationToken = default)
+    private async ValueTask<Result<Unit, Failure<int>>> InnerDeleteEntityAsync(
+        DataverseEntityDeleteIn input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionData, apiType: ApiTypeData)
+            .InternalCreateHttpClientAsync(
+                messageHandler,
+                configurationProvider.Invoke(),
+                apiVersion: ApiVersionData,
+                apiType: ApiTypeData)
             .ConfigureAwait(false);
 
         var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityKey.Value})";
 
         var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
-        return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
+        return await response.InternalReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
     }  
 }

@@ -7,14 +7,14 @@ namespace GGroupp.Infra;
 
 internal static class QueryParametersBuilder
 {
-    public static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
+    internal static string InternalBuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
         =>
         paramValues.Where(
             v => string.IsNullOrEmpty(v) is false)
         .Pipe(
             values => string.Join(',', values));
 
-    public static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
+    internal static string InternalBuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {
         var queryStringBuilder = new StringBuilder();
 

@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseSearchIn
+public sealed record class DataverseSearchIn
 {
     public DataverseSearchIn(string searchString)
         => 

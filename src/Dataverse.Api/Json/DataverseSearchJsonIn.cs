@@ -3,10 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal sealed record DataverseSearchJsonIn
+internal sealed record class DataverseSearchJsonIn
 {
     public DataverseSearchJsonIn(string searchString)
-        => Search = searchString;
+        =>
+        Search = searchString ?? string.Empty;
 
     [JsonPropertyName("search")]
     public string Search { get; }

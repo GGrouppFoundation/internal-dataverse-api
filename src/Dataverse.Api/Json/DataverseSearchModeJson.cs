@@ -1,5 +1,5 @@
-﻿
-namespace GGroupp.Infra;
+﻿namespace GGroupp.Infra;
+
 internal enum DataverseSearchModeJson
 {
     Any,

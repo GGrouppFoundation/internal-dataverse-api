@@ -13,22 +13,26 @@ partial class DataverseApiClient
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken) :
-            InternalGetEntitySetAsync<TEntityJson>(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>>(cancellationToken)
+            : InnerGetEntitySetAsync<TEntityJson>(input, cancellationToken);
     }
 
-    private async ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> InternalGetEntitySetAsync<TEntityJson>(
+    private async ValueTask<Result<DataverseEntitySetGetOut<TEntityJson>, Failure<int>>> InnerGetEntitySetAsync<TEntityJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionData, apiType: ApiTypeData)
+            .InternalCreateHttpClientAsync(
+                messageHandler,
+                configurationProvider.Invoke(),
+                apiVersion: ApiVersionData,
+                apiType: ApiTypeData)
             .ConfigureAwait(false); 
 
         var entitiesGetUrl = BuildEntitySetGetUrl(input);
 
         var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TEntityJson>>(cancellationToken);
+        var result = await response.InternalReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TEntityJson>>(cancellationToken);
 
         return result.MapSuccess(e => new DataverseEntitySetGetOut<TEntityJson>(e?.Value));
     }
@@ -38,7 +42,7 @@ partial class DataverseApiClient
         Pipeline.Pipe(
             new Dictionary<string, string>
             { 
-                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields),
+                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields),
                 ["$filter"] = input.Filter
             })
         .Pipe<Dictionary<string, string>,IReadOnlyCollection<KeyValuePair<string, string>>>(
@@ -51,7 +55,7 @@ partial class DataverseApiClient
                 return parameters;
             })
         .Pipe(
-            QueryParametersBuilder.BuildQueryString)
+            QueryParametersBuilder.InternalBuildQueryString)
         .Pipe(
-            queryString => input.EntitySetName + queryString);
+            queryString => input.EntityPluralName + queryString);
 }

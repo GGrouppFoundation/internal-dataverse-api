@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntitySetGetOut<TEntityJson>
+public sealed record class DataverseEntitySetGetOut<TEntityJson>
 {
     public DataverseEntitySetGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
         =>

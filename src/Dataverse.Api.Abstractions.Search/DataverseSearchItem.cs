@@ -1,29 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseSearchItem
+using IDataverseSearchJsonFieldValues = IReadOnlyCollection<KeyValuePair<string, DataverseSearchJsonValue>>;
+
+public sealed record class DataverseSearchItem
 {
     public DataverseSearchItem(
         double searchScore,
-        [AllowNull] string entityName,
         Guid objectId,
-        [AllowNull] ReadOnlyDictionary<string, DataverseSearchJsonValue> extensionData)
+        [AllowNull] string entityName,
+        [AllowNull] IDataverseSearchJsonFieldValues extensionData)
     {
         SearchScore = searchScore;
         EntityName = entityName ?? string.Empty;    
         ObjectId = objectId;
-        ExtensionData = extensionData;
+        ExtensionData = extensionData ?? Array.Empty<KeyValuePair<string, DataverseSearchJsonValue>>();
     }
 
     public double SearchScore { get; }
 
-    public string EntityName { get; }
-
     public Guid ObjectId { get; }
 
-    public IReadOnlyDictionary<string, DataverseSearchJsonValue>? ExtensionData { get; }
+    public string EntityName { get; }
+
+    public IDataverseSearchJsonFieldValues ExtensionData { get; }
 }
