@@ -1,6 +1,6 @@
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityUpdateOut<TResponseJson>
+public readonly record struct DataverseEntityUpdateOut<TResponseJson>
 {
     public DataverseEntityUpdateOut(TResponseJson? value)
         =>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
@@ -26,9 +25,9 @@ internal static class DataverseHttpHelper
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-    internal static async Task<HttpClient> CreateHttpClientAsync(
+    internal static async Task<HttpClient> InternalCreateHttpClientAsync(
         HttpMessageHandler messageHandler, 
-        IDataverseApiClientConfiguration clientConfiguration,
+        DataverseApiClientConfiguration clientConfiguration,
         string apiVersion,
         string apiType,
         string? apiSearchType = null)
@@ -36,7 +35,7 @@ internal static class DataverseHttpHelper
         var authContext = CreateAuthenticationContext(clientConfiguration.AuthTenantId);
         var credential = new ClientCredential(clientConfiguration.AuthClientId, clientConfiguration.AuthClientSecret);
 
-        var client = new HttpClient(messageHandler, disposeHandler: false)
+        using var client = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(
                 Invariant($"{clientConfiguration.ServiceUrl}/api/{apiType}/v{apiVersion}/{apiSearchType.OrEmpty()}"))
@@ -48,14 +47,10 @@ internal static class DataverseHttpHelper
         return client;
     }
 
-    private static AuthenticationContext CreateAuthenticationContext(string tenantId)
-        =>
-        new(LoginMsOnlineServiceBaseUrl + tenantId);
-
-    public async static ValueTask<Result<T?, Failure<int>>> ReadDataverseResultAsync<T>(
+    internal async static ValueTask<Result<T?, Failure<int>>> InternalReadDataverseResultAsync<T>(
         this HttpResponseMessage response, CancellationToken cancellationToken) 
         => 
-        (response, await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false))switch
+        (response, await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false)) switch
         {
             var (resp, body) when resp.IsSuccessStatusCode && typeof(T) == typeof(Unit)
                 => default(T),
@@ -66,23 +61,13 @@ internal static class DataverseHttpHelper
             var (_, body) 
                 => JsonSerializer.Deserialize<DataverseFailureJson>(body).Pipe(MapDataverseFailureJson)
         };
-    
-    private static Failure<int> MapDataverseFailureJson(DataverseFailureJson? failureJson)
-        =>
-        Pipeline.Pipe(
-            failureJson?.Error?.Code)
-        .Pipe(
-            code => string.IsNullOrEmpty(code) ? default : Convert.ToInt32(code, 16))
-        .Pipe(
-            code => Failure.Create(code, failureJson?.Error?.Message));
 
-    public static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
+    internal static HttpContent InternalBuildRequestJsonBody<TRequestJson>(TRequestJson input)
         =>
-        Pipeline.Pipe(
-            new StringContent(
-                JsonSerializer.Serialize(input, jsonSerializerOptions),
-                System.Text.Encoding.UTF8,
-                MediaTypeNames.Application.Json))
+        new StringContent(
+            JsonSerializer.Serialize(input, jsonSerializerOptions),
+            System.Text.Encoding.UTF8,
+            MediaTypeNames.Application.Json)
         .Pipe(
             contetnt =>
             {
@@ -90,7 +75,7 @@ internal static class DataverseHttpHelper
                 return contetnt;
             });
 
-    public static DataverseSearchJsonIn MapDataverseSearchIn(this DataverseSearchIn input)
+    internal static DataverseSearchJsonIn InternalMapDataverseSearchIn(this DataverseSearchIn input)
         =>
         new(input.Search)
         { 
@@ -105,27 +90,38 @@ internal static class DataverseHttpHelper
             SearchType = input.SearchType?.ToDataverseSearchTypeJson()
         };
 
-    public static DataverseSearchOut MapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
-       =>
-       Pipeline.Pipe(
-           @out?.Value?.Select(
-                    item => new DataverseSearchItem(
-                            searchScore: item.SearchScore,
-                            entityName: item.EntityName,
-                            objectId: item.ObjectId,
-                            extensionData: MapJsonElementDictionary(item.ExtensionData ?? new())))
-                        .ToArray())
-        .Pipe(
-           items => new DataverseSearchOut(@out?.TotalRecordCount ?? default, items));
-
-    private static ReadOnlyDictionary<string, DataverseSearchJsonValue> MapJsonElementDictionary(
-        Dictionary<string, JsonElement> jsonElemntDictonary)
+    internal static DataverseSearchOut InternalMapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
         =>
         new(
-            jsonElemntDictonary
-            .ToDictionary<KeyValuePair<string,JsonElement>, string, DataverseSearchJsonValue>( 
-                kv => kv.Key,
-                kv => new(kv.Value)));
+            @out?.TotalRecordCount ?? default,
+            @out?.Value?.Select(MapJsonItem).ToArray());
+
+    private static AuthenticationContext CreateAuthenticationContext(string tenantId)
+        =>
+        new(LoginMsOnlineServiceBaseUrl + tenantId);
+    
+    private static Failure<int> MapDataverseFailureJson(DataverseFailureJson failureJson)
+        =>
+        Pipeline.Pipe(
+            failureJson.Error.Code)
+        .Pipe(
+            code => string.IsNullOrEmpty(code) ? default : Convert.ToInt32(code, 16))
+        .Pipe(
+            code => Failure.Create(code, failureJson.Error.Message));
+
+    private static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
+        =>
+        new(
+            searchScore: jsonItem.SearchScore,
+            entityName: jsonItem.EntityName,
+            objectId: jsonItem.ObjectId,
+            extensionData: jsonItem.ExtensionData?.Select(MapJsonFieldValue).ToArray());
+
+    private static KeyValuePair<string, DataverseSearchJsonValue> MapJsonFieldValue(KeyValuePair<string, JsonElement> source)
+        =>
+        new(
+            key: source.Key,
+            value: new(source.Value));
    
 
     private static DataverseSearchModeJson ToDataverseSearchModeJson(this DataverseSearchMode searchMode)

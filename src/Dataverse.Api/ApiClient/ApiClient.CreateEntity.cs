@@ -12,24 +12,28 @@ partial class DataverseApiClient
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken) :
-            InternalCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>>(cancellationToken)
+            : InnerCreateEntityAsync<TRequestJson, TResponseJson>(input, cancellationToken);
     }
 
-    private async ValueTask<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>> InternalCreateEntityAsync<TRequestJson, TResponseJson>(
-        DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken = default)
+    private async ValueTask<Result<DataverseEntityCreateOut<TResponseJson>, Failure<int>>> InnerCreateEntityAsync<TRequestJson, TResponseJson>(
+        DataverseEntityCreateIn<TRequestJson> input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionData, apiType: ApiTypeData)
+            .InternalCreateHttpClientAsync(
+                messageHandler,
+                configurationProvider.Invoke(),
+                apiVersion: ApiVersionData,
+                apiType: ApiTypeData)
             .ConfigureAwait(false);
 
         var entityCreateUrl = BuildEntityCreateUrl(input);
 
-        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
+        using var content = DataverseHttpHelper.InternalBuildRequestJsonBody(input.EntityData);
 
         var response = await httpClient.PostAsync(entityCreateUrl, content, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);
+        var result = await response.InternalReadDataverseResultAsync<TResponseJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityCreateOut<TResponseJson>(e));
     }
@@ -39,10 +43,10 @@ partial class DataverseApiClient
         Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
             new Dictionary<string, string>
             {
-                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
             })
         .Pipe(
-            QueryParametersBuilder.BuildQueryString)
+            QueryParametersBuilder.InternalBuildQueryString)
         .Pipe(
             queryString => $"{input.EntityPluralName}{queryString}");
 }

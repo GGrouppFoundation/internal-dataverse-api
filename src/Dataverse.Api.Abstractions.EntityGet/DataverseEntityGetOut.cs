@@ -1,6 +1,6 @@
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityGetOut<TEntityJson>
+public readonly record struct DataverseEntityGetOut<TEntityJson>
 {
     public DataverseEntityGetOut(TEntityJson? value)
         =>

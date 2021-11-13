@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseSearchOut
+public sealed record class DataverseSearchOut
 {
     public DataverseSearchOut(
         int totalRecordCount,

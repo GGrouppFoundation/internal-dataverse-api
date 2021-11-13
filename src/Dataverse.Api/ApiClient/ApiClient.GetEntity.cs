@@ -12,22 +12,26 @@ partial class DataverseApiClient
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
-        return cancellationToken.IsCancellationRequested ?
-            ValueTask.FromCanceled<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>>(cancellationToken) :
-            InternalGetEntityAsync<TEntityJson>(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>>(cancellationToken)
+            : InnerGetEntityAsync<TEntityJson>(input, cancellationToken);
     }
 
-    private async ValueTask<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>> InternalGetEntityAsync<TEntityJson>(
+    private async ValueTask<Result<DataverseEntityGetOut<TEntityJson>, Failure<int>>> InnerGetEntityAsync<TEntityJson>(
         DataverseEntityGetIn input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionData, apiType: ApiTypeData)
+            .InternalCreateHttpClientAsync(
+                messageHandler,
+                configurationProvider.Invoke(),
+                apiVersion: ApiVersionData,
+                apiType: ApiTypeData)
             .ConfigureAwait(false); 
 
         var entitiesGetUrl = BuildEntityGetUrl(input);
 
         var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<TEntityJson>(cancellationToken).ConfigureAwait(false);
+        var result = await response.InternalReadDataverseResultAsync<TEntityJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityGetOut<TEntityJson>(e));
     }
@@ -37,10 +41,10 @@ partial class DataverseApiClient
         Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
             new Dictionary<string, string>
             {
-                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
             })
         .Pipe(
-            QueryParametersBuilder.BuildQueryString)
+            QueryParametersBuilder.InternalBuildQueryString)
         .Pipe(
             queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
 }

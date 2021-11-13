@@ -2,8 +2,8 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal sealed record DataverseFailureJson
+internal readonly record struct DataverseFailureJson
 {
     [JsonPropertyName("error")]
-    public DataverseFailureInfoJson? Error { get; init; }
+    public DataverseFailureInfoJson Error { get; init; }
 }

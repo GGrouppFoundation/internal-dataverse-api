@@ -12,26 +12,33 @@ partial class DataverseApiClient
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
-        return cancellationToken.IsCancellationRequested ? 
-            ValueTask.FromCanceled<Result<DataverseSearchOut, Failure<int>>>(cancellationToken) : 
-            InnerSearchAsync(input, cancellationToken);
+        return cancellationToken.IsCancellationRequested
+            ? ValueTask.FromCanceled<Result<DataverseSearchOut, Failure<int>>>(cancellationToken)
+            : InnerSearchAsync(input, cancellationToken);
     }
     
     private async ValueTask<Result<DataverseSearchOut, Failure<int>>> InnerSearchAsync(
-        DataverseSearchIn input, CancellationToken cancellationToken = default)
+        DataverseSearchIn input, CancellationToken cancellationToken)
     {
         var httpClient = await DataverseHttpHelper
-            .CreateHttpClientAsync(messageHandler, clientConfiguration, apiVersion: ApiVersionSearch, apiType: ApiTypeSearch, apiSearchType: ApiSearchType)
+            .InternalCreateHttpClientAsync(
+                messageHandler,
+                configurationProvider.Invoke(),
+                apiVersion: ApiVersionSearch,
+                apiType: ApiTypeSearch,
+                apiSearchType: ApiSearchType)
             .ConfigureAwait(false);
 
+        var searchIn = input.InternalMapDataverseSearchIn();
         var requestMessage = new HttpRequestMessage()
         { 
             Method = HttpMethod.Post,
-            Content = DataverseHttpHelper.BuildRequestJsonBody(input.MapDataverseSearchIn()) 
+            Content = DataverseHttpHelper.InternalBuildRequestJsonBody(searchIn) 
         };
-        var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<DataverseSearchJsonOut>(cancellationToken).ConfigureAwait(false);
 
-        return result.MapSuccess(DataverseHttpHelper.MapDataverseSearchJsonOut);
+        var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
+        var result = await response.InternalReadDataverseResultAsync<DataverseSearchJsonOut>(cancellationToken).ConfigureAwait(false);
+
+        return result.MapSuccess(DataverseHttpHelper.InternalMapDataverseSearchJsonOut);
     }
 }

@@ -3,17 +3,17 @@ using System.Text.Json;
 
 namespace GGroupp.Infra;
 
-public sealed record DataverseSearchJsonValue
+public readonly record struct DataverseSearchJsonValue
 {
-    public JsonElement Value { get; }
-
-    public JsonValueKind Kind {  get; }
+    private readonly JsonElement jsonElement;
 
     public DataverseSearchJsonValue(JsonElement jsonElement)
-    {
-        Value = jsonElement;
-        Kind = jsonElement.ValueKind;
-    }
+        =>
+        this.jsonElement = jsonElement;
+
+    public JsonElement Value => jsonElement;
+
+    public JsonValueKind Kind => jsonElement.ValueKind;
 
     public int? ToInt32()
         =>
@@ -29,7 +29,7 @@ public sealed record DataverseSearchJsonValue
         Kind switch
         {
             JsonValueKind.Null => null,
-            JsonValueKind.String => Value.ToStringOrEmpty(),
+            JsonValueKind.String => Value.ToString(),
             _ => throw CreateInvalidOperationException(nameof(JsonValueKind.String), Kind)
         };
 
@@ -47,7 +47,7 @@ public sealed record DataverseSearchJsonValue
         Kind switch
         {
             JsonValueKind.Null => null,
-            JsonValueKind.String when DateTime.TryParse(Value.ToStringOrEmpty(), out var dateTimeResult) => dateTimeResult,
+            JsonValueKind.String when DateTime.TryParse(Value.ToString(), out var dateTimeResult) => dateTimeResult,
             _ => throw CreateInvalidOperationException(nameof(JsonValueKind.String), Kind)
         };
 

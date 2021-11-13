@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal sealed record DataverseSearchJsonItem
+internal sealed record class DataverseSearchJsonItem
 {
     [JsonPropertyName("@search.score")]
     public double SearchScore { get; init; }

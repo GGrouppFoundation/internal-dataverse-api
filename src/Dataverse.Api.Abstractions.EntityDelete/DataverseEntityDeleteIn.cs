@@ -1,16 +1,13 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace GGroupp.Infra;
 
-public sealed record DataverseEntityDeleteIn
+public sealed record class DataverseEntityDeleteIn
 {
     public DataverseEntityDeleteIn(
-        [AllowNull] string entityPluralName,
+        string entityPluralName,
         IDataverseEntityKey entityKey)
     {
-        EntityKey = entityKey;
         EntityPluralName = entityPluralName ?? string.Empty;
+        EntityKey = entityKey;
     }
 
     public string EntityPluralName { get; }
