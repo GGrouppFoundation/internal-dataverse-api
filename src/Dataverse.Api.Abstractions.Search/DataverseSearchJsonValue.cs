@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace GGroupp.Infra;
 
-public readonly record struct DataverseSearchJsonValue
+public sealed record class DataverseSearchJsonValue
 {
     private readonly JsonElement jsonElement;
 
