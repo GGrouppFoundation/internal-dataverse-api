@@ -20,8 +20,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseSearchOut, Failure<int>>> InnerSearchAsync(
         DataverseSearchIn input, CancellationToken cancellationToken)
     {
-        var httpClient = await DataverseHttpHelper
-            .InternalCreateHttpClientAsync(
+        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
                 messageHandler,
                 configurationProvider.Invoke(),
                 apiVersion: ApiVersionSearch,

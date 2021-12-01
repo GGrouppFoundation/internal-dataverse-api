@@ -35,7 +35,7 @@ internal static class DataverseHttpHelper
         var authContext = CreateAuthenticationContext(clientConfiguration.AuthTenantId);
         var credential = new ClientCredential(clientConfiguration.AuthClientId, clientConfiguration.AuthClientSecret);
 
-        using var client = new HttpClient(messageHandler, disposeHandler: false)
+        var client = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(
                 Invariant($"{clientConfiguration.ServiceUrl}/api/{apiType}/v{apiVersion}/{apiSearchType.OrEmpty()}"))
