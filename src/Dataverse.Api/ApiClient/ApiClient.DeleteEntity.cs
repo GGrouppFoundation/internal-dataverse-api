@@ -19,8 +19,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<Unit, Failure<int>>> InnerDeleteEntityAsync(
         DataverseEntityDeleteIn input, CancellationToken cancellationToken)
     {
-        var httpClient = await DataverseHttpHelper
-            .InternalCreateHttpClientAsync(
+        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
                 messageHandler,
                 configurationProvider.Invoke(),
                 apiVersion: ApiVersionData,

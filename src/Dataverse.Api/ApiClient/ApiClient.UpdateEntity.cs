@@ -20,8 +20,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntityUpdateOut<TResponseJson>, Failure<int>>> InnerUpdateEntityAsync<TRequestJson, TResponseJson>(
         DataverseEntityUpdateIn<TRequestJson> input, CancellationToken cancellationToken)
     {
-        var httpClient = await DataverseHttpHelper
-            .InternalCreateHttpClientAsync(
+        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
                 messageHandler,
                 configurationProvider.Invoke(),
                 apiVersion: ApiVersionData,
