@@ -133,6 +133,17 @@ jobs:
 
     - name: Pack Dataverse.Api
       run: dotnet pack ./src/*/Dataverse.Api.csproj --no-restore -o ~/nuget  -c Release
+
+    # Dataverse.Api
+
+    - name: Restore Dataverse.Api.CallerId.MessageHandler
+      run: dotnet restore ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj
+
+    - name: Build Dataverse.Api.CallerId.MessageHandler
+      run: dotnet build ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj --no-restore  -c Release
+
+    - name: Pack Dataverse.Api.CallerId.MessageHandler
+      run: dotnet pack ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj --no-restore -o ~/nuget  -c Release
       
     # Push
       
