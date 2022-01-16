@@ -22,7 +22,7 @@ partial class DataverseApiClient
     {
         using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
                 messageHandler,
-                configurationProvider.Invoke(),
+                configuration,
                 apiVersion: ApiVersionSearch,
                 apiType: ApiTypeSearch,
                 apiSearchType: ApiSearchType)

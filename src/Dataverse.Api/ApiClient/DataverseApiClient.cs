@@ -15,19 +15,19 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ApiSearchType = "query";
 
-    public static DataverseApiClient Create(HttpMessageHandler messageHandler, IFunc<DataverseApiClientConfiguration> configurationProvider)
+    public static DataverseApiClient Create(HttpMessageHandler messageHandler, DataverseApiClientConfiguration configuration)
         =>
         new (
             messageHandler ?? throw new ArgumentNullException(nameof(messageHandler)),
-            configurationProvider ?? throw new ArgumentNullException(nameof(configurationProvider)));
+            configuration ?? throw new ArgumentNullException(nameof(configuration)));
 
     private readonly HttpMessageHandler messageHandler;
 
-    private readonly IFunc<DataverseApiClientConfiguration> configurationProvider;
+    private readonly DataverseApiClientConfiguration configuration;
 
-    private DataverseApiClient(HttpMessageHandler messageHandler, IFunc<DataverseApiClientConfiguration> configurationProvider)
+    private DataverseApiClient(HttpMessageHandler messageHandler, DataverseApiClientConfiguration configuration)
     {
         this.messageHandler = messageHandler;
-        this.configurationProvider = configurationProvider;
+        this.configuration = configuration;
     }
 }
