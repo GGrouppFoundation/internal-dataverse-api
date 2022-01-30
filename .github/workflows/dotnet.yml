@@ -40,7 +40,7 @@ jobs:
 
     # Api.Core.EntityKey.Tests
 
-    - name: Restore Api.Core.EntityKey
+    - name: Restore Api.Core.EntityKey.Tests
       run: dotnet restore ./src/*/*/Api.Core.EntityKey.Tests.csproj
 
     - name: Test Api.Core.EntityKey.Tests
