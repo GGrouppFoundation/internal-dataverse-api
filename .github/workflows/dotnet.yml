@@ -14,8 +14,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-        include-prerelease: true 
-        
+        include-prerelease: false 
+
      # Add NuGet Sources
 
     - name: Create Local NuGet Directory
@@ -27,126 +27,137 @@ jobs:
     - name: Add GGroupp NuGet Source
       run: dotnet nuget add source ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -n ggroupp -u ${{ secrets.GGROUPP_NUGET_SOURCE_USER_NAME }} -p ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --store-password-in-clear-text
 
-    # Dataverse.Api.Core.EntityKey.Tests
-    
-    - name: Restore Dataverse.Api.Core.EntityKey
-      run: dotnet restore ./src/*/Dataverse.Api.Core.EntityKey.Tests.csproj
+    # Api.Core.FailureCode
 
-    - name: Test Dataverse.Api.Core.EntityKey.Tests
-      run: dotnet test ./src/*/Dataverse.Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
+    - name: Restore Api.Core.FailureCode
+      run: dotnet restore ./src/*/*/Api.Core.FailureCode.csproj
 
-    # Dataverse.Api.Core.EntityKey
-    
-    - name: Restore Dataverse.Api.Core.EntityKey
-      run: dotnet restore ./src/*/Dataverse.Api.Core.EntityKey.csproj
+    - name: Build Api.Core.FailureCode
+      run: dotnet build ./src/*/*/Api.Core.FailureCode.csproj --no-restore  -c Release
 
-    - name: Build Dataverse.Api.Core.EntityKey
-      run: dotnet build ./src/*/Dataverse.Api.Core.EntityKey.csproj --no-restore  -c Release
+    - name: Pack Api.Core.FailureCode
+      run: dotnet pack ./src/*/*/Api.Core.FailureCode.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Pack Dataverse.Api.Core.EntityKey
-      run: dotnet pack ./src/*/Dataverse.Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
+    # Api.Core.EntityKey.Tests
 
-    # Dataverse.Api.Abstractions.Search
-    
-    - name: Restore Dataverse.Api.Abstractions.Search
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.Search.csproj
+    - name: Restore Api.Core.EntityKey
+      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Tests.csproj
 
-    - name: Build Dataverse.Api.Abstractions.Search
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.Search.csproj --no-restore  -c Release
+    - name: Test Api.Core.EntityKey.Tests
+      run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
 
-    - name: Pack Dataverse.Api.Core.Search
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.Search.csproj --no-restore -o ~/nuget  -c Release
+    # Api.Core.EntityKey
 
-    # Dataverse.Api.Abstractions.EntityUpdate
-    
-    - name: Restore Dataverse.Api.Abstractions.EntityUpdate
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj
+    - name: Restore Api.Core.EntityKey
+      run: dotnet restore ./src/*/*/Api.Core.EntityKey.csproj
 
-    - name: Build Dataverse.Api.Abstractions.EntityUpdate
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj --no-restore  -c Release
+    - name: Build Api.Core.EntityKey
+      run: dotnet build ./src/*/*/Api.Core.EntityKey.csproj --no-restore  -c Release
 
-    - name: Pack Dataverse.Api.Abstractions.EntityUpdate
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityUpdate.csproj --no-restore -o ~/nuget  -c Release
+    - name: Pack Api.Core.EntityKey
+      run: dotnet pack ./src/*/*/Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
 
-    # Dataverse.Api.Abstractions.EntityDelete
-    
-    - name: Restore Dataverse.Api.Abstractions.EntityDelete
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityDelete.csproj
+    # Api.Abstractions.Search
 
-    - name: Build Dataverse.Api.Abstractions.EntityDelete
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityDelete.csproj --no-restore  -c Release
+    - name: Restore Api.Abstractions.Search
+      run: dotnet restore ./src/*/*/Api.Abstractions.Search.csproj
 
-    - name: Pack Dataverse.Api.Abstractions.EntityDelete
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityDelete.csproj --no-restore -o ~/nuget  -c Release
+    - name: Build Api.Abstractions.Search
+      run: dotnet build ./src/*/*/Api.Abstractions.Search.csproj --no-restore  -c Release
 
-    # Dataverse.Api.Abstractions.EntityCreate
-    
-    - name: Restore Dataverse.Api.Abstractions.EntityCreate
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityCreate.csproj
+    - name: Pack Api.Core.Search
+      run: dotnet pack ./src/*/*/Api.Abstractions.Search.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Build Dataverse.Api.Abstractions.EntityCreate
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityCreate.csproj --no-restore  -c Release
+    # Api.Abstractions.EntityUpdate
 
-    - name: Pack Dataverse.Api.Abstractions.EntityCreate
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityCreate.csproj --no-restore -o ~/nuget  -c Release
+    - name: Restore Api.Abstractions.EntityUpdate
+      run: dotnet restore ./src/*/*/Api.Abstractions.EntityUpdate.csproj
 
-    # Dataverse.Api.Abstractions.EntitySetGet
-    
-    - name: Restore Dataverse.Api.Abstractions.EntitySetGet
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj
+    - name: Build Api.Abstractions.EntityUpdate
+      run: dotnet build ./src/*/*/Api.Abstractions.EntityUpdate.csproj --no-restore  -c Release
 
-    - name: Build Dataverse.Api.Abstractions.EntitySetGet
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj --no-restore  -c Release
+    - name: Pack Api.Abstractions.EntityUpdate
+      run: dotnet pack ./src/*/*/Api.Abstractions.EntityUpdate.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Pack Dataverse.Api.Abstractions.EntitySetGet
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntitySetGet.csproj --no-restore -o ~/nuget  -c Release
-      
-    # Dataverse.Api.Abstractions.EntityGet
-    
-    - name: Restore Dataverse.Api.Abstractions.EntityGet
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj
+    # Api.Abstractions.EntityDelete
 
-    - name: Build Dataverse.Api.Abstractions.EntityGet
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj --no-restore  -c Release
+    - name: Restore Api.Abstractions.EntityDelete
+      run: dotnet restore ./src/*/*/Api.Abstractions.EntityDelete.csproj
 
-    - name: Pack Dataverse.Api.Abstractions.EntityGet
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.EntityGet.csproj --no-restore -o ~/nuget  -c Release
+    - name: Build Api.Abstractions.EntityDelete
+      run: dotnet build ./src/*/*/Api.Abstractions.EntityDelete.csproj --no-restore  -c Release
 
-    # Dataverse.Api.Abstractions
-    
-    - name: Restore Dataverse.Api.Abstractions
-      run: dotnet restore ./src/*/Dataverse.Api.Abstractions.csproj
+    - name: Pack Api.Abstractions.EntityDelete
+      run: dotnet pack ./src/*/*/Api.Abstractions.EntityDelete.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Build Dataverse.Api.Abstractions
-      run: dotnet build ./src/*/Dataverse.Api.Abstractions.csproj --no-restore  -c Release
+    # Api.Abstractions.EntityCreate
 
-    - name: Pack Dataverse.Api.Abstractions
-      run: dotnet pack ./src/*/Dataverse.Api.Abstractions.csproj --no-restore -o ~/nuget  -c Release
-      
-    # Dataverse.Api
+    - name: Restore Api.Abstractions.EntityCreate
+      run: dotnet restore ./src/*/*/Api.Abstractions.EntityCreate.csproj
 
-    - name: Restore Dataverse.Api
-      run: dotnet restore ./src/*/Dataverse.Api.csproj
+    - name: Build Api.Abstractions.EntityCreate
+      run: dotnet build ./src/*/*/Api.Abstractions.EntityCreate.csproj --no-restore  -c Release
 
-    - name: Build Dataverse.Api
-      run: dotnet build ./src/*/Dataverse.Api.csproj --no-restore  -c Release
+    - name: Pack Api.Abstractions.EntityCreate
+      run: dotnet pack ./src/*/*/Api.Abstractions.EntityCreate.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Pack Dataverse.Api
-      run: dotnet pack ./src/*/Dataverse.Api.csproj --no-restore -o ~/nuget  -c Release
+    # Api.Abstractions.EntitySetGet
 
-    # Dataverse.Api
+    - name: Restore Api.Abstractions.EntitySetGet
+      run: dotnet restore ./src/*/*/Api.Abstractions.EntitySetGet.csproj
 
-    - name: Restore Dataverse.Api.CallerId.MessageHandler
-      run: dotnet restore ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj
+    - name: Build Api.Abstractions.EntitySetGet
+      run: dotnet build ./src/*/*/Api.Abstractions.EntitySetGet.csproj --no-restore  -c Release
 
-    - name: Build Dataverse.Api.CallerId.MessageHandler
-      run: dotnet build ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj --no-restore  -c Release
+    - name: Pack Api.Abstractions.EntitySetGet
+      run: dotnet pack ./src/*/*/Api.Abstractions.EntitySetGet.csproj --no-restore -o ~/nuget  -c Release
 
-    - name: Pack Dataverse.Api.CallerId.MessageHandler
-      run: dotnet pack ./src/*/Dataverse.Api.CallerId.MessageHandler.csproj --no-restore -o ~/nuget  -c Release
-      
+    # Api.Abstractions.EntityGet
+
+    - name: Restore Api.Abstractions.EntityGet
+      run: dotnet restore ./src/*/*/Api.Abstractions.EntityGet.csproj
+
+    - name: Build Api.Abstractions.EntityGet
+      run: dotnet build ./src/*/*/Api.Abstractions.EntityGet.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.EntityGet
+      run: dotnet pack ./src/*/*/Api.Abstractions.EntityGet.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api.Abstractions
+
+    - name: Restore Api.Abstractions
+      run: dotnet restore ./src/*/*/Api.Abstractions.csproj
+
+    - name: Build Api.Abstractions
+      run: dotnet build ./src/*/*/Api.Abstractions.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions
+      run: dotnet pack ./src/*/*/Api.Abstractions.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api
+
+    - name: Restore Api
+      run: dotnet restore ./src/*/*/Api.csproj
+
+    - name: Build Api
+      run: dotnet build ./src/*/*/Api.csproj --no-restore  -c Release
+
+    - name: Pack Api
+      run: dotnet pack ./src/*/*/Api.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api.Impersonation
+
+    - name: Restore Api.Impersonation
+      run: dotnet restore ./src/*/*/Api.Impersonationr.csproj
+
+    - name: Build Api.Impersonationr
+      run: dotnet build ./src/*/*/Api.Impersonationr.csproj --no-restore  -c Release
+
+    - name: Pack Api.Impersonationr
+      run: dotnet pack ./src/*/*/Api.Impersonationr.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
-      
+
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
       run: dotnet nuget push "../../../nuget/*.nupkg" -s ${{ secrets.GGROUPP_NUGET_SOURCE_URL }} -k ${{ secrets.GGROUPP_NUGET_SOURCE_USER_PASSWORD }} --skip-duplicate
