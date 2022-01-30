@@ -6,5 +6,7 @@ public enum DataverseFailureCode
 
     RecordNotFoundByEntityKey,
 
-    SearchableEntityNotFound
+    SearchableEntityNotFound,
+
+    PicklistValueOutOfRange
 }

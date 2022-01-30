@@ -148,13 +148,13 @@ jobs:
     # Api.Impersonation
 
     - name: Restore Api.Impersonation
-      run: dotnet restore ./src/*/*/Api.Impersonationr.csproj
+      run: dotnet restore ./src/*/*/Api.Impersonation.csproj
 
-    - name: Build Api.Impersonationr
-      run: dotnet build ./src/*/*/Api.Impersonationr.csproj --no-restore  -c Release
+    - name: Build Api.Impersonation
+      run: dotnet build ./src/*/*/Api.Impersonation.csproj --no-restore  -c Release
 
-    - name: Pack Api.Impersonationr
-      run: dotnet pack ./src/*/*/Api.Impersonationr.csproj --no-restore -o ~/nuget  -c Release
+    - name: Pack Api.Impersonation
+      run: dotnet pack ./src/*/*/Api.Impersonation.csproj --no-restore -o ~/nuget  -c Release
 
     # Push
 

@@ -104,6 +104,7 @@ internal static class DataverseHttpHelper
         failureJson.Code switch
         {
             "0x80060891" => new(DataverseFailureCode.RecordNotFoundByEntityKey, failureJson.Message),
+            "0x8004431A" => new(DataverseFailureCode.PicklistValueOutOfRange, failureJson.Message),
             "SearchableEntityNotFound" => new(DataverseFailureCode.SearchableEntityNotFound, failureJson.Message),
             _ => new(DataverseFailureCode.Unknown, failureJson.Message)
         };
