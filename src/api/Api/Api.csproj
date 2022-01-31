@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>GGroupp.Infra</RootNamespace>
+    <AssemblyName>GGroupp.Infra.Dataverse.Api</AssemblyName>
+    <Version>2.6.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
+    <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.0.0" />
+    <PackageReference Include="PrimeFuncPack.Primitives.Pipeline" Version="2.0.1" />
+    <PackageReference Include="PrimeFuncPack.Primitives.Strings" Version="2.0.1" />
+  </ItemGroup>
+
+</Project>
