@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal readonly record struct DataverseFailureInfoJson
+internal sealed record class DataverseFailureInfoJson
 {
     [JsonPropertyName("code")]
     public string? Code { get; init; }

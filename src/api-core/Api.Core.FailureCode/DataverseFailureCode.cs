@@ -4,9 +4,15 @@ public enum DataverseFailureCode
 {
     Unknown,
 
-    RecordNotFoundByEntityKey,
+    RecordNotFound,
 
-    SearchableEntityNotFound,
+    PicklistValueOutOfRange,
 
-    PicklistValueOutOfRange
+    UserNotEnabled,
+
+    PrivilegeDenied,
+
+    Throttling,
+
+    SearchableEntityNotFound
 }

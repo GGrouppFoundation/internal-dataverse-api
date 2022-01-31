@@ -8,11 +8,11 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet</AssemblyName>
-    <Version>2.2.0-build.2</Version>
+    <Version>2.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Core.FailureCode" Version="1.0.0-build.2" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Core.FailureCode" Version="1.0.0" />
     <PackageReference Include="PrimeFuncPack.Core.Failure" Version="2.0.0" />
     <PackageReference Include="PrimeFuncPack.Core.Result" Version="2.0.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Core.EntityKey" Version="2.1.0" />

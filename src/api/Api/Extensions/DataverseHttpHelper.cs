@@ -47,19 +47,43 @@ internal static class DataverseHttpHelper
     }
 
     internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> InternalReadDataverseResultAsync<T>(
-        this HttpResponseMessage response, CancellationToken cancellationToken) 
-        => 
-        (response, await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false)) switch
+        this HttpResponseMessage response, CancellationToken cancellationToken)
+    {
+        if (response.IsSuccessStatusCode && typeof(T) == typeof(Unit))
         {
-            var (resp, body) when resp.IsSuccessStatusCode && typeof(T) == typeof(Unit)
-                => default(T),
-            var (resp, body) when resp.IsSuccessStatusCode
-                => JsonSerializer.Deserialize<T>(body),
-            var (resp, body) when resp.Content.Headers.ContentType?.MediaType != MediaTypeNames.Application.Json 
-                => Failure.Create<DataverseFailureCode>(default, body),
-            var (_, body) 
-                => JsonSerializer.Deserialize<DataverseFailureJson>(body).Error.Pipe(MapDataverseFailureJson)
-        };
+            return default(T);
+        }
+
+        var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
+        if (response.IsSuccessStatusCode)
+        {
+            return JsonSerializer.Deserialize<T>(body);
+        }
+
+        if (response.Content.Headers.ContentType?.MediaType is not MediaTypeNames.Application.Json)
+        {
+            return Failure.Create<DataverseFailureCode>(default, body);
+        }
+
+        var failureJson = JsonSerializer.Deserialize<DataverseFailureJson>(body);
+
+        if (failureJson.Failure is not null)
+        {
+            return CreateDataverseFailure(failureJson.Failure.Code, failureJson.Failure.Message ?? body);
+        }
+
+        if (failureJson.Error is not null)
+        {
+            return CreateDataverseFailure(failureJson.Error.Code, failureJson.Error.Description ?? body);
+        }
+
+        if (string.IsNullOrEmpty(failureJson.ErrorCode) is false)
+        {
+            return CreateDataverseFailure(failureJson.ErrorCode, failureJson.Message ?? failureJson.ExceptionMessage ?? body);
+        }
+
+        return Failure.Create(DataverseFailureCode.Unknown, body);
+    }
 
     internal static HttpContent InternalBuildRequestJsonBody<TRequestJson>(TRequestJson input)
         =>
@@ -99,14 +123,17 @@ internal static class DataverseHttpHelper
         =>
         new(LoginMsOnlineServiceBaseUrl + tenantId);
     
-    private static Failure<DataverseFailureCode> MapDataverseFailureJson(DataverseFailureInfoJson failureJson)
+    private static Failure<DataverseFailureCode> CreateDataverseFailure(string? code, string message)
         =>
-        failureJson.Code switch
+        code switch
         {
-            "0x80060891" => new(DataverseFailureCode.RecordNotFoundByEntityKey, failureJson.Message),
-            "0x8004431A" => new(DataverseFailureCode.PicklistValueOutOfRange, failureJson.Message),
-            "SearchableEntityNotFound" => new(DataverseFailureCode.SearchableEntityNotFound, failureJson.Message),
-            _ => new(DataverseFailureCode.Unknown, failureJson.Message)
+            "0x80060891" or "0x80040217" => new(DataverseFailureCode.RecordNotFound, message),
+            "0x8004431A" => new(DataverseFailureCode.PicklistValueOutOfRange, message),
+            "0x80040220" => new(DataverseFailureCode.PrivilegeDenied, message),
+            "0x80040225" => new(DataverseFailureCode.UserNotEnabled, message),
+            "SearchableEntityNotFound" => new(DataverseFailureCode.SearchableEntityNotFound, message),
+            "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => new(DataverseFailureCode.Throttling, message),
+            _ => new(DataverseFailureCode.Unknown, message)
         };
 
     private static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
