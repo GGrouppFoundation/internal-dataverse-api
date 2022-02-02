@@ -129,8 +129,8 @@ internal static class DataverseHttpHelper
         {
             "0x80060891" or "0x80040217" => new(DataverseFailureCode.RecordNotFound, message),
             "0x8004431A" => new(DataverseFailureCode.PicklistValueOutOfRange, message),
-            "0x80040220" => new(DataverseFailureCode.PrivilegeDenied, message),
-            "0x80040225" => new(DataverseFailureCode.UserNotEnabled, message),
+            "0x80040220" or "0x80048306" => new(DataverseFailureCode.PrivilegeDenied, message),
+            "0x80040225" or "0x8004d24b" => new(DataverseFailureCode.UserNotEnabled, message),
             "SearchableEntityNotFound" => new(DataverseFailureCode.SearchableEntityNotFound, message),
             "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => new(DataverseFailureCode.Throttling, message),
             _ => new(DataverseFailureCode.Unknown, message)
