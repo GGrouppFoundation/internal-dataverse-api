@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,19 +47,33 @@ partial class DataverseApiClient
             new Dictionary<string, string>
             { 
                 ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields),
-                ["$filter"] = input.Filter
+                ["$filter"] = input.Filter,
+                ["$orderby"] = string.Join(',', input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue))
             })
-        .Pipe<Dictionary<string, string>,IReadOnlyCollection<KeyValuePair<string, string>>>(
+        .Pipe(
             parameters =>
             {
                 if (input.Top.HasValue)
                 {
                     parameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
                 }
-                return parameters;
+                return (IReadOnlyCollection<KeyValuePair<string, string>>)parameters;
             })
         .Pipe(
             QueryParametersBuilder.InternalBuildQueryString)
         .Pipe(
             queryString => input.EntityPluralName + queryString);
+
+    private static bool NotEmptyFieldName(DataverseOrderParameter orderParameter)
+        =>
+        string.IsNullOrEmpty(orderParameter.FieldName) is false;
+
+    private static string GetOrderByValue(DataverseOrderParameter orderParameter)
+        =>
+        orderParameter.Direction switch
+        {
+            DataverseOrderDirection.Ascending => $"{orderParameter.FieldName} asc",
+            DataverseOrderDirection.Descending => $"{orderParameter.FieldName} desc",
+            _ => orderParameter.FieldName
+        };
 }
