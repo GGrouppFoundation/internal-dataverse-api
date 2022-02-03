@@ -10,11 +10,13 @@ public sealed record class DataverseEntitySetGetIn
         string entityPluralName,
         [AllowNull] IReadOnlyCollection<string> selectFields,
         [AllowNull] string filter,
+        [AllowNull] IReadOnlyCollection<DataverseOrderParameter> orderBy = null,
         int? top = null)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         SelectFields = selectFields ?? Array.Empty<string>();
         Filter = filter ?? string.Empty;
+        OrderBy = orderBy ?? Array.Empty<DataverseOrderParameter>();
         Top = top;
     }
 
@@ -23,6 +25,8 @@ public sealed record class DataverseEntitySetGetIn
     public IReadOnlyCollection<string> SelectFields { get; }
 
     public string Filter { get; }
+
+    public IReadOnlyCollection<DataverseOrderParameter> OrderBy { get; }
 
     public int? Top { get; }
 }
