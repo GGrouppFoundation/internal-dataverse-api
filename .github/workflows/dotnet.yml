@@ -156,6 +156,14 @@ jobs:
     - name: Pack Api.Impersonation
       run: dotnet pack ./src/*/*/Api.Impersonation.csproj --no-restore -o ~/nuget  -c Release
 
+    # Api.Impersonation.Test
+
+    - name: Restore Api.Impersonation.Test
+      run: dotnet restore ./src/*/*/Api.Impersonation.Test.csproj
+
+    - name: Test Api.Impersonation.Test
+      run: dotnet test ./src/*/*/Api.Impersonation.Test.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
 
     - name: Push Packages
