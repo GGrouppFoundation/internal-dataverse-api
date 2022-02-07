@@ -21,7 +21,18 @@ internal static class DataverseHttpHelper
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-    internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> InternalReadDataverseResultAsync<T>(
+    internal static HttpRequestMessage IncludeAnnotationsHeaderValue(this HttpRequestMessage requestMessage, string? includeAnnotations)
+    {
+        if (string.IsNullOrEmpty(includeAnnotations))
+        {
+            return requestMessage;
+        }
+
+        requestMessage.Headers.TryAddWithoutValidation("Prefer", $"odata.include-annotations={includeAnnotations}");
+        return requestMessage;
+    }
+
+    internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> ReadDataverseResultAsync<T>(
         this HttpResponseMessage response, CancellationToken cancellationToken)
     {
         if (response.IsSuccessStatusCode && typeof(T) == typeof(Unit))
@@ -60,7 +71,7 @@ internal static class DataverseHttpHelper
         return CreateDataverseFailure(failureJson.ErrorCode, failureJson.Message ?? failureJson.ExceptionMessage ?? body);
     }
 
-    internal static HttpContent InternalBuildRequestJsonBody<TRequestJson>(TRequestJson input)
+    internal static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
         =>
         new StringContent(
             JsonSerializer.Serialize(input, jsonSerializerOptions),
@@ -73,7 +84,7 @@ internal static class DataverseHttpHelper
                 return contetnt;
             });
 
-    internal static DataverseSearchJsonIn InternalMapDataverseSearchIn(this DataverseSearchIn input)
+    internal static DataverseSearchJsonIn MapDataverseSearchIn(this DataverseSearchIn input)
         =>
         new(input.Search)
         { 
@@ -88,7 +99,7 @@ internal static class DataverseHttpHelper
             SearchType = input.SearchType?.ToDataverseSearchTypeJson()
         };
 
-    internal static DataverseSearchOut InternalMapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
+    internal static DataverseSearchOut MapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
         =>
         new(
             @out?.TotalRecordCount ?? default,

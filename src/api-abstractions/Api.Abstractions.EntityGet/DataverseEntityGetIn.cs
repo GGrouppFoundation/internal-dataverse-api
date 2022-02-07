@@ -21,4 +21,6 @@ public sealed record class DataverseEntityGetIn
     public IDataverseEntityKey EntityKey { get; }
 
     public IReadOnlyCollection<string> SelectFields { get; }
+
+    public string? IncludeAnnotations { get; init; }
 }

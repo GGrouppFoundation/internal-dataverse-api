@@ -29,4 +29,6 @@ public sealed record class DataverseEntitySetGetIn
     public IReadOnlyCollection<DataverseOrderParameter> OrderBy { get; }
 
     public int? Top { get; }
+
+    public string? IncludeAnnotations { get; init; }
 }

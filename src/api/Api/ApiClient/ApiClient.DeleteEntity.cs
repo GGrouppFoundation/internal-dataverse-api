@@ -26,6 +26,6 @@ partial class DataverseApiClient
         var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityKey.Value})";
 
         var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
-        return await response.InternalReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
+        return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
     }  
 }

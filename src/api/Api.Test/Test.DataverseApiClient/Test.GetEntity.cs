@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -45,7 +46,7 @@ partial class DataverseApiClientTest
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetEntityGetTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
     public async Task GetEntityAsync_CancellationTokenIsNotCanceled_ExpectGetRequest(
-        Uri dataverseUri, DataverseEntityGetIn input, string expectedUrl)
+        Uri dataverseUri, DataverseEntityGetIn input, string expectedUrl, string? expectedPreferHeaderValue)
     {
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response, Callback);
@@ -62,6 +63,17 @@ partial class DataverseApiClientTest
         {
             Assert.Equal(HttpMethod.Get, requestMessage.Method);
             Assert.Equal(expectedUrl, requestMessage.RequestUri?.ToString(), ignoreCase: true);
+
+            var actualContainsPreferHeaderValue = requestMessage.Headers.Contains("Prefer");
+            if (expectedPreferHeaderValue is not null)
+            {
+                Assert.True(actualContainsPreferHeaderValue);
+                Assert.Equal(expectedPreferHeaderValue, requestMessage.Headers.GetValues("Prefer").First().ToString());
+            }
+            else
+            {
+                Assert.False(actualContainsPreferHeaderValue);
+            }
         }
     }
 

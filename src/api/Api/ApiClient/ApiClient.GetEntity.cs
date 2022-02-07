@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -25,26 +26,36 @@ partial class DataverseApiClient
         DataverseEntityGetIn input, CancellationToken cancellationToken)
     {
         using var httpClient = CreateDataHttpClient();
-        var entitiesGetUrl = BuildEntityGetUrl(input);
+        using var request = CreateEntityGetRequest(input);
 
-        var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<TJson>(cancellationToken).ConfigureAwait(false);
+        var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<TJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityGetOut<TJson>(e));
     }
 
-    private static string BuildEntityGetUrl(DataverseEntityGetIn input)
+    private static HttpRequestMessage CreateEntityGetRequest(DataverseEntityGetIn input)
+        =>
+        new HttpRequestMessage()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = BuildEntityGetUri(input)
+        }
+        .IncludeAnnotationsHeaderValue(
+            input.IncludeAnnotations);
+
+    private static Uri BuildEntityGetUri(DataverseEntityGetIn input)
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
+            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
         };
 
-        var queryString = QueryParametersBuilder.InternalBuildQueryString(queryParameters);
+        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
         var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
 
-        return $"{encodedPluralName}({encodedKey}){queryString}";
+        return new Uri($"{encodedPluralName}({encodedKey}){queryString}", UriKind.Relative);
     }
 }

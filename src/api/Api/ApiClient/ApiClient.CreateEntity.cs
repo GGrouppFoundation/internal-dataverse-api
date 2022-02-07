@@ -26,10 +26,10 @@ partial class DataverseApiClient
         using var httpClient = CreateDataHttpClient();
         var entityCreateUrl = BuildEntityCreateUrl(input);
 
-        using var content = DataverseHttpHelper.InternalBuildRequestJsonBody(input.EntityData);
+        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
 
         var response = await httpClient.PostAsync(entityCreateUrl, content, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityCreateOut<TOutJson>(e));
     }
@@ -39,10 +39,10 @@ partial class DataverseApiClient
         Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
             new Dictionary<string, string>
             {
-                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
+                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
             })
         .Pipe(
-            QueryParametersBuilder.InternalBuildQueryString)
+            QueryParametersBuilder.BuildQueryString)
         .Pipe(
             queryString => $"{input.EntityPluralName}{queryString}");
 }
