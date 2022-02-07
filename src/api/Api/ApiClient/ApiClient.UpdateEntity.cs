@@ -23,19 +23,13 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntityUpdateOut<TOutJson>, Failure<DataverseFailureCode>>> InnerUpdateEntityAsync<TInJson, TOutJson>(
         DataverseEntityUpdateIn<TInJson> input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionData,
-                apiType: ApiTypeData)
-            .ConfigureAwait(false);
-
+        using var httpClient = CreateDataHttpClient();
         var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
 
-        using var content = DataverseHttpHelper.InternalBuildRequestJsonBody(input.EntityData);
+        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
 
         var response = await httpClient.PatchAsync(entitiyUpdateUrl, content, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityUpdateOut<TOutJson>(e));
     }
@@ -45,10 +39,10 @@ partial class DataverseApiClient
         Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
             new Dictionary<string, string>
             {
-                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
+                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
             })
         .Pipe(
-            QueryParametersBuilder.InternalBuildQueryString)
+            QueryParametersBuilder.BuildQueryString)
         .Pipe(
             queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
 }

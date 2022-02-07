@@ -23,24 +23,18 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseSearchOut, Failure<DataverseFailureCode>>> InnerSearchAsync(
         DataverseSearchIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionSearch,
-                apiType: ApiTypeSearch,
-                apiSearchType: ApiSearchType)
-            .ConfigureAwait(false);
+        using var httpClient = CreateSearchHttpClient();
 
-        var searchIn = input.InternalMapDataverseSearchIn();
+        var searchIn = input.MapDataverseSearchIn();
         var requestMessage = new HttpRequestMessage()
         { 
             Method = HttpMethod.Post,
-            Content = DataverseHttpHelper.InternalBuildRequestJsonBody(searchIn) 
+            Content = DataverseHttpHelper.BuildRequestJsonBody(searchIn) 
         };
 
         var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<DataverseSearchJsonOut>(cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<DataverseSearchJsonOut>(cancellationToken).ConfigureAwait(false);
 
-        return result.MapSuccess(DataverseHttpHelper.InternalMapDataverseSearchJsonOut);
+        return result.MapSuccess(DataverseHttpHelper.MapDataverseSearchJsonOut);
     }
 }

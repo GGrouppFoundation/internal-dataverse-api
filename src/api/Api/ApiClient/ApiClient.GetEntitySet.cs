@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -26,43 +27,44 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntitySetGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntitySetAsync<TJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionData,
-                apiType: ApiTypeData)
-            .ConfigureAwait(false); 
+        using var httpClient = CreateDataHttpClient();
+        using var request = CreateEntitySetGetRequest(input);
 
-        var entitiesGetUrl = BuildEntitySetGetUrl(input);
-
-        var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TJson>>(cancellationToken);
+        var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TJson>>(cancellationToken);
 
         return result.MapSuccess(e => new DataverseEntitySetGetOut<TJson>(e?.Value));
     }
-    
-    private static string BuildEntitySetGetUrl(DataverseEntitySetGetIn input)
+
+    private static HttpRequestMessage CreateEntitySetGetRequest(DataverseEntitySetGetIn input)
         =>
-        Pipeline.Pipe(
-            new Dictionary<string, string>
-            { 
-                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields),
-                ["$filter"] = input.Filter,
-                ["$orderby"] = string.Join(',', input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue))
-            })
-        .Pipe(
-            parameters =>
-            {
-                if (input.Top.HasValue)
-                {
-                    parameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
-                }
-                return (IReadOnlyCollection<KeyValuePair<string, string>>)parameters;
-            })
-        .Pipe(
-            QueryParametersBuilder.InternalBuildQueryString)
-        .Pipe(
-            queryString => input.EntityPluralName + queryString);
+        new HttpRequestMessage()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = BuildEntitySetGetUri(input)
+        }
+        .IncludeAnnotationsHeaderValue(
+            input.IncludeAnnotations);
+
+    private static Uri BuildEntitySetGetUri(DataverseEntitySetGetIn input)
+    {
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields),
+            ["$filter"] = input.Filter,
+            ["$orderby"] = string.Join(',', input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue))
+        };
+
+        if (input.Top.HasValue)
+        {
+            queryParameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
+        }
+
+        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        return new Uri(encodedPluralName + queryString, UriKind.Relative);
+    }
 
     private static bool NotEmptyFieldName(DataverseOrderParameter orderParameter)
         =>

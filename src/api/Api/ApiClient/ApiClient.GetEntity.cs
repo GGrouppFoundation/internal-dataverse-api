@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -23,30 +25,37 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntityGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntityAsync<TJson>(
         DataverseEntityGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionData,
-                apiType: ApiTypeData)
-            .ConfigureAwait(false); 
+        using var httpClient = CreateDataHttpClient();
+        using var request = CreateEntityGetRequest(input);
 
-        var entitiesGetUrl = BuildEntityGetUrl(input);
-
-        var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.InternalReadDataverseResultAsync<TJson>(cancellationToken).ConfigureAwait(false);
+        var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        var result = await response.ReadDataverseResultAsync<TJson>(cancellationToken).ConfigureAwait(false);
 
         return result.MapSuccess(e => new DataverseEntityGetOut<TJson>(e));
     }
 
-    private static string BuildEntityGetUrl(DataverseEntityGetIn input)
+    private static HttpRequestMessage CreateEntityGetRequest(DataverseEntityGetIn input)
         =>
-        Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
-            new Dictionary<string, string>
-            {
-                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
-            })
-        .Pipe(
-            QueryParametersBuilder.InternalBuildQueryString)
-        .Pipe(
-            queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
+        new HttpRequestMessage()
+        {
+            Method = HttpMethod.Get,
+            RequestUri = BuildEntityGetUri(input)
+        }
+        .IncludeAnnotationsHeaderValue(
+            input.IncludeAnnotations);
+
+    private static Uri BuildEntityGetUri(DataverseEntityGetIn input)
+    {
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+        };
+
+        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
+
+        return new Uri($"{encodedPluralName}({encodedKey}){queryString}", UriKind.Relative);
+    }
 }
