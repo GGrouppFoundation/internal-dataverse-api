@@ -19,6 +19,21 @@ public sealed partial class DataverseApiClientTest
             entityKey: new StubEntityKey("Some key"),
             selectFields: new[] { "Some field name" });
 
+    private static readonly DataverseEntitySetGetIn SomeDataverseEntitySetGetInput
+        =
+        new(
+            entityPluralName: "SomeEntities",
+            selectFields: new[] { "Some field name" },
+            filter: "Some filter",
+            orderBy: new DataverseOrderParameter[] { new("one", DataverseOrderDirection.Default) },
+            top: 5);
+
+    private static readonly DataverseEntityDeleteIn SomeDataverseEntityDeleteInput
+        =
+        new(
+            entityPluralName: "SomeEntitiesToDelete",
+            entityKey: new StubEntityKey("Some entity key to delete"));
+
     private static IDataverseApiClient CreateDataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri)
         =>
         new DataverseApiClient(messageHandler, dataverseBaseUri);

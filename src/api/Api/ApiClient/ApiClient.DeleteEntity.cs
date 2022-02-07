@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -23,7 +24,11 @@ partial class DataverseApiClient
         DataverseEntityDeleteIn input, CancellationToken cancellationToken)
     {
         using var httpClient = CreateDataHttpClient();
-        var entitiyDeleteUrl = $"{input.EntityPluralName}({input.EntityKey.Value})";
+
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
+
+        var entitiyDeleteUrl = $"{encodedPluralName}({encodedKey})";
 
         var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
         return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);

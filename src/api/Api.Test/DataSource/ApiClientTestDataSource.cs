@@ -5,7 +5,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 internal static partial class ApiClientTestDataSource
 {
-    private static StringContent CreateResponseContentJson(StubResponseJson responseJson)
+    private static StringContent CreateResponseContentJson<TJson>(TJson responseJson)
         =>
         new(
             JsonSerializer.Serialize(responseJson));
