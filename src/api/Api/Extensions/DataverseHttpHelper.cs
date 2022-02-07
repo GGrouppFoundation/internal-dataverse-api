@@ -7,14 +7,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 namespace GGroupp.Infra;
 
 internal static class DataverseHttpHelper
 {
-    private const string LoginMsOnlineServiceBaseUrl = "https://login.microsoftonline.com/";
-
     private static readonly JsonSerializerOptions jsonSerializerOptions;
 
     static DataverseHttpHelper()
@@ -23,28 +20,6 @@ internal static class DataverseHttpHelper
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
-
-    internal static async Task<HttpClient> InternalCreateHttpClientAsync(
-        HttpMessageHandler messageHandler, 
-        DataverseApiClientConfiguration configuration,
-        string apiVersion,
-        string apiType,
-        string? apiSearchType = null)
-    {
-        var authContext = CreateAuthenticationContext(configuration.AuthTenantId);
-        var credential = new ClientCredential(configuration.AuthClientId, configuration.AuthClientSecret);
-
-        var baseUri = new Uri(configuration.ServiceUrl, UriKind.Absolute);
-        var client = new HttpClient(messageHandler, disposeHandler: false)
-        {
-            BaseAddress = new(baseUri, $"/api/{apiType}/v{apiVersion}/{apiSearchType.OrEmpty()}")
-        };
-
-        var authTokenResult = await authContext.AcquireTokenAsync(configuration.ServiceUrl, credential).ConfigureAwait(false);
-        client.DefaultRequestHeaders.Authorization = new(authTokenResult.AccessTokenType, authTokenResult.AccessToken);
-
-        return client;
-    }
 
     internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> InternalReadDataverseResultAsync<T>(
         this HttpResponseMessage response, CancellationToken cancellationToken)
@@ -57,6 +32,11 @@ internal static class DataverseHttpHelper
         var body = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
         if (response.IsSuccessStatusCode)
         {
+            if (string.IsNullOrEmpty(body))
+            {
+                return default(T);
+            }
+
             return JsonSerializer.Deserialize<T>(body);
         }
 
@@ -77,12 +57,7 @@ internal static class DataverseHttpHelper
             return CreateDataverseFailure(failureJson.Error.Code, failureJson.Error.Description ?? body);
         }
 
-        if (string.IsNullOrEmpty(failureJson.ErrorCode) is false)
-        {
-            return CreateDataverseFailure(failureJson.ErrorCode, failureJson.Message ?? failureJson.ExceptionMessage ?? body);
-        }
-
-        return Failure.Create(DataverseFailureCode.Unknown, body);
+        return CreateDataverseFailure(failureJson.ErrorCode, failureJson.Message ?? failureJson.ExceptionMessage ?? body);
     }
 
     internal static HttpContent InternalBuildRequestJsonBody<TRequestJson>(TRequestJson input)
@@ -118,10 +93,6 @@ internal static class DataverseHttpHelper
         new(
             @out?.TotalRecordCount ?? default,
             @out?.Value?.Select(MapJsonItem).ToArray());
-
-    private static AuthenticationContext CreateAuthenticationContext(string tenantId)
-        =>
-        new(LoginMsOnlineServiceBaseUrl + tenantId);
     
     private static Failure<DataverseFailureCode> CreateDataverseFailure(string? code, string message)
         =>

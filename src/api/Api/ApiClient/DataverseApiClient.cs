@@ -17,21 +17,29 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ApiSearchType = "query";
 
-    public static DataverseApiClient Create(HttpMessageHandler messageHandler, DataverseApiClientConfiguration configuration)
-        =>
-        new (
-            messageHandler ?? throw new ArgumentNullException(nameof(messageHandler)),
-            configuration ?? throw new ArgumentNullException(nameof(configuration)));
-
     private readonly HttpMessageHandler messageHandler;
 
-    private readonly DataverseApiClientConfiguration configuration;
+    private readonly Uri dataverseBaseUri;
 
-    private DataverseApiClient(HttpMessageHandler messageHandler, DataverseApiClientConfiguration configuration)
+    internal DataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri)
     {
         this.messageHandler = messageHandler;
-        this.configuration = configuration;
+        this.dataverseBaseUri = dataverseBaseUri;
     }
+
+    private HttpClient CreateDataHttpClient()
+        =>
+        new(messageHandler, disposeHandler: false)
+        {
+            BaseAddress = new(dataverseBaseUri, $"/api/{ApiTypeData}/v{ApiVersionData}/")
+        };
+
+    private HttpClient CreateSearchHttpClient()
+        =>
+        new(messageHandler, disposeHandler: false)
+        {
+            BaseAddress = new(dataverseBaseUri, $"/api/{ApiTypeSearch}/v{ApiVersionSearch}/{ApiSearchType}")
+        };
 
     private static ValueTask<Result<T, Failure<DataverseFailureCode>>> GetCanceledAsync<T>(CancellationToken cancellationToken)
         =>

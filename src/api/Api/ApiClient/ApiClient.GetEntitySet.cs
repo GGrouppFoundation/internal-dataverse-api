@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,13 +25,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntitySetGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntitySetAsync<TJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionData,
-                apiType: ApiTypeData)
-            .ConfigureAwait(false); 
-
+        using var httpClient = CreateDataHttpClient();
         var entitiesGetUrl = BuildEntitySetGetUrl(input);
 
         var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);

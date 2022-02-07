@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -23,13 +24,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntityGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntityAsync<TJson>(
         DataverseEntityGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = await DataverseHttpHelper.InternalCreateHttpClientAsync(
-                messageHandler,
-                configuration,
-                apiVersion: ApiVersionData,
-                apiType: ApiTypeData)
-            .ConfigureAwait(false); 
-
+        using var httpClient = CreateDataHttpClient();
         var entitiesGetUrl = BuildEntityGetUrl(input);
 
         var response = await httpClient.GetAsync(entitiesGetUrl, cancellationToken).ConfigureAwait(false);
@@ -39,14 +34,17 @@ partial class DataverseApiClient
     }
 
     private static string BuildEntityGetUrl(DataverseEntityGetIn input)
-        =>
-        Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
-            new Dictionary<string, string>
-            {
-                ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
-            })
-        .Pipe(
-            QueryParametersBuilder.InternalBuildQueryString)
-        .Pipe(
-            queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
+    {
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["$select"] = QueryParametersBuilder.InternalBuildOdataParameterValue(input.SelectFields)
+        };
+
+        var queryString = QueryParametersBuilder.InternalBuildQueryString(queryParameters);
+
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
+
+        return $"{encodedPluralName}({encodedKey}){queryString}";
+    }
 }
