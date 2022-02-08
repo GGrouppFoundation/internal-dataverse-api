@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -72,17 +73,13 @@ internal static class DataverseHttpHelper
     }
 
     internal static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
-        =>
-        new StringContent(
-            JsonSerializer.Serialize(input, jsonSerializerOptions),
-            System.Text.Encoding.UTF8,
-            MediaTypeNames.Application.Json)
-        .Pipe(
-            contetnt =>
-            {
-                contetnt.Headers.Add("Prefer", "return=representation");
-                return contetnt;
-            });
+    {
+        var json = JsonSerializer.Serialize(input, jsonSerializerOptions);
+        var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+        content.Headers.Add("Prefer", "return=representation");
+        return content;
+    }
 
     internal static DataverseSearchJsonIn MapDataverseSearchIn(this DataverseSearchIn input)
         =>

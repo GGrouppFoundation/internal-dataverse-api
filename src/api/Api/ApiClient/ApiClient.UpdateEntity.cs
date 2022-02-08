@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -9,6 +10,7 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntityUpdateOut<TOutJson>, Failure<DataverseFailureCode>>> UpdateEntityAsync<TInJson, TOutJson>(
         DataverseEntityUpdateIn<TInJson> input, CancellationToken cancellationToken = default)
+        where TInJson : notnull
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
@@ -22,6 +24,7 @@ partial class DataverseApiClient
 
     private async ValueTask<Result<DataverseEntityUpdateOut<TOutJson>, Failure<DataverseFailureCode>>> InnerUpdateEntityAsync<TInJson, TOutJson>(
         DataverseEntityUpdateIn<TInJson> input, CancellationToken cancellationToken)
+        where TInJson : notnull
     {
         using var httpClient = CreateDataHttpClient();
         var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
@@ -35,14 +38,18 @@ partial class DataverseApiClient
     }
 
     private static string BuildEntityUpdateUrl<TInJson>(DataverseEntityUpdateIn<TInJson> input)
-        =>
-        Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
-            new Dictionary<string, string>
-            {
-                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
-            })
-        .Pipe(
-            QueryParametersBuilder.BuildQueryString)
-        .Pipe(
-            queryString => $"{input.EntityPluralName}({input.EntityKey.Value}){queryString}");
+        where TInJson : notnull
+    {
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+        };
+
+        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
+
+        return $"{encodedPluralName}({encodedKey}){queryString}";
+    }
 }

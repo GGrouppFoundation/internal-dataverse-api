@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GGroupp.Infra;
 
@@ -9,6 +10,7 @@ partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEntityCreateOut<TOutJson>, Failure<DataverseFailureCode>>> CreateEntityAsync<TInJson, TOutJson>(
         DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken = default)
+        where TInJson : notnull
     {
         _ = input ?? throw new ArgumentNullException(nameof(input));
 
@@ -22,6 +24,7 @@ partial class DataverseApiClient
 
     private async ValueTask<Result<DataverseEntityCreateOut<TOutJson>, Failure<DataverseFailureCode>>> InnerCreateEntityAsync<TInJson, TOutJson>(
         DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken)
+        where TInJson : notnull
     {
         using var httpClient = CreateDataHttpClient();
         var entityCreateUrl = BuildEntityCreateUrl(input);
@@ -35,14 +38,16 @@ partial class DataverseApiClient
     }
 
     private static string BuildEntityCreateUrl<TInJson>(DataverseEntityCreateIn<TInJson> input)
-        =>
-        Pipeline.Pipe<IReadOnlyCollection<KeyValuePair<string, string>>>(
-            new Dictionary<string, string>
-            {
-                ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
-            })
-        .Pipe(
-            QueryParametersBuilder.BuildQueryString)
-        .Pipe(
-            queryString => $"{input.EntityPluralName}{queryString}");
+        where TInJson : notnull
+    {
+        var queryParameters = new Dictionary<string, string>
+        {
+            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+        };
+
+        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+        var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+
+        return $"{encodedPluralName}{queryString}";
+    }
 }

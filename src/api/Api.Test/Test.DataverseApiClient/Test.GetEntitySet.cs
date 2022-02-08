@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -12,7 +13,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public async Task GetEntityAsync_InputIsNull_ExpectArgumentNullException()
+    public async Task GetEntitySetAsync_InputIsNull_ExpectArgumentNullException()
     {
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response);
@@ -23,13 +24,13 @@ partial class DataverseApiClientTest
         var token = new CancellationToken(canceled: false);
 
         var ex = await Assert.ThrowsAsync<ArgumentNullException>(
-            () => dataverseApiClient.GetEntityAsync<Unit>(null!, token).AsTask());
+            () => dataverseApiClient.GetEntitySetAsync<Unit>(null!, token).AsTask());
 
         Assert.Equal("input", ex.ParamName);
     }
 
     [Fact]
-    public void GetEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public void GetEntitySetAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response);
@@ -37,16 +38,17 @@ partial class DataverseApiClientTest
         using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
+        var input = SomeDataverseEntitySetGetInput;
         var token = new CancellationToken(canceled: true);
 
-        var actualTask = dataverseApiClient.GetEntityAsync<Unit>(SomeDataverseEntityGetInput, token);
+        var actualTask = dataverseApiClient.GetEntitySetAsync<StubResponseJson>(input, token);
         Assert.True(actualTask.IsCanceled);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetEntityGetInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntityAsync_CancellationTokenIsNotCanceled_ExpectGetRequest(
-        Uri dataverseUri, DataverseEntityGetIn input, string expectedUrl, string? expectedPreferHeaderValue)
+    [MemberData(nameof(ApiClientTestDataSource.GetEntitySetGetInputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public async Task GetEntitySetAsync_CancellationTokenIsNotCanceled_ExpectGetRequest(
+        Uri dataverseUri, DataverseEntitySetGetIn input, string expectedUrl, string? expectedPreferHeaderValue)
     {
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response, Callback);
@@ -55,7 +57,7 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, dataverseUri);
 
         var token = new CancellationToken(canceled: false);
-        _ = await dataverseApiClient.GetEntityAsync<Unit>(input, token);
+        _ = await dataverseApiClient.GetEntitySetAsync<StubResponseJson>(input, token);
 
         mockProxyHandler.Verify(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()), Times.Once);
 
@@ -79,7 +81,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntityAsync_ResponseIsFailure_ExpectFailure(
+    public async Task GetEntitySetAsync_ResponseIsFailure_ExpectFailure(
         StringContent? responseContent, Failure<DataverseFailureCode> expected)
     {
         using var response = new HttpResponseMessage
@@ -92,14 +94,16 @@ partial class DataverseApiClientTest
         using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
-        var actual = await dataverseApiClient.GetEntityAsync<StubResponseJson>(SomeDataverseEntityGetInput, CancellationToken.None);
+        var input = SomeDataverseEntitySetGetInput;
+        var actual = await dataverseApiClient.GetEntitySetAsync<StubResponseJson>(input, CancellationToken.None);
+
         Assert.Equal(expected, actual);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetUnitOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntityAsync_UnitResponseIsSuccess_ExpectSuccess(
-        StringContent? responseContent)
+    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public async Task GetEntitySetAsync_ResponseJsonIsSuccess_ExpectSuccess(
+        StringContent? responseContent, IReadOnlyCollection<StubResponseJson> expected)
     {
         using var response = new HttpResponseMessage
         {
@@ -111,30 +115,10 @@ partial class DataverseApiClientTest
         using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
-        var actual = await dataverseApiClient.GetEntityAsync<Unit>(SomeDataverseEntityGetInput, CancellationToken.None);
-        var expected = new DataverseEntityGetOut<Unit>(default);
+        var input = SomeDataverseEntitySetGetInput;
+        var actualResult = await dataverseApiClient.GetEntitySetAsync<StubResponseJson>(input, CancellationToken.None);
 
-        Assert.Equal(expected, actual);
-    }
-
-    [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntityAsync_ResponseJsonIsSuccess_ExpectSuccess(
-        StringContent? responseContent, StubResponseJson? expectedValue)
-    {
-        using var response = new HttpResponseMessage
-        {
-            StatusCode = HttpStatusCode.OK,
-            Content = responseContent
-        };
-        var mockProxyHandler = CreateMockProxyHandler(response);
-
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
-
-        var actual = await dataverseApiClient.GetEntityAsync<StubResponseJson>(SomeDataverseEntityGetInput, CancellationToken.None);
-        var expected = new DataverseEntityGetOut<StubResponseJson>(expectedValue);
-
-        Assert.Equal(expected, actual);
+        Assert.True(actualResult.IsSuccess);
+        Assert.Equal(expected, actualResult.SuccessOrThrow().Value);
     }
 }
