@@ -46,7 +46,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetEntitySetGetTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetEntitySetGetInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task GetEntitySetAsync_CancellationTokenIsNotCanceled_ExpectGetRequest(
         Uri dataverseUri, DataverseEntitySetGetIn input, string expectedUrl, string? expectedPreferHeaderValue)
     {
@@ -80,7 +80,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureResponseTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task GetEntitySetAsync_ResponseIsFailure_ExpectFailure(
         StringContent? responseContent, Failure<DataverseFailureCode> expected)
     {
@@ -101,7 +101,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonSetTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task GetEntitySetAsync_ResponseJsonIsSuccess_ExpectSuccess(
         StringContent? responseContent, IReadOnlyCollection<StubResponseJson> expected)
     {

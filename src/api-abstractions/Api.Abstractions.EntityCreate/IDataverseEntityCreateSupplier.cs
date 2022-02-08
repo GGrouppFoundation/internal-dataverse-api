@@ -7,5 +7,6 @@ namespace GGroupp.Infra;
 public interface IDataverseEntityCreateSupplier
 {
     ValueTask<Result<DataverseEntityCreateOut<TOutJson>, Failure<DataverseFailureCode>>> CreateEntityAsync<TInJson, TOutJson>(
-        DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken = default);
+        DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken = default)
+        where TInJson : notnull;
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using static GGroupp.Infra.QueryParametersBuilder;
 
 namespace GGroupp.Infra;
 
@@ -50,9 +51,9 @@ partial class DataverseApiClient
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields),
+            ["$select"] = input.SelectFields.Pipe(BuildOdataParameterValue),
             ["$filter"] = input.Filter,
-            ["$orderby"] = string.Join(',', input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue))
+            ["$orderby"] = input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue).Pipe(BuildOdataParameterValue)
         };
 
         if (input.Top.HasValue)
@@ -60,7 +61,7 @@ partial class DataverseApiClient
             queryParameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
         }
 
-        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+        var queryString = BuildQueryString(queryParameters);
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
         return new Uri(encodedPluralName + queryString, UriKind.Relative);

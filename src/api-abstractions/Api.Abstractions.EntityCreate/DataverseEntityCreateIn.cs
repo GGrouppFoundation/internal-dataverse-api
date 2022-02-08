@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace GGroupp.Infra;
 
 public sealed record class DataverseEntityCreateIn<TInJson>
+    where TInJson : notnull
 {
     public DataverseEntityCreateIn(
         string entityPluralName,

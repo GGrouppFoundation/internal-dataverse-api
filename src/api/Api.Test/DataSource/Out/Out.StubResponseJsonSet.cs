@@ -6,7 +6,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> GetStubResponseJsonSetTestDataPair()
+    public static IEnumerable<object?[]> GetStubResponseJsonSetOutputTestData()
     {
         yield return new object?[]
         {

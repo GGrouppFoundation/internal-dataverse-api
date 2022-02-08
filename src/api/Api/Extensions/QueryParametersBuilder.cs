@@ -7,7 +7,7 @@ namespace GGroupp.Infra;
 
 internal static class QueryParametersBuilder
 {
-    internal static string BuildOdataParameterValue(IReadOnlyCollection<string> paramValues)
+    internal static string BuildOdataParameterValue(IEnumerable<string> paramValues)
         =>
         paramValues.Where(
             v => string.IsNullOrEmpty(v) is false)

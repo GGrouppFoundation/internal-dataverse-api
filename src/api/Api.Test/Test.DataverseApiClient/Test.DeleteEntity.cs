@@ -43,7 +43,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetEntityDeleteTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetEntityDeleteInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task DeleteEntityAsync_CancellationTokenIsNotCanceled_ExpectGetRequest(
         Uri dataverseUri, DataverseEntityDeleteIn input, string expectedUrl)
     {
@@ -66,7 +66,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureResponseTestDataPair), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task DeleteEntityAsync_ResponseIsFailure_ExpectFailure(
         StringContent? responseContent, Failure<DataverseFailureCode> expected)
     {
@@ -85,7 +85,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetResponseUnitTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.GetUnitOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task DeleteEntityAsync_ResponseIsSuccess_ExpectSuccess(
         StringContent? responseContent)
     {
