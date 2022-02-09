@@ -22,8 +22,8 @@ partial class ApiClientTestDataSource
                 new Uri("http://ggroupp.ru", UriKind.Absolute),
                 new DataverseEntityDeleteIn(
                     entityPluralName: "Some/Entities",
-                    entityKey: new StubEntityKey("Some Key")),
-                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some+Key)"
+                    entityKey: new StubEntityKey("Some=Key")),
+                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some=Key)"
             }
         };
 }

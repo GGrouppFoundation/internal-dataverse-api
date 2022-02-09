@@ -47,7 +47,7 @@ partial class ApiClientTestDataSource
                 entityKey: new StubEntityKey("Some Key"),
                 selectFields: default,
                 entityData: emptyRequest),
-            "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some+Key)",
+            "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some Key)",
             Serialize(emptyRequest)
         };
     }

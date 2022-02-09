@@ -54,8 +54,6 @@ partial class DataverseApiClient
         var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
-        var encodedKey = HttpUtility.UrlEncode(input.EntityKey.Value);
-
-        return new Uri($"{encodedPluralName}({encodedKey}){queryString}", UriKind.Relative);
+        return new Uri($"{encodedPluralName}({input.EntityKey.Value}){queryString}", UriKind.Relative);
     }
 }
