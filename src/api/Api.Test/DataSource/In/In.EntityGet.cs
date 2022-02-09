@@ -37,12 +37,12 @@ partial class ApiClientTestDataSource
                 new Uri("http://ggroupp.ru", UriKind.Absolute),
                 new DataverseEntityGetIn(
                     entityPluralName: "Some/Entities",
-                    entityKey: new StubEntityKey("Some Key"),
+                    entityKey: new StubEntityKey("Some=Key"),
                     selectFields: default)
                     {
                         IncludeAnnotations = "*"
                     },
-                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some+Key)",
+                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some=Key)",
                 "odata.include-annotations=*"
             }
         };
