@@ -21,7 +21,7 @@ partial class ApiClientTestDataSource
                 entityKey: new StubEntityKey("SomeKey"),
                 selectFields: new[] { "field1", "field2" },
                 entityData: firstRequest),
-            "https://some.crm4.dynamics.com/api/data/v9.0/SomeEntities(SomeKey)?$select=field1,field2",
+            "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities(SomeKey)?$select=field1,field2",
             Serialize(firstRequest)
         };
 
@@ -35,7 +35,7 @@ partial class ApiClientTestDataSource
                 entityKey: new StubEntityKey("SomeKey"),
                 selectFields: new[] { string.Empty, "field 1" },
                 entityData: emptyRequest),
-            "https://some.crm4.dynamics.com/api/data/v9.0/SomeEntities(SomeKey)?$select=field 1",
+            "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities(SomeKey)?$select=field 1",
             Serialize(emptyRequest)
         };
 
@@ -47,7 +47,7 @@ partial class ApiClientTestDataSource
                 entityKey: new StubEntityKey("Some Key"),
                 selectFields: default,
                 entityData: emptyRequest),
-            "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some Key)",
+            "http://ggroupp.ru/api/data/v9.1/Some%2fEntities(Some Key)",
             Serialize(emptyRequest)
         };
     }
