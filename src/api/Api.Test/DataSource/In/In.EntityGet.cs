@@ -16,7 +16,7 @@ partial class ApiClientTestDataSource
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new[] { "field1", "field2" }),
-                "https://some.crm4.dynamics.com/api/data/v9.0/SomeEntities(SomeKey)?$select=field1,field2",
+                "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities(SomeKey)?$select=field1,field2",
                 null
             },
             new object?[]
@@ -29,7 +29,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "display.*"
                     },
-                "https://some.crm4.dynamics.com/api/data/v9.0/SomeEntities(SomeKey)?$select=field 1",
+                "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities(SomeKey)?$select=field 1",
                 "odata.include-annotations=display.*"
             },
             new object?[]
@@ -42,7 +42,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "*"
                     },
-                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some=Key)",
+                "http://ggroupp.ru/api/data/v9.1/Some%2fEntities(Some=Key)",
                 "odata.include-annotations=*"
             }
         };

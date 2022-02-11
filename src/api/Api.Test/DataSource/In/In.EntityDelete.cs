@@ -15,7 +15,7 @@ partial class ApiClientTestDataSource
                 new DataverseEntityDeleteIn(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey")),
-                "https://some.crm4.dynamics.com/api/data/v9.0/SomeEntities(SomeKey)"
+                "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities(SomeKey)"
             },
             new object?[]
             {
@@ -23,7 +23,7 @@ partial class ApiClientTestDataSource
                 new DataverseEntityDeleteIn(
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some=Key")),
-                "http://ggroupp.ru/api/data/v9.0/Some%2fEntities(Some=Key)"
+                "http://ggroupp.ru/api/data/v9.1/Some%2fEntities(Some=Key)"
             }
         };
 }
