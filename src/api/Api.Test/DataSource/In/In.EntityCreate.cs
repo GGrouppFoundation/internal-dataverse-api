@@ -20,7 +20,7 @@ partial class ApiClientTestDataSource
                 entityPluralName: "SomeEntities",
                 selectFields: new[] { "field1", "field2" },
                 entityData: firstRequest),
-            "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities?$select=field1,field2",
+            "https://some.crm4.dynamics.com/api/data/v9.2/SomeEntities?$select=field1,field2",
             Serialize(firstRequest)
         };
 
@@ -33,7 +33,7 @@ partial class ApiClientTestDataSource
                 entityPluralName: "SomeEntities",
                 selectFields: new[] { string.Empty, "field 1" },
                 entityData: emptyRequest),
-            "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities?$select=field 1",
+            "https://some.crm4.dynamics.com/api/data/v9.2/SomeEntities?$select=field 1",
             Serialize(emptyRequest)
         };
 
@@ -44,7 +44,7 @@ partial class ApiClientTestDataSource
                 entityPluralName: "Some/Entities",
                 selectFields: default,
                 entityData: emptyRequest),
-            "http://ggroupp.ru/api/data/v9.1/Some%2fEntities",
+            "http://ggroupp.ru/api/data/v9.2/Some%2fEntities",
             Serialize(emptyRequest)
         };
     }

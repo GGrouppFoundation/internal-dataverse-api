@@ -23,7 +23,7 @@ partial class ApiClientTestDataSource
                         new("field5", DataverseOrderDirection.Ascending)
                     },
                     top: 15),
-                "https://some.crm4.dynamics.com/api/data/v9.1/SomeEntities?$select=field1,field2&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
+                "https://some.crm4.dynamics.com/api/data/v9.2/SomeEntities?$select=field1,field2&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
                 null
             },
             new object?[]
@@ -38,7 +38,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "display.*"
                     },
-                "https://some.crm4.dynamics.com/api/data/v9.1/Some+Entities?$select=field 1&$top=1",
+                "https://some.crm4.dynamics.com/api/data/v9.2/Some+Entities?$select=field 1&$top=1",
                 "odata.include-annotations=display.*"
             },
             new object?[]
@@ -51,7 +51,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "*"
                     },
-                "http://ggroupp.ru/api/data/v9.1/Some%2fEntities?$filter=date gt 2020-01-01",
+                "http://ggroupp.ru/api/data/v9.2/Some%2fEntities?$filter=date gt 2020-01-01",
                 "odata.include-annotations=*"
             }
         };
