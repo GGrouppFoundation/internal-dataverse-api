@@ -38,14 +38,6 @@ jobs:
     - name: Pack Api.Core.FailureCode
       run: dotnet pack ./src/*/*/Api.Core.FailureCode.csproj --no-restore -o ~/nuget  -c Release
 
-    # Api.Core.EntityKey.Tests
-
-    - name: Restore Api.Core.EntityKey.Tests
-      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Tests.csproj
-
-    - name: Test Api.Core.EntityKey.Tests
-      run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
-
     # Api.Core.EntityKey
 
     - name: Restore Api.Core.EntityKey
@@ -56,6 +48,14 @@ jobs:
 
     - name: Pack Api.Core.EntityKey
       run: dotnet pack ./src/*/*/Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api.Core.EntityKey.Tests
+
+    - name: Restore Api.Core.EntityKey.Tests
+      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Tests.csproj
+
+    - name: Test Api.Core.EntityKey.Tests
+      run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
 
     # Api.Abstractions.Search
 
