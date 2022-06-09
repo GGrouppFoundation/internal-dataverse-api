@@ -2,9 +2,9 @@ using System;
 
 namespace GGroupp.Infra;
 
-public sealed record class DataverseApiClientConfiguration
+public sealed record class DataverseApiClientOption
 {
-    public DataverseApiClientConfiguration(string serviceUrl, string authTenantId, string authClientId, string authClientSecret)
+    public DataverseApiClientOption(string serviceUrl, string authTenantId, string authClientId, string authClientSecret)
     {
         ServiceUrl = serviceUrl.OrEmpty();
         AuthTenantId = authTenantId.OrEmpty();

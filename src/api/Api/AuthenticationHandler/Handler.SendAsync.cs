@@ -9,10 +9,10 @@ partial class AuthenticationHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var authContext = new AuthenticationContext(LoginMsOnlineServiceBaseUrl + configuration.AuthTenantId);
-        var credential = new ClientCredential(configuration.AuthClientId, configuration.AuthClientSecret);
+        var authContext = new AuthenticationContext(LoginMsOnlineServiceBaseUrl + option.AuthTenantId);
+        var credential = new ClientCredential(option.AuthClientId, option.AuthClientSecret);
 
-        var authTokenResult = await authContext.AcquireTokenAsync(configuration.ServiceUrl, credential).ConfigureAwait(false);
+        var authTokenResult = await authContext.AcquireTokenAsync(option.ServiceUrl, credential).ConfigureAwait(false);
         request.Headers.TryAddWithoutValidation("Authorization", authTokenResult.CreateAuthorizationHeader());
 
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
