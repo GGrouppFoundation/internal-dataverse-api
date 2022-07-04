@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,9 +18,13 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ApiSearchType = "query";
 
+    private const string CallerIdHeaderName = "MSCRMCallerID";
+
     private readonly HttpMessageHandler messageHandler;
 
     private readonly Uri dataverseBaseUri;
+
+    private readonly Guid? callerId;
 
     internal DataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri)
     {
@@ -27,19 +32,35 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
         this.dataverseBaseUri = dataverseBaseUri;
     }
 
+    private DataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri, Guid callerId)
+    {
+        this.messageHandler = messageHandler;
+        this.dataverseBaseUri = dataverseBaseUri;
+        this.callerId = callerId;
+    }
+
     private HttpClient CreateDataHttpClient()
         =>
-        new(messageHandler, disposeHandler: false)
-        {
-            BaseAddress = new(dataverseBaseUri, $"/api/{ApiTypeData}/v{ApiVersionData}/")
-        };
+        CreateHttpClient($"/api/{ApiTypeData}/v{ApiVersionData}/");
 
     private HttpClient CreateSearchHttpClient()
         =>
-        new(messageHandler, disposeHandler: false)
+        CreateHttpClient($"/api/{ApiTypeSearch}/v{ApiVersionSearch}/{ApiSearchType}");
+
+    private HttpClient CreateHttpClient(string relativeUrl)
+    {
+        var httpClient = new HttpClient(messageHandler, disposeHandler: false)
         {
-            BaseAddress = new(dataverseBaseUri, $"/api/{ApiTypeSearch}/v{ApiVersionSearch}/{ApiSearchType}")
+            BaseAddress = new(dataverseBaseUri, relativeUrl)
         };
+
+        if (callerId is not null)
+        {
+            httpClient.DefaultRequestHeaders.Add(CallerIdHeaderName, callerId.Value.ToString("D", CultureInfo.InvariantCulture));
+        }
+
+        return httpClient;
+    }
 
     private static ValueTask<Result<T, Failure<DataverseFailureCode>>> GetCanceledAsync<T>(CancellationToken cancellationToken)
         =>

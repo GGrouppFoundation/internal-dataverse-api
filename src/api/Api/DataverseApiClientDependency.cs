@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 using PrimeFuncPack;
+using static Microsoft.Extensions.Configuration.DataverseApiClientConfigurationExtensions;
 
 [assembly: InternalsVisibleTo("GGroupp.Infra.Dataverse.Api.Test")]
 
@@ -24,6 +27,18 @@ public static class DataverseApiClientDependency
         _ = optionResolver ?? throw new ArgumentNullException(nameof(optionResolver));
 
         return dependency.With(optionResolver).Fold(CreateApiClient);
+    }
+
+    public static Dependency<IDataverseApiClient> UseDataverseApiClient(
+        this Dependency<HttpMessageHandler> dependency, [AllowNull] string sectionName = DefaultSectionName)
+    {
+        _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
+
+        return dependency.With(ResolveOption).Fold(CreateApiClient);
+
+        DataverseApiClientOption ResolveOption(IServiceProvider serviceProvider)
+            =>
+            serviceProvider.GetServiceOrThrow<IConfiguration>().InternalGetDataverseApiClientOption(sectionName.OrEmpty());
     }
 
     private static IDataverseApiClient CreateApiClient(HttpMessageHandler httpMessageHandler, DataverseApiClientOption option)

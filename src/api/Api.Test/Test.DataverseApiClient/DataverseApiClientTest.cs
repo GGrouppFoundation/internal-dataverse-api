@@ -3,11 +3,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
+using Xunit;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
 public sealed partial class DataverseApiClientTest
 {
+    private const string CallerIdHeaderName = "MSCRMCallerID";
+
     private static readonly Uri SomeDataverseBaseUri
         =
         new("https://some.crm4.dynamics.com/", UriKind.Absolute);
@@ -91,4 +94,9 @@ public sealed partial class DataverseApiClientTest
 
         return mock;
     }
+
+    private static void DoesNotContainCallerIdHeader(HttpRequestMessage actualRequest)
+        =>
+        Assert.False(
+            actualRequest.Headers.Contains(CallerIdHeaderName));
 }

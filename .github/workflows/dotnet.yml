@@ -57,6 +57,17 @@ jobs:
     - name: Test Api.Core.EntityKey.Tests
       run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
 
+    # Api.Abstractions.Impersonate
+
+    - name: Restore Api.Abstractions.Impersonate
+      run: dotnet restore ./src/*/*/Api.Abstractions.Impersonate.csproj
+
+    - name: Build Api.Abstractions.Impersonate
+      run: dotnet build ./src/*/*/Api.Abstractions.Impersonate.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.Impersonate
+      run: dotnet pack ./src/*/*/Api.Abstractions.Impersonate.csproj --no-restore -o ~/nuget  -c Release
+
     # Api.Abstractions.Search
 
     - name: Restore Api.Abstractions.Search
@@ -65,7 +76,7 @@ jobs:
     - name: Build Api.Abstractions.Search
       run: dotnet build ./src/*/*/Api.Abstractions.Search.csproj --no-restore  -c Release
 
-    - name: Pack Api.Core.Search
+    - name: Pack Api.Abstractions.Search
       run: dotnet pack ./src/*/*/Api.Abstractions.Search.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions.EntityUpdate
