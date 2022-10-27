@@ -9,7 +9,7 @@ public sealed record class DataverseEntityGetIn
     public DataverseEntityGetIn(
         string entityPluralName,
         IDataverseEntityKey entityKey,
-        [AllowNull] IReadOnlyCollection<string> selectFields)
+        [AllowNull] FlatArray<string> selectFields)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         EntityKey = entityKey;
@@ -20,7 +20,7 @@ public sealed record class DataverseEntityGetIn
 
     public IDataverseEntityKey EntityKey { get; }
 
-    public IReadOnlyCollection<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; }
 
     public string? IncludeAnnotations { get; init; }
 }

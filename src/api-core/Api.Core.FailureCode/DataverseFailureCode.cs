@@ -4,6 +4,8 @@ public enum DataverseFailureCode
 {
     Unknown,
 
+    Unauthorized,
+
     RecordNotFound,
 
     PicklistValueOutOfRange,

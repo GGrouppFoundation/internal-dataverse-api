@@ -13,7 +13,7 @@ namespace GGroupp.Infra;
 public static class DataverseApiClientDependency
 {
     public static Dependency<IDataverseApiClient> UseDataverseApiClient(
-        this Dependency<HttpMessageHandler, DataverseApiClientOption> dependency)
+        this Dependency<HttpMessageHandler, DataverseApiClientAuthOption> dependency)
     {
         _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
 
@@ -21,7 +21,7 @@ public static class DataverseApiClientDependency
     }
 
     public static Dependency<IDataverseApiClient> UseDataverseApiClient(
-        this Dependency<HttpMessageHandler> dependency, Func<IServiceProvider, DataverseApiClientOption> optionResolver)
+        this Dependency<HttpMessageHandler> dependency, Func<IServiceProvider, DataverseApiClientAuthOption> optionResolver)
     {
         _ = dependency ?? throw new ArgumentNullException(nameof(dependency));
         _ = optionResolver ?? throw new ArgumentNullException(nameof(optionResolver));
@@ -36,12 +36,13 @@ public static class DataverseApiClientDependency
 
         return dependency.With(ResolveOption).Fold(CreateApiClient);
 
-        DataverseApiClientOption ResolveOption(IServiceProvider serviceProvider)
+        DataverseApiClientAuthOption ResolveOption(IServiceProvider serviceProvider)
             =>
-            serviceProvider.GetServiceOrThrow<IConfiguration>().InternalGetDataverseApiClientOption(sectionName.OrEmpty());
+            serviceProvider.GetServiceOrThrow<IConfiguration>().InternalGetDataverseApiClientAuthOption(sectionName.OrEmpty());
     }
 
-    private static IDataverseApiClient CreateApiClient(HttpMessageHandler httpMessageHandler, DataverseApiClientOption option)
+    private static IDataverseApiClient CreateApiClient(
+        HttpMessageHandler httpMessageHandler, DataverseApiClientAuthOption option)
     {
         _ = httpMessageHandler ?? throw new ArgumentNullException(nameof(httpMessageHandler));
         _ = option ?? throw new ArgumentNullException(nameof(option));

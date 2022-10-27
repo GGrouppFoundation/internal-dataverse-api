@@ -8,13 +8,13 @@ public sealed record class DataverseSearchOut
 {
     public DataverseSearchOut(
         int totalRecordCount,
-        [AllowNull] IReadOnlyCollection<DataverseSearchItem> value)
+        [AllowNull] FlatArray<DataverseSearchItem> value)
     {
         TotalRecordCount = totalRecordCount;
-        Value = value ?? Array.Empty<DataverseSearchItem>();
+        Value = value ?? FlatArray.Empty<DataverseSearchItem>();
     }
 
     public int TotalRecordCount { get; }
 
-    public IReadOnlyCollection<DataverseSearchItem> Value { get; }
+    public FlatArray<DataverseSearchItem> Value { get; }
 }

@@ -18,6 +18,8 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ApiSearchType = "query";
 
+    private const string WhoAmIRelativeUrl = "WhoAmI";
+
     private const string CallerIdHeaderName = "MSCRMCallerID";
 
     private readonly HttpMessageHandler messageHandler;

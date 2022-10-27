@@ -34,7 +34,11 @@ partial class DataverseApiClient
         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
         var result = await response.ReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TJson>>(cancellationToken).ConfigureAwait(false);
 
-        return result.MapSuccess(success => new DataverseEntitySetGetOut<TJson>(success?.Value));
+        return result.MapSuccess(MapSuccess);
+
+        static DataverseEntitySetGetOut<TJson> MapSuccess(DataverseEntitySetJsonGetOut<TJson>? success)
+            =>
+            new(success?.Value);
     }
 
     private static HttpRequestMessage CreateEntitySetGetRequest(DataverseEntitySetGetIn input)

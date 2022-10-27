@@ -13,8 +13,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
-        include-prerelease: false 
+        dotnet-version: 7.0.x
+        include-prerelease: true 
 
      # Add NuGet Sources
 
@@ -67,6 +67,17 @@ jobs:
 
     - name: Pack Api.Abstractions.Impersonate
       run: dotnet pack ./src/*/*/Api.Abstractions.Impersonate.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api.Abstractions.WhoAmI
+
+    - name: Restore Api.Abstractions.WhoAmI
+      run: dotnet restore ./src/*/*/Api.Abstractions.WhoAmI.csproj
+
+    - name: Build Api.Abstractions.WhoAmI
+      run: dotnet build ./src/*/*/Api.Abstractions.WhoAmI.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.WhoAmI
+      run: dotnet pack ./src/*/*/Api.Abstractions.WhoAmI.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions.Search
 
