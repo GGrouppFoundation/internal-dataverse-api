@@ -8,25 +8,25 @@ public sealed record class DataverseEntitySetGetIn
 {
     public DataverseEntitySetGetIn(
         string entityPluralName,
-        [AllowNull] IReadOnlyCollection<string> selectFields,
+        [AllowNull] FlatArray<string> selectFields,
         [AllowNull] string filter,
-        [AllowNull] IReadOnlyCollection<DataverseOrderParameter> orderBy = null,
+        [AllowNull] FlatArray<DataverseOrderParameter> orderBy = null,
         int? top = null)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
-        SelectFields = selectFields ?? Array.Empty<string>();
+        SelectFields = selectFields ?? FlatArray.Empty<string>();
         Filter = filter ?? string.Empty;
-        OrderBy = orderBy ?? Array.Empty<DataverseOrderParameter>();
+        OrderBy = orderBy ?? FlatArray.Empty<DataverseOrderParameter>();
         Top = top;
     }
 
     public string EntityPluralName { get; }
 
-    public IReadOnlyCollection<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; }
 
     public string Filter { get; }
 
-    public IReadOnlyCollection<DataverseOrderParameter> OrderBy { get; }
+    public FlatArray<DataverseOrderParameter> OrderBy { get; }
 
     public int? Top { get; }
 

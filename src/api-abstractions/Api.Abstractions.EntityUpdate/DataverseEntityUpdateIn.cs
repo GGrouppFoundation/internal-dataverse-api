@@ -10,18 +10,18 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
     public DataverseEntityUpdateIn(
         string entityPluralName,
         IDataverseEntityKey entityKey,
-        [AllowNull] IReadOnlyCollection<string> selectFields,
+        [AllowNull] FlatArray<string> selectFields,
         TInJson entityData)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         EntityKey = entityKey;
-        SelectFields = selectFields ?? Array.Empty<string>();
+        SelectFields = selectFields ?? FlatArray.Empty<string>();
         EntityData = entityData;
     }
 
     public string EntityPluralName { get; }
 
-    public IReadOnlyCollection<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; }
 
     public TInJson EntityData { get; }
 

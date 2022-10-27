@@ -4,15 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-using IDataverseSearchJsonFieldValues = IReadOnlyCollection<KeyValuePair<string, DataverseSearchJsonValue>>;
-
 public sealed record class DataverseSearchItem
 {
     public DataverseSearchItem(
         double searchScore,
         Guid objectId,
         [AllowNull] string entityName,
-        [AllowNull] IDataverseSearchJsonFieldValues extensionData)
+        [AllowNull] FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> extensionData)
     {
         SearchScore = searchScore;
         EntityName = entityName ?? string.Empty;    
@@ -26,5 +24,5 @@ public sealed record class DataverseSearchItem
 
     public string EntityName { get; }
 
-    public IDataverseSearchJsonFieldValues ExtensionData { get; }
+    public FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> ExtensionData { get; }
 }

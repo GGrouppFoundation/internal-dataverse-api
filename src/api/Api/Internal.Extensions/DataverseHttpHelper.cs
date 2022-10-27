@@ -1,6 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
@@ -52,24 +51,8 @@ internal static class DataverseHttpHelper
             return JsonSerializer.Deserialize<T>(body);
         }
 
-        if (response.Content.Headers.ContentType?.MediaType is not MediaTypeNames.Application.Json)
-        {
-            return Failure.Create<DataverseFailureCode>(default, body);
-        }
-
-        var failureJson = JsonSerializer.Deserialize<DataverseFailureJson>(body);
-
-        if (failureJson.Failure is not null)
-        {
-            return CreateDataverseFailure(failureJson.Failure.Code, failureJson.Failure.Message ?? body);
-        }
-
-        if (failureJson.Error is not null)
-        {
-            return CreateDataverseFailure(failureJson.Error.Code, failureJson.Error.Description ?? body);
-        }
-
-        return CreateDataverseFailure(failureJson.ErrorCode, failureJson.Message ?? failureJson.ExceptionMessage ?? body);
+        var failureJson = DeserializeFailure(body: body, mediaType: response.Content.Headers.ContentType?.MediaType);
+        return failureJson.ToDataverseFailure(body, response.StatusCode);
     }
 
     internal static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
@@ -81,68 +64,81 @@ internal static class DataverseHttpHelper
         return content;
     }
 
-    internal static DataverseSearchJsonIn MapDataverseSearchIn(this DataverseSearchIn input)
-        =>
-        new(input.Search)
-        { 
-            Entities = input.Entities,
-            Facets = input.Facets,
-            Filter = input.Filter,
-            ReturnTotalRecordCount = input.ReturnTotalRecordCount,
-            Skip = input.Skip,
-            Top = input.Top,
-            OrderBy = input.OrderBy,
-            SearchMode = input.SearchMode?.ToDataverseSearchModeJson(),
-            SearchType = input.SearchType?.ToDataverseSearchTypeJson()
-        };
-
-    internal static DataverseSearchOut MapDataverseSearchJsonOut(this DataverseSearchJsonOut? @out)
-        =>
-        new(
-            @out?.TotalRecordCount ?? default,
-            @out?.Value?.Select(MapJsonItem).ToArray());
-    
-    private static Failure<DataverseFailureCode> CreateDataverseFailure(string? code, string message)
-        =>
-        code switch
+    private static DataverseFailureJson? DeserializeFailure(string? body, string? mediaType)
+    {
+        if (mediaType is MediaTypeNames.Application.Json && string.IsNullOrEmpty(body) is false)
         {
-            "0x80060891" or "0x80040217" => new(DataverseFailureCode.RecordNotFound, message),
-            "0x8004431A" => new(DataverseFailureCode.PicklistValueOutOfRange, message),
-            "0x80040220" or "0x80048306" => new(DataverseFailureCode.PrivilegeDenied, message),
-            "0x80040225" or "0x8004d24b" => new(DataverseFailureCode.UserNotEnabled, message),
-            "SearchableEntityNotFound" => new(DataverseFailureCode.SearchableEntityNotFound, message),
-            "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => new(DataverseFailureCode.Throttling, message),
-            _ => new(DataverseFailureCode.Unknown, message)
-        };
+            return JsonSerializer.Deserialize<DataverseFailureJson>(body);
+        }
 
-    private static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
-        =>
-        new(
-            searchScore: jsonItem.SearchScore,
-            entityName: jsonItem.EntityName,
-            objectId: jsonItem.ObjectId,
-            extensionData: jsonItem.ExtensionData?.Select(MapJsonFieldValue).ToArray());
+        return null;
+    }
 
-    private static KeyValuePair<string, DataverseSearchJsonValue> MapJsonFieldValue(KeyValuePair<string, JsonElement> source)
-        =>
-        new(
-            key: source.Key,
-            value: new(source.Value));
-   
-
-    private static DataverseSearchModeJson ToDataverseSearchModeJson(this DataverseSearchMode searchMode)
-        =>
-        searchMode switch
+    private static Failure<DataverseFailureCode> ToDataverseFailure(
+        this DataverseFailureJson? failureJson, string? body, HttpStatusCode statusCode)
+    {
+        if (failureJson is null)
         {
-            DataverseSearchMode.Any => DataverseSearchModeJson.Any,
-            _ => DataverseSearchModeJson.All
-        };
+            return new(GetFailureCode(null), GetFailureMessage(null));
+        }
 
-    private static DataverseSearchTypeJson ToDataverseSearchTypeJson(this DataverseSearchType searchType)
-        =>
-        searchType switch
+        var value = failureJson.Value;
+
+        if (value.Failure is not null)
         {
-            DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
-            _ => DataverseSearchTypeJson.Full
+            return new(GetFailureCode(value.Failure.Code), GetFailureMessage(value.Failure.Message));
+        }
+
+        if (value.Error is not null)
+        {
+            return new(GetFailureCode(value.Error.Code), GetFailureMessage(value.Error.Description));
+        }
+
+        var failureCode = GetFailureCode(value.ErrorCode);
+
+        if (string.IsNullOrEmpty(value.Message) is false)
+        {
+            return new(failureCode, value.Message);
+        }
+
+        return new(failureCode, GetFailureMessage(value.ExceptionMessage));
+
+        string GetFailureMessage(string? message)
+        {
+            if (string.IsNullOrEmpty(message) is false)
+            {
+                return message;
+            }
+
+            if (string.IsNullOrEmpty(body) is false)
+            {
+                return body;
+            }
+
+            return $"Dataverse respose status was {statusCode}";
+        }
+
+        DataverseFailureCode GetFailureCode(string? code)
+            =>
+            statusCode.ToDataverseFailureCode(code);
+    }
+
+    private static DataverseFailureCode ToDataverseFailureCode(this HttpStatusCode statusCode, string? code)
+    {
+        if (statusCode is HttpStatusCode.Unauthorized)
+        {
+            return DataverseFailureCode.Unauthorized;
+        }
+
+        return code switch
+        {
+            "0x80060891" or "0x80040217" => DataverseFailureCode.RecordNotFound,
+            "0x8004431A" => DataverseFailureCode.PicklistValueOutOfRange,
+            "0x80040220" or "0x80048306" => DataverseFailureCode.PrivilegeDenied,
+            "0x80040225" or "0x8004d24b" => DataverseFailureCode.UserNotEnabled,
+            "SearchableEntityNotFound" => DataverseFailureCode.SearchableEntityNotFound,
+            "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => DataverseFailureCode.Throttling,
+            _ => DataverseFailureCode.Unknown
         };
+    }
 }

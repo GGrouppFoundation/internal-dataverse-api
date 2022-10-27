@@ -10,9 +10,9 @@ public sealed record class DataverseSearchIn
 
     public string Search { get; }
 
-    public IReadOnlyCollection<string>? Entities { get; init; }
+    public FlatArray<string>? Entities { get; init; }
 
-    public IReadOnlyCollection<string>? Facets { get; init; }
+    public FlatArray<string>? Facets { get; init; }
 
     public string? Filter { get; init; }
 
@@ -22,7 +22,7 @@ public sealed record class DataverseSearchIn
 
     public int? Top { get; init; }
 
-    public IReadOnlyCollection<string>? OrderBy { get; init; }
+    public FlatArray<string>? OrderBy { get; init; }
 
     public DataverseSearchMode? SearchMode {  get; init; }
 

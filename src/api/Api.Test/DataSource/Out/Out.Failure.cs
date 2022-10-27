@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
-using System.Text.Json;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
@@ -10,10 +10,12 @@ partial class ApiClientTestDataSource
 {
     public static IEnumerable<object?[]> GetFailureOutputTestData()
     {
+        var statusCode = HttpStatusCode.NotFound;
         yield return new object?[]
         {
+            statusCode,
             null,
-            default(Failure<DataverseFailureCode>)
+            Failure.Create(DataverseFailureCode.Unknown, statusCode.GetDefaultFailureMessage())
         };
 
         var content = new DataverseFailureJson
@@ -25,6 +27,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.InternalServerError,
             new StringContent(content),
             Failure.Create(DataverseFailureCode.Unknown, content)
         };
@@ -36,6 +39,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.BadRequest,
             exceptionFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Unknown, exceptionFailure.ExceptionMessage)
         };
@@ -51,6 +55,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.TooManyRequests,
             recordNotFoundByEntityKeyFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.RecordNotFound, recordNotFoundByEntityKeyFailure.Error.Description)
         };
@@ -66,6 +71,8 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+
+            HttpStatusCode.Forbidden,
             objectDoesNotExistFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.RecordNotFound, objectDoesNotExistFailure.Failure.Message)
         };
@@ -78,6 +85,8 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+
+            HttpStatusCode.BadRequest,
             picklistValueOutOfRangeFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.PicklistValueOutOfRange, picklistValueOutOfRangeFailure.ExceptionMessage)
         };
@@ -93,6 +102,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.NotAcceptable,
             privilegeDeniedFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.PrivilegeDenied, privilegeDeniedFailure.Error.Description)
         };
@@ -108,6 +118,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.InternalServerError,
             unManagedIdsAccessDeniedFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.PrivilegeDenied, unManagedIdsAccessDeniedFailure.Failure.Message)
         };
@@ -120,6 +131,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.NotFound,
             unManagedIdsUserNotEnabledFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.UserNotEnabled, unManagedIdsUserNotEnabledFailure.Message)
         };
@@ -135,6 +147,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.Conflict,
             userNotAssignedLicenseFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.UserNotEnabled, userNotAssignedLicenseFailure.Error.Description)
         };
@@ -150,6 +163,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.NotFound,
             searchableEntityNotFoundFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.SearchableEntityNotFound, searchableEntityNotFoundFailure.Error.Description)
         };
@@ -165,6 +179,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.InternalServerError,
             throttlingFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Throttling, throttlingFailure.Failure.Message)
         };
@@ -178,6 +193,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.BadRequest,
             throttlingBurstRequestLimitExceededErrorFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Throttling, throttlingBurstRequestLimitExceededErrorFailure.Message)
         };
@@ -193,6 +209,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.BadGateway,
             throttlingConcurrencyLimitExceededErrorFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Throttling, throttlingConcurrencyLimitExceededErrorFailure.Error.Description)
         };
@@ -208,6 +225,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.PaymentRequired,
             throttlingTimeExceededErrorFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Throttling, throttlingTimeExceededErrorFailure.Error.Description)
         };
@@ -223,6 +241,7 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.ExpectationFailed,
             throttlingCodeFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Throttling, throttlingCodeFailure.Failure.Message)
         };
@@ -238,16 +257,9 @@ partial class ApiClientTestDataSource
 
         yield return new object?[]
         {
+            HttpStatusCode.BadRequest,
             unknownFailure.ToJsonContent(),
             Failure.Create(DataverseFailureCode.Unknown, unknownFailure.Failure.Message)
         };
     }
-
-    private static StringContent ToJsonContent(this DataverseFailureJson failureJson)
-        =>
-        new(failureJson.Serialize(), default, MediaTypeNames.Application.Json);
-
-    private static string Serialize(this DataverseFailureJson failureJson)
-        =>
-        JsonSerializer.Serialize(failureJson);
 }

@@ -6,9 +6,9 @@ namespace GGroupp.Infra;
 
 public sealed record class DataverseEntitySetGetOut<TEntityJson>
 {
-    public DataverseEntitySetGetOut([AllowNull] IReadOnlyCollection<TEntityJson> value)
+    public DataverseEntitySetGetOut([AllowNull] FlatArray<TEntityJson> value)
         =>
-        Value = value ?? Array.Empty<TEntityJson>();
+        Value = value ?? FlatArray.Empty<TEntityJson>();
 
-    public IReadOnlyCollection<TEntityJson> Value { get; }
+    public FlatArray<TEntityJson> Value { get; }
 }

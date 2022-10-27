@@ -34,7 +34,11 @@ partial class DataverseApiClient
         var response = await httpClient.PatchAsync(entitiyUpdateUrl, content, cancellationToken).ConfigureAwait(false);
         var result = await response.ReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
 
-        return result.MapSuccess(e => new DataverseEntityUpdateOut<TOutJson>(e));
+        return result.MapSuccess(MapSuccess);
+
+        static DataverseEntityUpdateOut<TOutJson> MapSuccess(TOutJson? @out)
+            =>
+            new(@out);
     }
 
     private static string BuildEntityUpdateUrl<TInJson>(DataverseEntityUpdateIn<TInJson> input)

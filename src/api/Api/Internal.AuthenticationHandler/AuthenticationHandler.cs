@@ -6,9 +6,9 @@ internal sealed partial class AuthenticationHandler : DelegatingHandler
 {
     private const string LoginMsOnlineServiceBaseUrl = "https://login.microsoftonline.com/";
 
-    private readonly DataverseApiClientOption option;
+    private readonly DataverseApiClientAuthOption option;
 
-    internal AuthenticationHandler(HttpMessageHandler innerHandler, DataverseApiClientOption option)
+    internal AuthenticationHandler(HttpMessageHandler innerHandler, DataverseApiClientAuthOption option)
         : base(innerHandler)
         =>
         this.option = option;

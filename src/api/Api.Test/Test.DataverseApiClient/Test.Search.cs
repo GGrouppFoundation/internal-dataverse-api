@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using DeepEqual.Syntax;
 using Moq;
 using Xunit;
 
@@ -22,11 +21,13 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
         var token = new CancellationToken(canceled: false);
-
-        var ex = await Assert.ThrowsAsync<ArgumentNullException>(
-            () => dataverseApiClient.SearchAsync(null!, token).AsTask());
+        var ex = await Assert.ThrowsAsync<ArgumentNullException>(InnerSearchAsync);
 
         Assert.Equal("input", ex.ParamName);
+
+        Task InnerSearchAsync()
+            =>
+            dataverseApiClient.SearchAsync(null!, token).AsTask();
     }
 
     [Fact]
@@ -78,13 +79,34 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task SearchAsync_ResponseIsFailure_ExpectFailure(
-        StringContent? responseContent, Failure<DataverseFailureCode> expected)
+    [MemberData(nameof(ApiClientTestDataSource.GetUnauthorizedOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public async Task SearchAsync_ResponseIsUnauthorized_ExpectUnauthorizedFailure(
+        StringContent? responseContent, string failureMessage)
     {
         using var response = new HttpResponseMessage
         {
-            StatusCode = HttpStatusCode.Conflict,
+            StatusCode = HttpStatusCode.Unauthorized,
+            Content = responseContent
+        };
+        var mockProxyHandler = CreateMockProxyHandler(response);
+
+        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
+        var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
+
+        var actual = await dataverseApiClient.SearchAsync(SomeDataverseSearchInput, CancellationToken.None);
+        var expected = Failure.Create(DataverseFailureCode.Unauthorized, failureMessage);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public async Task SearchAsync_ResponseIsFailure_ExpectFailure(
+        HttpStatusCode statusCode, StringContent? responseContent, Failure<DataverseFailureCode> expected)
+    {
+        using var response = new HttpResponseMessage
+        {
+            StatusCode = statusCode,
             Content = responseContent
         };
         var mockProxyHandler = CreateMockProxyHandler(response);
@@ -111,12 +133,7 @@ partial class DataverseApiClientTest
         using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
-        var input = SomeDataverseSearchInput;
-        var actualResult = await dataverseApiClient.SearchAsync(input, default);
-
-        Assert.True(actualResult.IsSuccess);
-        var actual = actualResult.SuccessOrThrow();
-
-        expected.ShouldDeepEqual(actual);
+        var actual = await dataverseApiClient.SearchAsync(SomeDataverseSearchInput, default);
+        Assert.Equal(expected, actual);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
@@ -11,13 +12,13 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             null,
-            Array.Empty<StubResponseJson>()
+            FlatArray.Empty<StubResponseJson>()
         };
 
         yield return new object?[]
         {
             new StringContent(string.Empty),
-            Array.Empty<StubResponseJson>()
+            FlatArray.Empty<StubResponseJson>()
         };
 
         var emptyResponseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>();
@@ -25,7 +26,7 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             CreateResponseContentJson(emptyResponseJson),
-            Array.Empty<StubResponseJson>()
+            FlatArray.Empty<StubResponseJson>()
         };
 
         var responseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
@@ -48,7 +49,7 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             CreateResponseContentJson(responseJson),
-            responseJson.Value
+            responseJson.Value.ToFlatArray()
         };
     }
 }
