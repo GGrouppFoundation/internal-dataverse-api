@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public sealed record class DataverseEntitySetGetOut<TEntityJson>
+public readonly record struct DataverseEntitySetGetOut<TEntityJson>
 {
-    public DataverseEntitySetGetOut([AllowNull] FlatArray<TEntityJson> value)
+    public DataverseEntitySetGetOut(FlatArray<TEntityJson> value)
         =>
-        Value = value ?? FlatArray.Empty<TEntityJson>();
+        Value = value;
 
     public FlatArray<TEntityJson> Value { get; }
 }

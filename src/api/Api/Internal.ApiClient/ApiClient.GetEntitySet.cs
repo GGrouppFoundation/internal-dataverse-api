@@ -55,9 +55,9 @@ partial class DataverseApiClient
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = input.SelectFields.Pipe(BuildOdataParameterValue),
+            ["$select"] = input.SelectFields.Pipe(BuildODataParameterValue),
             ["$filter"] = input.Filter,
-            ["$orderby"] = input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue).Pipe(BuildOdataParameterValue)
+            ["$orderby"] = input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue).Pipe(BuildODataParameterValue)
         };
 
         if (input.Top.HasValue)

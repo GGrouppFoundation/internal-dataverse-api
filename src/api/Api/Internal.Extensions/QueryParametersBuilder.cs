@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,12 +6,35 @@ namespace GGroupp.Infra;
 
 internal static class QueryParametersBuilder
 {
-    internal static string BuildOdataParameterValue(IEnumerable<string> paramValues)
-        =>
-        paramValues.Where(
-            v => string.IsNullOrEmpty(v) is false)
-        .Pipe(
-            values => string.Join(',', values));
+    internal static string BuildODataParameterValue(FlatArray<string> paramValues)
+    {
+        var valueBuilder = new StringBuilder();
+
+        foreach (var paramValue in paramValues)
+        {
+            if (string.IsNullOrEmpty(paramValue))
+            {
+                continue;
+            }
+
+            if (valueBuilder.Length > 0)
+            {
+                valueBuilder.Append(',');
+            }
+
+            valueBuilder.Append(paramValue);
+        }
+
+        return valueBuilder.ToString();
+    }
+
+    internal static string BuildODataParameterValue(IEnumerable<string> paramValues)
+    {
+        var notEmptyValues = paramValues.Where(
+            static v => string.IsNullOrEmpty(v) is false);
+        
+        return string.Join(',', notEmptyValues);
+    }
 
     internal static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {

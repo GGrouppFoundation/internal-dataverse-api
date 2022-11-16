@@ -1,19 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
 public sealed record class DataverseEntityCreateIn<TInJson>
     where TInJson : notnull
 {
-    public DataverseEntityCreateIn(
-        string entityPluralName,
-        [AllowNull] FlatArray<string> selectFields,
-        TInJson entityData)
+    public DataverseEntityCreateIn(string entityPluralName, FlatArray<string> selectFields, TInJson entityData)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
-        SelectFields = selectFields ?? Array.Empty<string>();
+        SelectFields = selectFields;
         EntityData = entityData;
     }
 

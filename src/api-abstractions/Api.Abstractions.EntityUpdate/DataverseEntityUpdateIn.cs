@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
@@ -10,12 +8,12 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
     public DataverseEntityUpdateIn(
         string entityPluralName,
         IDataverseEntityKey entityKey,
-        [AllowNull] FlatArray<string> selectFields,
+        FlatArray<string> selectFields,
         TInJson entityData)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         EntityKey = entityKey;
-        SelectFields = selectFields ?? FlatArray.Empty<string>();
+        SelectFields = selectFields;
         EntityData = entityData;
     }
 

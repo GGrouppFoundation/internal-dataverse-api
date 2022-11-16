@@ -10,12 +10,12 @@ public sealed record class DataverseSearchItem
         double searchScore,
         Guid objectId,
         [AllowNull] string entityName,
-        [AllowNull] FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> extensionData)
+        FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> extensionData)
     {
         SearchScore = searchScore;
         EntityName = entityName ?? string.Empty;    
         ObjectId = objectId;
-        ExtensionData = extensionData ?? Array.Empty<KeyValuePair<string, DataverseSearchJsonValue>>();
+        ExtensionData = extensionData;
     }
 
     public double SearchScore { get; }
