@@ -37,13 +37,13 @@ public static class DataverseApiClientConfigurationExtensions
     private static DataverseApiClientOption GetDataverseApiClientOption(this IConfigurationSection section)
         =>
         new(
-            serviceUrl: section["ServiceUrl"]);
+            serviceUrl: section["ServiceUrl"].OrEmpty());
 
     private static DataverseApiClientAuthOption GetDataverseApiClientAuthOption(this IConfigurationSection section)
         =>
         new(
-            serviceUrl: section["ServiceUrl"],
-            authTenantId: section["AuthTenantId"],
-            authClientId: section["AuthClientId"],
-            authClientSecret: section["AuthClientSecret"]);
+            serviceUrl: section["ServiceUrl"].OrEmpty(),
+            authTenantId: section["AuthTenantId"].OrEmpty(),
+            authClientId: section["AuthClientId"].OrEmpty(),
+            authClientSecret: section["AuthClientSecret"].OrEmpty());
 }

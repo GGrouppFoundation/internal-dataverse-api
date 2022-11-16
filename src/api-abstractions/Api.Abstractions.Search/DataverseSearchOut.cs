@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 
 namespace GGroupp.Infra;
 
 public sealed record class DataverseSearchOut
 {
-    public DataverseSearchOut(
-        int totalRecordCount,
-        [AllowNull] FlatArray<DataverseSearchItem> value)
+    public DataverseSearchOut(int totalRecordCount, FlatArray<DataverseSearchItem> value)
     {
         TotalRecordCount = totalRecordCount;
-        Value = value ?? FlatArray.Empty<DataverseSearchItem>();
+        Value = value;
     }
 
     public int TotalRecordCount { get; }

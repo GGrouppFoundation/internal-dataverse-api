@@ -46,7 +46,7 @@ partial class DataverseApiClient
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = QueryParametersBuilder.BuildOdataParameterValue(input.SelectFields)
+            ["$select"] = QueryParametersBuilder.BuildODataParameterValue(input.SelectFields)
         };
 
         var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);

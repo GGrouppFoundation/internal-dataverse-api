@@ -1,19 +1,14 @@
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
 public sealed record class DataverseEntityGetIn
 {
-    public DataverseEntityGetIn(
-        string entityPluralName,
-        IDataverseEntityKey entityKey,
-        [AllowNull] FlatArray<string> selectFields)
+    public DataverseEntityGetIn(string entityPluralName, IDataverseEntityKey entityKey, FlatArray<string> selectFields)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         EntityKey = entityKey;
-        SelectFields = selectFields ?? Array.Empty<string>();
+        SelectFields = selectFields;
     }
 
     public string EntityPluralName { get; }

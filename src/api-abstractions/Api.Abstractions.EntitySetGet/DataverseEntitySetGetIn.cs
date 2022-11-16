@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -8,15 +7,15 @@ public sealed record class DataverseEntitySetGetIn
 {
     public DataverseEntitySetGetIn(
         string entityPluralName,
-        [AllowNull] FlatArray<string> selectFields,
+        FlatArray<string> selectFields,
         [AllowNull] string filter,
-        [AllowNull] FlatArray<DataverseOrderParameter> orderBy = null,
+        FlatArray<DataverseOrderParameter> orderBy = default,
         int? top = null)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
-        SelectFields = selectFields ?? FlatArray.Empty<string>();
+        SelectFields = selectFields;
         Filter = filter ?? string.Empty;
-        OrderBy = orderBy ?? FlatArray.Empty<DataverseOrderParameter>();
+        OrderBy = orderBy;
         Top = top;
     }
 
