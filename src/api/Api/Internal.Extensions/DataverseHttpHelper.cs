@@ -25,7 +25,7 @@ internal static class DataverseHttpHelper
     internal static HttpRequestMessage SetPreferHeaderValue(
         this HttpRequestMessage requestMessage, string? includeAnnotations, int? maxPageSize = null)
     {
-        var preferValue = string.Join(',',GetPreferValues());
+        var preferValue = string.Join(',', GetPreferValues());
         if (string.IsNullOrEmpty(preferValue))
         {
             return requestMessage;
