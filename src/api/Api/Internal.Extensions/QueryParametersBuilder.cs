@@ -35,6 +35,11 @@ internal static class QueryParametersBuilder
 
     internal static string BuildQueryString(this IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {
+        if (queryParams.Count is not > 0)
+        {
+            return string.Empty;
+        }
+
         var queryStringBuilder = new StringBuilder();
 
         foreach(var queryParam in queryParams.Where(kv => string.IsNullOrEmpty(kv.Value) is false))
