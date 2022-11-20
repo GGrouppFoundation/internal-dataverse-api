@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal sealed record class DataverseSearchJsonOut
+internal readonly record struct DataverseSearchJsonOut
 {
     [JsonPropertyName("totalrecordcount")]
     public int TotalRecordCount { get; init; }

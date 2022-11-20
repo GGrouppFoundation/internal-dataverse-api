@@ -36,9 +36,9 @@ partial class DataverseApiClient
 
         return result.MapSuccess(MapSuccess);
 
-        static DataverseEntitySetGetOut<TJson> MapSuccess(DataverseEntitySetJsonGetOut<TJson>? success)
+        static DataverseEntitySetGetOut<TJson> MapSuccess(DataverseEntitySetJsonGetOut<TJson> success)
             =>
-            new(success?.Value, success?.NextLink);
+            new(success.Value, success.NextLink);
     }
 
     private static HttpRequestMessage CreateEntitySetGetRequest(DataverseEntitySetGetIn input)

@@ -28,8 +28,9 @@ partial class DataverseApiClient
     {
         using var httpClient = CreateSearchHttpClient();
 
-        var searchIn = new DataverseSearchJsonIn(input.Search)
+        var searchIn = new DataverseSearchJsonIn
         {
+            Search = input.Search,
             Entities = input.Entities,
             Facets = input.Facets,
             Filter = input.Filter,
@@ -62,11 +63,11 @@ partial class DataverseApiClient
 
         return result.MapSuccess(MapSuccess);
 
-        static DataverseSearchOut MapSuccess(DataverseSearchJsonOut? @out)
+        static DataverseSearchOut MapSuccess(DataverseSearchJsonOut @out)
             =>
             new(
-                @out?.TotalRecordCount ?? default,
-                @out?.Value?.Select(MapJsonItem).ToArray());
+                @out.TotalRecordCount,
+                @out.Value?.Select(MapJsonItem).ToArray());
 
         static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
             =>

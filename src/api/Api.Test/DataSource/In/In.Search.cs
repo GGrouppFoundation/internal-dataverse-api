@@ -20,8 +20,9 @@ partial class ApiClientTestDataSource
             SearchType = DataverseSearchType.Simple
         };
 
-        var firstExpected = new DataverseSearchJsonIn(firstRequest.Search)
+        var firstExpected = new DataverseSearchJsonIn
         {
+            Search = firstRequest.Search,
             OrderBy = firstRequest.OrderBy,
             Top = firstRequest.Top,
             Skip = firstRequest.Skip,
@@ -48,8 +49,9 @@ partial class ApiClientTestDataSource
             SearchType = DataverseSearchType.Full
         };
 
-        var secondExpected = new DataverseSearchJsonIn(secondRequest.Search)
+        var secondExpected = new DataverseSearchJsonIn
         {
+            Search = secondRequest.Search,
             OrderBy = secondRequest.OrderBy,
             SearchMode = DataverseSearchModeJson.All,
             SearchType = DataverseSearchTypeJson.Full
@@ -64,7 +66,10 @@ partial class ApiClientTestDataSource
         };
 
         var emptyRequest = new DataverseSearchIn(string.Empty);
-        var emptyExpected = new DataverseSearchJsonIn(string.Empty);
+        var emptyExpected = new DataverseSearchJsonIn
+        {
+            Search = string.Empty
+        };
 
         yield return new object[]
         {

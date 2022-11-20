@@ -3,14 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
-internal sealed record class DataverseSearchJsonIn
+internal readonly record struct DataverseSearchJsonIn
 {
-    public DataverseSearchJsonIn(string searchString)
-        =>
-        Search = searchString ?? string.Empty;
-
     [JsonPropertyName("search")]
-    public string Search { get; }
+    public required string? Search { get; init; }
 
     [JsonPropertyName("entities")]
     public IReadOnlyCollection<string>? Entities { get; init; }
