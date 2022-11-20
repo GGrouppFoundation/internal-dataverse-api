@@ -12,13 +12,13 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             null,
-            FlatArray.Empty<StubResponseJson>()
+            new DataverseEntitySetGetOut<StubResponseJson>(default)
         };
 
         yield return new object?[]
         {
             new StringContent(string.Empty),
-            FlatArray.Empty<StubResponseJson>()
+            new DataverseEntitySetGetOut<StubResponseJson>(default)
         };
 
         var emptyResponseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>();
@@ -26,7 +26,7 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             CreateResponseContentJson(emptyResponseJson),
-            FlatArray.Empty<StubResponseJson>()
+            new DataverseEntitySetGetOut<StubResponseJson>(default)
         };
 
         var responseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
@@ -49,7 +49,55 @@ partial class ApiClientTestDataSource
         yield return new object?[]
         {
             CreateResponseContentJson(responseJson),
-            responseJson.Value.ToFlatArray()
+            new DataverseEntitySetGetOut<StubResponseJson>(responseJson.Value)
+        };
+
+        var responseEmptyNextLinkJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
+        {
+            Value = new StubResponseJson[]
+            {
+                new()
+                {
+                    Id = -11,
+                    Name = "First"
+                }
+            },
+            NextLink = string.Empty
+        };
+
+        yield return new object?[]
+        {
+            CreateResponseContentJson(responseEmptyNextLinkJson),
+            new DataverseEntitySetGetOut<StubResponseJson>(responseEmptyNextLinkJson.Value)
+        };
+
+        var responseNotEmptyNextLinkJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
+        {
+            Value = new StubResponseJson[]
+            {
+                new()
+                {
+                    Id = 171,
+                    Name = string.Empty
+                },
+                new()
+                {
+                    Id = 0,
+                    Name = "Second"
+                },
+                new()
+                {
+                    Id = -105,
+                    Name = "Third"
+                }
+            },
+            NextLink = "Some Link"
+        };
+
+        yield return new object?[]
+        {
+            CreateResponseContentJson(responseNotEmptyNextLinkJson),
+            new DataverseEntitySetGetOut<StubResponseJson>(responseNotEmptyNextLinkJson.Value, responseNotEmptyNextLinkJson.NextLink)
         };
     }
 }

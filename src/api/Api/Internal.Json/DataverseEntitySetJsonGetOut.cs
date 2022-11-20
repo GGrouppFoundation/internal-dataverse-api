@@ -6,4 +6,7 @@ internal sealed record class DataverseEntitySetJsonGetOut<TOutJson>
 {
     [JsonPropertyName("value")]
     public TOutJson[]? Value { get; init; }
+
+    [JsonPropertyName("@odata.nextLink")]
+    public string? NextLink { get; init; }
 }

@@ -45,7 +45,7 @@ partial class DataverseApiClient
             Method = HttpMethod.Get,
             RequestUri = BuildEntityGetUri(input)
         }
-        .IncludeAnnotationsHeaderValue(
+        .SetPreferHeaderValue(
             input.IncludeAnnotations);
 
     private static Uri BuildEntityGetUri(DataverseEntityGetIn input)

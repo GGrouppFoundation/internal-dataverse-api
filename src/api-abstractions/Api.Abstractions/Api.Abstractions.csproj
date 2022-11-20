@@ -8,12 +8,12 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>3.1.0</Version>
+    <Version>3.1.1-build.2</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="3.1.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="3.1.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="3.1.1-build.2" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="3.1.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="3.0.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="3.1.0" />

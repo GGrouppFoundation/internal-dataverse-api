@@ -29,5 +29,7 @@ public sealed record class DataverseEntitySetGetIn
 
     public int? Top { get; }
 
+    public int? MaxPageSize { get; init; }
+
     public string? IncludeAnnotations { get; init; }
 }

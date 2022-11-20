@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -21,15 +23,30 @@ internal static class DataverseHttpHelper
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-    internal static HttpRequestMessage IncludeAnnotationsHeaderValue(this HttpRequestMessage requestMessage, string? includeAnnotations)
+    internal static HttpRequestMessage SetPreferHeaderValue(
+        this HttpRequestMessage requestMessage, string? includeAnnotations, int? maxPageSize = null)
     {
-        if (string.IsNullOrEmpty(includeAnnotations))
+        var preferValue = string.Join(',',GetPreferValues());
+        if (string.IsNullOrEmpty(preferValue))
         {
             return requestMessage;
         }
 
-        requestMessage.Headers.TryAddWithoutValidation("Prefer", $"odata.include-annotations={includeAnnotations}");
+        requestMessage.Headers.TryAddWithoutValidation("Prefer", preferValue);
         return requestMessage;
+
+        IEnumerable<string> GetPreferValues()
+        {
+            if (maxPageSize is not null)
+            {
+                yield return $"odata.maxpagesize={maxPageSize}";
+            }
+
+            if (string.IsNullOrEmpty(includeAnnotations) is false)
+            {
+                yield return $"odata.include-annotations={includeAnnotations}";
+            }
+        }
     }
 
     internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> ReadDataverseResultAsync<T>(

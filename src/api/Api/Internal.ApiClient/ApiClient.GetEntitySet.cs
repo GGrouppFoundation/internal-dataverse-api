@@ -38,7 +38,7 @@ partial class DataverseApiClient
 
         static DataverseEntitySetGetOut<TJson> MapSuccess(DataverseEntitySetJsonGetOut<TJson>? success)
             =>
-            new(success?.Value);
+            new(success?.Value, success?.NextLink);
     }
 
     private static HttpRequestMessage CreateEntitySetGetRequest(DataverseEntitySetGetIn input)
@@ -48,8 +48,8 @@ partial class DataverseApiClient
             Method = HttpMethod.Get,
             RequestUri = BuildEntitySetGetUri(input)
         }
-        .IncludeAnnotationsHeaderValue(
-            input.IncludeAnnotations);
+        .SetPreferHeaderValue(
+            input.IncludeAnnotations, input.MaxPageSize);
 
     private static Uri BuildEntitySetGetUri(DataverseEntitySetGetIn input)
     {
