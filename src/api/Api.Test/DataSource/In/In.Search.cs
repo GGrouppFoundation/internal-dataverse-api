@@ -7,76 +7,68 @@ partial class ApiClientTestDataSource
 {
     public static IEnumerable<object[]> GetSearchInputTestData()
     {
-        var firstRequest = new DataverseSearchIn("Some first text")
-        {
-            OrderBy = new[] { "field 1" },
-            Top = 10,
-            Skip = 5,
-            ReturnTotalRecordCount = false,
-            Filter = "Some filter",
-            Facets = new string[] { "one", "two" },
-            Entities = new string[] { "first", "second", "third" },
-            SearchMode = DataverseSearchMode.Any,
-            SearchType = DataverseSearchType.Simple
-        };
-
-        var firstExpected = new DataverseSearchJsonIn
-        {
-            Search = firstRequest.Search,
-            OrderBy = firstRequest.OrderBy,
-            Top = firstRequest.Top,
-            Skip = firstRequest.Skip,
-            ReturnTotalRecordCount = firstRequest.ReturnTotalRecordCount,
-            Filter = firstRequest.Filter,
-            Facets = firstRequest.Facets,
-            Entities = firstRequest.Entities,
-            SearchMode = DataverseSearchModeJson.Any,
-            SearchType = DataverseSearchTypeJson.Simple
-        };
-
         yield return new object[]
         {
             new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
-            firstRequest,
+            new DataverseSearchIn("Some first text")
+            {
+                OrderBy = new("field 1"),
+                Top = 10,
+                Skip = 5,
+                ReturnTotalRecordCount = false,
+                Filter = "Some filter",
+                Facets = new("one", "two", string.Empty),
+                Entities = new("first", "second", string.Empty, "third"),
+                SearchMode = DataverseSearchMode.Any,
+                SearchType = DataverseSearchType.Full
+            },
             "https://some.crm4.dynamics.com/api/search/v1.0/query",
-            Serialize(firstExpected)
-        };
-
-        var secondRequest = new DataverseSearchIn("Some second text")
-        {
-            OrderBy = new[] { "field 1", string.Empty },
-            SearchMode = DataverseSearchMode.All,
-            SearchType = DataverseSearchType.Full
-        };
-
-        var secondExpected = new DataverseSearchJsonIn
-        {
-            Search = secondRequest.Search,
-            OrderBy = secondRequest.OrderBy,
-            SearchMode = DataverseSearchModeJson.All,
-            SearchType = DataverseSearchTypeJson.Full
+            new StubSearchJsonIn
+            {
+                Search = "Some first text",
+                OrderBy = new[] { "field 1" },
+                Top = 10,
+                Skip = 5,
+                ReturnTotalRecordCount = false,
+                Filter = "Some filter",
+                Facets = new[] { "one", "two" },
+                Entities = new[] { "first", "second", "third" },
+                SearchMode = 0,
+                SearchType = 1
+            }
+            .Serialize()
         };
 
         yield return new object[]
         {
             new Uri("https://some.crm4.dynamics.com", UriKind.Absolute),
-            secondRequest,
+            new DataverseSearchIn("Some second text")
+            {
+                OrderBy = new("field 1", string.Empty),
+                SearchMode = DataverseSearchMode.All,
+                SearchType = DataverseSearchType.Simple
+            },
             "https://some.crm4.dynamics.com/api/search/v1.0/query",
-            Serialize(secondExpected)
-        };
-
-        var emptyRequest = new DataverseSearchIn(string.Empty);
-        var emptyExpected = new DataverseSearchJsonIn
-        {
-            Search = string.Empty
+            new StubSearchJsonIn
+            {
+                Search = "Some second text",
+                OrderBy = new[] { "field 1" },
+                SearchMode = 1,
+                SearchType = 0
+            }
+            .Serialize()
         };
 
         yield return new object[]
         {
             new Uri("http://ggroupp.ru", UriKind.Absolute),
-            emptyRequest,
+            new DataverseSearchIn(string.Empty),
             "http://ggroupp.ru/api/search/v1.0/query",
-            Serialize(emptyExpected)
+            new StubSearchJsonIn
+            {
+                Search = string.Empty
+            }
+            .Serialize()
         };
     }
 }

@@ -19,16 +19,19 @@ partial class ApiClientTestDataSource
             default(StubResponseJson)
         };
 
-        var responseJson = new StubResponseJson
-        {
-            Id = 15,
-            Name = "Some name"
-        };
-
         yield return new object?[]
         {
-            CreateResponseContentJson(responseJson),
-            responseJson
+            new StubResponseJson
+            {
+                Id = 15,
+                Name = "Some name"
+            }
+            .CreateResponseContentJson(),
+            new StubResponseJson
+            {
+                Id = 15,
+                Name = "Some name"
+            }
         };
     }
 }

@@ -31,24 +31,24 @@ partial class DataverseApiClient
         var searchIn = new DataverseSearchJsonIn
         {
             Search = input.Search,
-            Entities = input.Entities,
-            Facets = input.Facets,
+            Entities = input.Entities?.NotEmpty().ToArray(),
+            Facets = input.Facets?.NotEmpty().ToArray(),
             Filter = input.Filter,
             ReturnTotalRecordCount = input.ReturnTotalRecordCount,
             Skip = input.Skip,
             Top = input.Top,
-            OrderBy = input.OrderBy,
+            OrderBy = input.OrderBy?.NotEmpty().ToArray(),
             SearchMode = input.SearchMode switch
             {
-                null => null,
                 DataverseSearchMode.Any => DataverseSearchModeJson.Any,
-                _ => DataverseSearchModeJson.All
+                DataverseSearchMode.All => DataverseSearchModeJson.All,
+                _ => null
             },
             SearchType = input.SearchType switch
             {
-                null => null,
                 DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
-                _ => DataverseSearchTypeJson.Full
+                DataverseSearchType.Full => DataverseSearchTypeJson.Full,
+                _ => null
             }
         };
 

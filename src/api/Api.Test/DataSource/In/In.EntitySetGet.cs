@@ -81,6 +81,44 @@ partial class ApiClientTestDataSource
                     },
                 "http://ggroupp.ru/api/data/v9.2/SomeEntities",
                 "odata.maxpagesize=-5,odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink")
+                {
+                    MaxPageSize = 15,
+                    IncludeAnnotations = "*"
+                },
+                "http://garage.ru/api/someLink",
+                "odata.maxpagesize=15,odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink")
+                {
+                    MaxPageSize = 7
+                },
+                "http://garage.ru/api/someLink",
+                "odata.maxpagesize=7"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("/api/someLink")
+                {
+                    IncludeAnnotations = "*"
+                },
+                "http://ggroupp.ru/api/someLink",
+                "odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink"),
+                "http://garage.ru/api/someLink",
+                null
             }
         };
 }

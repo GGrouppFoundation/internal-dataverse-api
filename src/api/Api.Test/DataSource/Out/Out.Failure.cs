@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Mime;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
@@ -10,15 +9,14 @@ partial class ApiClientTestDataSource
 {
     public static IEnumerable<object?[]> GetFailureOutputTestData()
     {
-        var statusCode = HttpStatusCode.NotFound;
         yield return new object?[]
         {
-            statusCode,
+            HttpStatusCode.NotFound,
             null,
-            Failure.Create(DataverseFailureCode.Unknown, statusCode.GetDefaultFailureMessage())
+            Failure.Create(DataverseFailureCode.Unknown, HttpStatusCode.NotFound.GetDefaultFailureMessage())
         };
 
-        var content = new DataverseFailureJson
+        var content = new StubFailureJson
         {
             ErrorCode = "0x80060891",
             Message = "Some message"
@@ -32,7 +30,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Unknown, content)
         };
 
-        var exceptionFailure = new DataverseFailureJson
+        var exceptionFailure = new StubFailureJson
         {
             ExceptionMessage = "Some exception message"
         };
@@ -44,7 +42,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Unknown, exceptionFailure.ExceptionMessage)
         };
 
-        var recordNotFoundByEntityKeyFailure = new DataverseFailureJson
+        var recordNotFoundByEntityKeyFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -60,9 +58,9 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.RecordNotFound, recordNotFoundByEntityKeyFailure.Error.Description)
         };
 
-        var objectDoesNotExistFailure = new DataverseFailureJson
+        var objectDoesNotExistFailure = new StubFailureJson
         {
-            Failure = new DataverseFailureInfoJson
+            Failure = new StubFailureInfoJson
             {
                 Code = "0x80040217",
                 Message = "Some object does not exist"
@@ -77,7 +75,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.RecordNotFound, objectDoesNotExistFailure.Failure.Message)
         };
 
-        var picklistValueOutOfRangeFailure = new DataverseFailureJson
+        var picklistValueOutOfRangeFailure = new StubFailureJson
         {
             ErrorCode = "0x8004431A",
             ExceptionMessage = "Some pick list value is out of range"
@@ -91,7 +89,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.PicklistValueOutOfRange, picklistValueOutOfRangeFailure.ExceptionMessage)
         };
 
-        var privilegeDeniedFailure = new DataverseFailureJson
+        var privilegeDeniedFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -107,7 +105,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.PrivilegeDenied, privilegeDeniedFailure.Error.Description)
         };
 
-        var unManagedIdsAccessDeniedFailure = new DataverseFailureJson
+        var unManagedIdsAccessDeniedFailure = new StubFailureJson
         {
             Failure = new()
             {
@@ -123,7 +121,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.PrivilegeDenied, unManagedIdsAccessDeniedFailure.Failure.Message)
         };
 
-        var unManagedIdsUserNotEnabledFailure = new DataverseFailureJson
+        var unManagedIdsUserNotEnabledFailure = new StubFailureJson
         {
             ErrorCode = "0x80040225",
             Message = "Some user is disabled"
@@ -136,7 +134,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.UserNotEnabled, unManagedIdsUserNotEnabledFailure.Message)
         };
 
-        var userNotAssignedLicenseFailure = new DataverseFailureJson
+        var userNotAssignedLicenseFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -152,7 +150,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.UserNotEnabled, userNotAssignedLicenseFailure.Error.Description)
         };
 
-        var searchableEntityNotFoundFailure = new DataverseFailureJson
+        var searchableEntityNotFoundFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -168,7 +166,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.SearchableEntityNotFound, searchableEntityNotFoundFailure.Error.Description)
         };
 
-        var throttlingFailure = new DataverseFailureJson
+        var throttlingFailure = new StubFailureJson
         {
             Failure = new()
             {
@@ -184,7 +182,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingFailure.Failure.Message)
         };
 
-        var throttlingBurstRequestLimitExceededErrorFailure = new DataverseFailureJson
+        var throttlingBurstRequestLimitExceededErrorFailure = new StubFailureJson
         {
             ErrorCode = "0x80072322",
             Message = "Some throttling error message",
@@ -198,7 +196,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingBurstRequestLimitExceededErrorFailure.Message)
         };
 
-        var throttlingConcurrencyLimitExceededErrorFailure = new DataverseFailureJson
+        var throttlingConcurrencyLimitExceededErrorFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -214,7 +212,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingConcurrencyLimitExceededErrorFailure.Error.Description)
         };
 
-        var throttlingTimeExceededErrorFailure = new DataverseFailureJson
+        var throttlingTimeExceededErrorFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -230,7 +228,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingTimeExceededErrorFailure.Error.Description)
         };
 
-        var throttlingCodeFailure = new DataverseFailureJson
+        var throttlingCodeFailure = new StubFailureJson
         {
             Failure = new()
             {
@@ -246,7 +244,7 @@ partial class ApiClientTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingCodeFailure.Failure.Message)
         };
 
-        var unknownFailure = new DataverseFailureJson
+        var unknownFailure = new StubFailureJson
         {
             Failure = new()
             {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
-using System.Net.Mime;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
@@ -16,7 +14,7 @@ partial class ApiClientTestDataSource
             HttpStatusCode.Unauthorized.GetDefaultFailureMessage()
         };
 
-        var content = new DataverseFailureJson
+        var content = new StubFailureJson
         {
             ErrorCode = "0x80060891",
             Message = "Some message"
@@ -29,7 +27,7 @@ partial class ApiClientTestDataSource
             content
         };
 
-        var exceptionFailure = new DataverseFailureJson
+        var exceptionFailure = new StubFailureJson
         {
             ExceptionMessage = "Some exception message"
         };
@@ -40,7 +38,7 @@ partial class ApiClientTestDataSource
             exceptionFailure.ExceptionMessage
         };
 
-        var recordNotFoundByEntityKeyFailure = new DataverseFailureJson
+        var recordNotFoundByEntityKeyFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -55,9 +53,9 @@ partial class ApiClientTestDataSource
             recordNotFoundByEntityKeyFailure.Error.Description
         };
 
-        var objectDoesNotExistFailure = new DataverseFailureJson
+        var objectDoesNotExistFailure = new StubFailureJson
         {
-            Failure = new DataverseFailureInfoJson
+            Failure = new()
             {
                 Code = "0x80040217",
                 Message = "Some object does not exist"
@@ -70,7 +68,7 @@ partial class ApiClientTestDataSource
             objectDoesNotExistFailure.Failure.Message
         };
 
-        var picklistValueOutOfRangeFailure = new DataverseFailureJson
+        var picklistValueOutOfRangeFailure = new StubFailureJson
         {
             ErrorCode = "0x8004431A"
         };
@@ -81,7 +79,7 @@ partial class ApiClientTestDataSource
             picklistValueOutOfRangeFailure.Serialize()
         };
 
-        var privilegeDeniedFailure = new DataverseFailureJson
+        var privilegeDeniedFailure = new StubFailureJson
         {
             Error = new()
             {
@@ -95,7 +93,7 @@ partial class ApiClientTestDataSource
             privilegeDeniedFailure.Serialize()
         };
 
-        var unManagedIdsAccessDeniedFailure = new DataverseFailureJson
+        var unManagedIdsAccessDeniedFailure = new StubFailureJson
         {
             Failure = new()
             {

@@ -9,5 +9,5 @@ internal readonly record struct DataverseSearchJsonOut
     public int TotalRecordCount { get; init; }
 
     [JsonPropertyName("value")]
-    public IReadOnlyCollection<DataverseSearchJsonItem>? Value {  get; init; }   
+    public IReadOnlyCollection<DataverseSearchJsonItem>? Value { get; init; }
 }

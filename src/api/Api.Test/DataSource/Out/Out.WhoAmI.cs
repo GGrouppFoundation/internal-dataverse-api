@@ -20,22 +20,19 @@ partial class ApiClientTestDataSource
             default(DataverseWhoAmIOut)
         };
 
-        var responseJson = new DataverseWhoAmIOutJson
-        {
-            BusinessUnitId = Guid.Parse("da7d87f5380e40668c8011356e6d4ba1"),
-            UserId = Guid.Parse("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
-            OrganizationId = Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae")
-        };
-
-        var expected = new DataverseWhoAmIOut(
-            businessUnitId: responseJson.BusinessUnitId,
-            userId: responseJson.UserId,
-            organizationId: responseJson.OrganizationId);
-
         yield return new object?[]
         {
-            CreateResponseContentJson(responseJson),
-            expected
+            new StubWhoAmIOutJson
+            {
+                BusinessUnitId = "51ea96d6-5119-4059-b649-d90c0a4aeab6",
+                UserId = "6ac49276-357d-441f-89c4-c118cbaa5ee3",
+                OrganizationId = "92847989-5772-4ff9-851b-661dc66720ae"
+            }
+            .CreateResponseContentJson(),
+            new DataverseWhoAmIOut(
+                businessUnitId: Guid.Parse("51ea96d6-5119-4059-b649-d90c0a4aeab6"),
+                userId: Guid.Parse("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
+                organizationId: Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae"))
         };
     }
 }

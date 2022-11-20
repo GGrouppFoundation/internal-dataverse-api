@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
@@ -21,83 +19,112 @@ partial class ApiClientTestDataSource
             new DataverseEntitySetGetOut<StubResponseJson>(default)
         };
 
-        var emptyResponseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>();
-
         yield return new object?[]
         {
-            CreateResponseContentJson(emptyResponseJson),
+            new StubEntitySetJsonOut().CreateResponseContentJson(),
             new DataverseEntitySetGetOut<StubResponseJson>(default)
         };
 
-        var responseJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
+        yield return new object?[]
         {
-            Value = new StubResponseJson[]
+            new StubEntitySetJsonOut
             {
-                new()
+                Value = new StubResponseJson[]
                 {
-                    Id = 15,
-                    Name = "Some first"
-                },
-                new()
-                {
-                    Id = 101,
-                    Name = "Some second"
+                    new()
+                    {
+                        Id = 15,
+                        Name = "Some first"
+                    },
+                    new()
+                    {
+                        Id = 101,
+                        Name = "Some second"
+                    }
                 }
             }
+            .CreateResponseContentJson(),
+            new DataverseEntitySetGetOut<StubResponseJson>(
+                value: new(
+                    new StubResponseJson
+                    {
+                        Id = 15,
+                        Name = "Some first"
+                    },
+                    new StubResponseJson
+                    {
+                        Id = 101,
+                        Name = "Some second"
+                    }))
         };
 
         yield return new object?[]
         {
-            CreateResponseContentJson(responseJson),
-            new DataverseEntitySetGetOut<StubResponseJson>(responseJson.Value)
-        };
-
-        var responseEmptyNextLinkJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
-        {
-            Value = new StubResponseJson[]
+            new StubEntitySetJsonOut
             {
-                new()
+                Value = new StubResponseJson[]
                 {
-                    Id = -11,
-                    Name = "First"
-                }
-            },
-            NextLink = string.Empty
+                    new()
+                    {
+                        Id = -11,
+                        Name = "First"
+                    }
+                },
+                NextLink = string.Empty
+            }
+            .CreateResponseContentJson(),
+            new DataverseEntitySetGetOut<StubResponseJson>(
+                value: new(
+                    new StubResponseJson
+                    {
+                        Id = -11,
+                        Name = "First"
+                    }))
         };
 
         yield return new object?[]
         {
-            CreateResponseContentJson(responseEmptyNextLinkJson),
-            new DataverseEntitySetGetOut<StubResponseJson>(responseEmptyNextLinkJson.Value)
-        };
-
-        var responseNotEmptyNextLinkJson = new DataverseEntitySetJsonGetOut<StubResponseJson>
-        {
-            Value = new StubResponseJson[]
+            new StubEntitySetJsonOut
             {
-                new()
+                Value = new StubResponseJson[]
                 {
-                    Id = 171,
-                    Name = string.Empty
+                    new()
+                    {
+                        Id = 171,
+                        Name = string.Empty
+                    },
+                    new()
+                    {
+                        Id = 0,
+                        Name = "Second"
+                    },
+                    new()
+                    {
+                        Id = -105,
+                        Name = "Third"
+                    }
                 },
-                new()
-                {
-                    Id = 0,
-                    Name = "Second"
-                },
-                new()
-                {
-                    Id = -105,
-                    Name = "Third"
-                }
-            },
-            NextLink = "Some Link"
-        };
-
-        yield return new object?[]
-        {
-            CreateResponseContentJson(responseNotEmptyNextLinkJson),
-            new DataverseEntitySetGetOut<StubResponseJson>(responseNotEmptyNextLinkJson.Value, responseNotEmptyNextLinkJson.NextLink)
+                NextLink = "Some Link"
+            }
+            .CreateResponseContentJson(),
+            new DataverseEntitySetGetOut<StubResponseJson>(
+                value: new(
+                    new()
+                    {
+                        Id = 171,
+                        Name = string.Empty
+                    },
+                    new()
+                    {
+                        Id = 0,
+                        Name = "Second"
+                    },
+                    new()
+                    {
+                        Id = -105,
+                        Name = "Third"
+                    }),
+                nextLink: "Some Link")
         };
     }
 }

@@ -5,6 +5,13 @@ namespace GGroupp.Infra;
 
 public sealed record class DataverseEntitySetGetIn
 {
+    public DataverseEntitySetGetIn(string nextLink)
+    {
+        NextLink = nextLink ?? string.Empty;
+        EntityPluralName = string.Empty;
+        Filter = string.Empty;
+    }
+
     public DataverseEntitySetGetIn(
         string entityPluralName,
         FlatArray<string> selectFields,
@@ -18,6 +25,8 @@ public sealed record class DataverseEntitySetGetIn
         OrderBy = orderBy;
         Top = top;
     }
+
+    public string? NextLink { get; }
 
     public string EntityPluralName { get; }
 

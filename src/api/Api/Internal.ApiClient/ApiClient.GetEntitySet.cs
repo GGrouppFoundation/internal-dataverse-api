@@ -28,7 +28,7 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntitySetGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntitySetAsync<TJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = CreateDataHttpClient();
+        using var httpClient = string.IsNullOrEmpty(input.NextLink) ? CreateDataHttpClient() : CreateHttpClient(input.NextLink);
         using var request = CreateEntitySetGetRequest(input);
 
         var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
@@ -51,8 +51,13 @@ partial class DataverseApiClient
         .SetPreferHeaderValue(
             input.IncludeAnnotations, input.MaxPageSize);
 
-    private static Uri BuildEntitySetGetUri(DataverseEntitySetGetIn input)
+    private static Uri? BuildEntitySetGetUri(DataverseEntitySetGetIn input)
     {
+        if (string.IsNullOrEmpty(input.NextLink) is false)
+        {
+            return null;
+        }
+
         var queryParameters = new Dictionary<string, string>
         {
             ["$select"] = input.SelectFields.Pipe(BuildODataParameterValue),
