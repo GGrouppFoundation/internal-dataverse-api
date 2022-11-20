@@ -8,6 +8,11 @@ internal static class QueryParametersBuilder
 {
     internal static string BuildODataParameterValue(this FlatArray<string> paramValues)
     {
+        if (paramValues.IsEmpty)
+        {
+            return string.Empty;
+        }
+
         var valueBuilder = new StringBuilder();
 
         foreach (var paramValue in paramValues)
