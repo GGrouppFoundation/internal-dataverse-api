@@ -8,13 +8,13 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api</AssemblyName>
-    <Version>3.1.1-build.2</Version>
+    <Version>3.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="3.1.1-build.5" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="3.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.2.9" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.48.1" />
     <PackageReference Include="PrimeFuncPack.Dependency" Version="2.0.2" />
     <PackageReference Include="PrimeFuncPack.Primitives.Pipeline" Version="2.0.1" />
     <PackageReference Include="PrimeFuncPack.Primitives.Strings" Version="2.0.1" />

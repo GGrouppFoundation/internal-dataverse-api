@@ -9,10 +9,10 @@ internal readonly record struct DataverseSearchJsonIn
     public required string? Search { get; init; }
 
     [JsonPropertyName("entities")]
-    public IReadOnlyCollection<string>? Entities { get; init; }
+    public FlatArray<string>? Entities { get; init; }
 
     [JsonPropertyName("facets")]
-    public IReadOnlyCollection<string>? Facets { get; init; }
+    public FlatArray<string>? Facets { get; init; }
 
     [JsonPropertyName("filter")]
     public string? Filter { get; init; }
@@ -27,7 +27,7 @@ internal readonly record struct DataverseSearchJsonIn
     public int? Top { get; init; }
 
     [JsonPropertyName("orderby")]
-    public IReadOnlyCollection<string>? OrderBy { get; init; }
+    public FlatArray<string>? OrderBy { get; init; }
 
     [JsonPropertyName("searchmode")]
     public DataverseSearchModeJson? SearchMode { get; init; }

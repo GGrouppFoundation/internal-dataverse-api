@@ -43,7 +43,19 @@ public static class DataverseApiClientConfigurationExtensions
         =>
         new(
             serviceUrl: section["ServiceUrl"].OrEmpty(),
-            authTenantId: section["AuthTenantId"].OrEmpty(),
+            authTenantId: section.GetGuid("AuthTenantId"),
             authClientId: section["AuthClientId"].OrEmpty(),
             authClientSecret: section["AuthClientSecret"].OrEmpty());
+
+    private static Guid GetGuid(this IConfiguration configuration, string key)
+    {
+        var value = configuration[key];
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return default;
+        }
+
+        return Guid.Parse(value);
+    }
 }

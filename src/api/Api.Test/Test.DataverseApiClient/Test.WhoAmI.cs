@@ -41,9 +41,9 @@ partial class DataverseApiClientTest
 
         mockProxyHandler.Verify(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()), Times.Once);
 
-        void Callback(HttpRequestMessage requestMessage)
+        static void Callback(HttpRequestMessage requestMessage)
         {
-            Assert.Equal(HttpMethod.Delete, requestMessage.Method);
+            Assert.Equal(HttpMethod.Get, requestMessage.Method);
 
             const string expectedUrl = "https://some.dynamics.com/api/data/v9.2/WhoAmI";
             Assert.Equal(expectedUrl, requestMessage.RequestUri?.ToString(), ignoreCase: true);

@@ -31,13 +31,13 @@ partial class DataverseApiClient
         var searchIn = new DataverseSearchJsonIn
         {
             Search = input.Search,
-            Entities = input.Entities?.NotEmpty().ToArray(),
-            Facets = input.Facets?.NotEmpty().ToArray(),
+            Entities = input.Entities?.NotEmpty(),
+            Facets = input.Facets?.NotEmpty(),
             Filter = input.Filter,
             ReturnTotalRecordCount = input.ReturnTotalRecordCount,
             Skip = input.Skip,
             Top = input.Top,
-            OrderBy = input.OrderBy?.NotEmpty().ToArray(),
+            OrderBy = input.OrderBy?.NotEmpty(),
             SearchMode = input.SearchMode switch
             {
                 DataverseSearchMode.Any => DataverseSearchModeJson.Any,
@@ -67,7 +67,7 @@ partial class DataverseApiClient
             =>
             new(
                 @out.TotalRecordCount,
-                @out.Value?.Select(MapJsonItem).ToArray());
+                @out.Value.Map(MapJsonItem));
 
         static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
             =>
