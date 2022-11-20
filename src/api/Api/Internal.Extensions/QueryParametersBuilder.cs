@@ -6,7 +6,7 @@ namespace GGroupp.Infra;
 
 internal static class QueryParametersBuilder
 {
-    internal static string BuildODataParameterValue(FlatArray<string> paramValues)
+    internal static string BuildODataParameterValue(this FlatArray<string> paramValues)
     {
         var valueBuilder = new StringBuilder();
 
@@ -28,15 +28,7 @@ internal static class QueryParametersBuilder
         return valueBuilder.ToString();
     }
 
-    internal static string BuildODataParameterValue(IEnumerable<string> paramValues)
-    {
-        var notEmptyValues = paramValues.Where(
-            static v => string.IsNullOrEmpty(v) is false);
-        
-        return string.Join(',', notEmptyValues);
-    }
-
-    internal static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
+    internal static string BuildQueryString(this IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {
         var queryStringBuilder = new StringBuilder();
 

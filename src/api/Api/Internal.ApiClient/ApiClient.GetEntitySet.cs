@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using static GGroupp.Infra.QueryParametersBuilder;
 
 namespace GGroupp.Infra;
 
@@ -60,9 +58,9 @@ partial class DataverseApiClient
 
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = input.SelectFields.Pipe(BuildODataParameterValue),
+            ["$select"] = input.SelectFields.BuildODataParameterValue(),
             ["$filter"] = input.Filter,
-            ["$orderby"] = input.OrderBy.Where(NotEmptyFieldName).Select(GetOrderByValue).Pipe(BuildODataParameterValue)
+            ["$orderby"] = input.OrderBy.Map(GetOrderByValue).BuildODataParameterValue()
         };
 
         if (input.Top.HasValue)
@@ -70,22 +68,24 @@ partial class DataverseApiClient
             queryParameters.Add("$top", input.Top.Value.ToString(CultureInfo.InvariantCulture));
         }
 
-        var queryString = BuildQueryString(queryParameters);
+        var queryString = queryParameters.BuildQueryString();
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
         return new Uri(encodedPluralName + queryString, UriKind.Relative);
     }
 
-    private static bool NotEmptyFieldName(DataverseOrderParameter orderParameter)
-        =>
-        string.IsNullOrEmpty(orderParameter.FieldName) is false;
-
     private static string GetOrderByValue(DataverseOrderParameter orderParameter)
-        =>
-        orderParameter.Direction switch
+    {
+        if (string.IsNullOrEmpty(orderParameter.FieldName))
+        {
+            return string.Empty;
+        }
+
+        return orderParameter.Direction switch
         {
             DataverseOrderDirection.Ascending => $"{orderParameter.FieldName} asc",
             DataverseOrderDirection.Descending => $"{orderParameter.FieldName} desc",
             _ => orderParameter.FieldName
         };
+    }
 }

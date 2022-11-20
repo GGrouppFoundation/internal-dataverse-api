@@ -5,7 +5,7 @@ namespace GGroupp.Infra;
 
 internal static class FlatArrayExtensions
 {
-    internal static FlatArray<string> NotEmpty(this FlatArray<string> source)
+    internal static FlatArray<string> FilterNotEmpty(this FlatArray<string> source)
     {
         if (source.IsEmpty)
         {

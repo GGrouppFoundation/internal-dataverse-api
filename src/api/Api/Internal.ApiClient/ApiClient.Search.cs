@@ -31,13 +31,13 @@ partial class DataverseApiClient
         var searchIn = new DataverseSearchJsonIn
         {
             Search = input.Search,
-            Entities = input.Entities?.NotEmpty(),
-            Facets = input.Facets?.NotEmpty(),
+            Entities = input.Entities?.FilterNotEmpty(),
+            Facets = input.Facets?.FilterNotEmpty(),
             Filter = input.Filter,
             ReturnTotalRecordCount = input.ReturnTotalRecordCount,
             Skip = input.Skip,
             Top = input.Top,
-            OrderBy = input.OrderBy?.NotEmpty(),
+            OrderBy = input.OrderBy?.FilterNotEmpty(),
             SearchMode = input.SearchMode switch
             {
                 DataverseSearchMode.Any => DataverseSearchModeJson.Any,
@@ -55,7 +55,7 @@ partial class DataverseApiClient
         var requestMessage = new HttpRequestMessage()
         { 
             Method = HttpMethod.Post,
-            Content = DataverseHttpHelper.BuildRequestJsonBody(searchIn) 
+            Content = searchIn.BuildRequestJsonBody() 
         };
 
         var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);

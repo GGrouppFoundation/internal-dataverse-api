@@ -71,7 +71,7 @@ internal static class DataverseHttpHelper
         return failureJson.ToDataverseFailure(body, response.StatusCode);
     }
 
-    internal static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
+    internal static HttpContent BuildRequestJsonBody<TRequestJson>(this TRequestJson input)
     {
         var json = JsonSerializer.Serialize(input, jsonSerializerOptions);
         var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
