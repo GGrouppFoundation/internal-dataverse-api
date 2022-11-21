@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -127,7 +126,7 @@ partial class DataverseApiClientTest
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public async Task GetEntitySetAsync_ResponseJsonIsSuccess_ExpectSuccess(
-        StringContent? responseContent, FlatArray<StubResponseJson> expectedValue)
+        StringContent? responseContent, DataverseEntitySetGetOut<StubResponseJson> expected)
     {
         using var response = new HttpResponseMessage
         {
@@ -141,8 +140,6 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(messageHandler, SomeDataverseBaseUri);
 
         var actual = await dataverseApiClient.GetEntitySetAsync<StubResponseJson>(SomeDataverseEntitySetGetInput, CancellationToken.None);
-        var expected = new DataverseEntitySetGetOut<StubResponseJson>(expectedValue);
-
         Assert.Equal(expected, actual);
     }
 }

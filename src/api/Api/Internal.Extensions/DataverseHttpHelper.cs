@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
@@ -21,15 +22,30 @@ internal static class DataverseHttpHelper
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
 
-    internal static HttpRequestMessage IncludeAnnotationsHeaderValue(this HttpRequestMessage requestMessage, string? includeAnnotations)
+    internal static HttpRequestMessage SetPreferHeaderValue(
+        this HttpRequestMessage requestMessage, string? includeAnnotations, int? maxPageSize = null)
     {
-        if (string.IsNullOrEmpty(includeAnnotations))
+        var preferValue = string.Join(',', GetPreferValues());
+        if (string.IsNullOrEmpty(preferValue))
         {
             return requestMessage;
         }
 
-        requestMessage.Headers.TryAddWithoutValidation("Prefer", $"odata.include-annotations={includeAnnotations}");
+        requestMessage.Headers.TryAddWithoutValidation("Prefer", preferValue);
         return requestMessage;
+
+        IEnumerable<string> GetPreferValues()
+        {
+            if (maxPageSize is not null)
+            {
+                yield return $"odata.maxpagesize={maxPageSize}";
+            }
+
+            if (string.IsNullOrEmpty(includeAnnotations) is false)
+            {
+                yield return $"odata.include-annotations={includeAnnotations}";
+            }
+        }
     }
 
     internal async static ValueTask<Result<T?, Failure<DataverseFailureCode>>> ReadDataverseResultAsync<T>(
@@ -55,7 +71,7 @@ internal static class DataverseHttpHelper
         return failureJson.ToDataverseFailure(body, response.StatusCode);
     }
 
-    internal static HttpContent BuildRequestJsonBody<TRequestJson>(TRequestJson input)
+    internal static HttpContent BuildRequestJsonBody<TRequestJson>(this TRequestJson input)
     {
         var json = JsonSerializer.Serialize(input, jsonSerializerOptions);
         var content = new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);

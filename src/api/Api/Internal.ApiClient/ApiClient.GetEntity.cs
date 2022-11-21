@@ -45,17 +45,17 @@ partial class DataverseApiClient
             Method = HttpMethod.Get,
             RequestUri = BuildEntityGetUri(input)
         }
-        .IncludeAnnotationsHeaderValue(
+        .SetPreferHeaderValue(
             input.IncludeAnnotations);
 
     private static Uri BuildEntityGetUri(DataverseEntityGetIn input)
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = QueryParametersBuilder.BuildODataParameterValue(input.SelectFields)
+            ["$select"] = input.SelectFields.BuildODataParameterValue()
         };
 
-        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+        var queryString = queryParameters.BuildQueryString();
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
         return new Uri($"{encodedPluralName}({input.EntityKey.Value}){queryString}", UriKind.Relative);

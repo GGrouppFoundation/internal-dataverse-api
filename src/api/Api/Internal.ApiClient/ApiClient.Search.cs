@@ -28,33 +28,34 @@ partial class DataverseApiClient
     {
         using var httpClient = CreateSearchHttpClient();
 
-        var searchIn = new DataverseSearchJsonIn(input.Search)
+        var searchIn = new DataverseSearchJsonIn
         {
-            Entities = input.Entities,
-            Facets = input.Facets,
+            Search = input.Search,
+            Entities = input.Entities?.FilterNotEmpty(),
+            Facets = input.Facets?.FilterNotEmpty(),
             Filter = input.Filter,
             ReturnTotalRecordCount = input.ReturnTotalRecordCount,
             Skip = input.Skip,
             Top = input.Top,
-            OrderBy = input.OrderBy,
+            OrderBy = input.OrderBy?.FilterNotEmpty(),
             SearchMode = input.SearchMode switch
             {
-                null => null,
                 DataverseSearchMode.Any => DataverseSearchModeJson.Any,
-                _ => DataverseSearchModeJson.All
+                DataverseSearchMode.All => DataverseSearchModeJson.All,
+                _ => null
             },
             SearchType = input.SearchType switch
             {
-                null => null,
                 DataverseSearchType.Simple => DataverseSearchTypeJson.Simple,
-                _ => DataverseSearchTypeJson.Full
+                DataverseSearchType.Full => DataverseSearchTypeJson.Full,
+                _ => null
             }
         };
 
         var requestMessage = new HttpRequestMessage()
         { 
             Method = HttpMethod.Post,
-            Content = DataverseHttpHelper.BuildRequestJsonBody(searchIn) 
+            Content = searchIn.BuildRequestJsonBody() 
         };
 
         var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
@@ -62,11 +63,11 @@ partial class DataverseApiClient
 
         return result.MapSuccess(MapSuccess);
 
-        static DataverseSearchOut MapSuccess(DataverseSearchJsonOut? @out)
+        static DataverseSearchOut MapSuccess(DataverseSearchJsonOut @out)
             =>
             new(
-                @out?.TotalRecordCount ?? default,
-                @out?.Value?.Select(MapJsonItem).ToArray());
+                @out.TotalRecordCount,
+                @out.Value.Map(MapJsonItem));
 
         static DataverseSearchItem MapJsonItem(DataverseSearchJsonItem jsonItem)
             =>

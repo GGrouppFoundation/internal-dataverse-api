@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace GGroupp.Infra;
+namespace GGroupp.Infra.Dataverse.Api.Test;
 
-internal readonly record struct DataverseSearchJsonIn
+internal sealed record class StubSearchJsonIn
 {
     [JsonPropertyName("search")]
-    public required string? Search { get; init; }
+    public string? Search { get; init; }
 
     [JsonPropertyName("entities")]
-    public FlatArray<string>? Entities { get; init; }
+    public string[]? Entities { get; init; }
 
     [JsonPropertyName("facets")]
-    public FlatArray<string>? Facets { get; init; }
+    public string[]? Facets { get; init; }
 
     [JsonPropertyName("filter")]
     public string? Filter { get; init; }
@@ -27,11 +26,11 @@ internal readonly record struct DataverseSearchJsonIn
     public int? Top { get; init; }
 
     [JsonPropertyName("orderby")]
-    public FlatArray<string>? OrderBy { get; init; }
+    public string[]? OrderBy { get; init; }
 
     [JsonPropertyName("searchmode")]
-    public DataverseSearchModeJson? SearchMode { get; init; }
+    public int? SearchMode { get; init; }
 
     [JsonPropertyName("searchtype")]
-    public DataverseSearchTypeJson? SearchType { get; init; }
+    public int? SearchType { get; init; }
 }

@@ -6,8 +6,13 @@ namespace GGroupp.Infra;
 
 internal static class QueryParametersBuilder
 {
-    internal static string BuildODataParameterValue(FlatArray<string> paramValues)
+    internal static string BuildODataParameterValue(this FlatArray<string> paramValues)
     {
+        if (paramValues.IsEmpty)
+        {
+            return string.Empty;
+        }
+
         var valueBuilder = new StringBuilder();
 
         foreach (var paramValue in paramValues)
@@ -28,16 +33,13 @@ internal static class QueryParametersBuilder
         return valueBuilder.ToString();
     }
 
-    internal static string BuildODataParameterValue(IEnumerable<string> paramValues)
+    internal static string BuildQueryString(this IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
     {
-        var notEmptyValues = paramValues.Where(
-            static v => string.IsNullOrEmpty(v) is false);
-        
-        return string.Join(',', notEmptyValues);
-    }
+        if (queryParams.Count is not > 0)
+        {
+            return string.Empty;
+        }
 
-    internal static string BuildQueryString(IReadOnlyCollection<KeyValuePair<string, string>> queryParams)
-    {
         var queryStringBuilder = new StringBuilder();
 
         foreach(var queryParam in queryParams.Where(kv => string.IsNullOrEmpty(kv.Value) is false))

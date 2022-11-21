@@ -8,20 +8,16 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 internal static partial class ApiClientTestDataSource
 {
-    private static StringContent CreateResponseContentJson<TJson>(TJson responseJson)
+    private static StringContent CreateResponseContentJson<TJson>(this TJson responseJson)
         =>
         new(
             Serialize(responseJson));
 
-    private static StringContent ToJsonContent(this DataverseFailureJson failureJson)
+    private static StringContent ToJsonContent(this StubFailureJson failureJson)
         =>
         new(failureJson.Serialize(), default, MediaTypeNames.Application.Json);
 
-    private static string Serialize(this DataverseFailureJson failureJson)
-        =>
-        JsonSerializer.Serialize(failureJson);
-
-    private static string Serialize<T>(T value)
+    private static string Serialize<T>(this T value)
         =>
         JsonSerializer.Serialize(
             value,

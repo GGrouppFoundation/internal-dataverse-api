@@ -14,7 +14,7 @@ partial class ApiClientTestDataSource
                 new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
                 new DataverseEntitySetGetIn(
                     entityPluralName: "SomeEntities",
-                    selectFields: new[] { "field1", "field2" },
+                    selectFields: new("field1", "field2"),
                     filter: "id eq 15",
                     orderBy: new DataverseOrderParameter[]
                     {
@@ -23,7 +23,8 @@ partial class ApiClientTestDataSource
                         new("field5", DataverseOrderDirection.Ascending)
                     },
                     top: 15),
-                "https://some.crm4.dynamics.com/api/data/v9.2/SomeEntities?$select=field1,field2&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
+                "https://some.crm4.dynamics.com/api/data/v9.2/SomeEntities" +
+                "?$select=field1,field2&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
                 null
             },
             new object?[]
@@ -31,7 +32,7 @@ partial class ApiClientTestDataSource
                 new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
                 new DataverseEntitySetGetIn(
                     entityPluralName: "Some Entities",
-                    selectFields: new[] { string.Empty, "field 1" },
+                    selectFields: new(string.Empty, "field 1"),
                     filter: default,
                     orderBy: default,
                     top: 1)
@@ -53,6 +54,71 @@ partial class ApiClientTestDataSource
                     },
                 "http://ggroupp.ru/api/data/v9.2/Some%2fEntities?$filter=date gt 2020-01-01",
                 "odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn(
+                    entityPluralName: "SomeEntities",
+                    selectFields: new("FieldOne"),
+                    filter: string.Empty)
+                    {
+                        MaxPageSize = 10
+                    },
+                "http://ggroupp.ru/api/data/v9.2/SomeEntities?$select=FieldOne",
+                "odata.maxpagesize=10"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn(
+                    entityPluralName: "SomeEntities",
+                    selectFields: default,
+                    filter: default)
+                    {
+                        MaxPageSize = -5,
+                        IncludeAnnotations = "*"
+                    },
+                "http://ggroupp.ru/api/data/v9.2/SomeEntities",
+                "odata.maxpagesize=-5,odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink")
+                {
+                    MaxPageSize = 15,
+                    IncludeAnnotations = "*"
+                },
+                "http://garage.ru/api/someLink",
+                "odata.maxpagesize=15,odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink")
+                {
+                    MaxPageSize = 7
+                },
+                "http://garage.ru/api/someLink",
+                "odata.maxpagesize=7"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("/api/someLink")
+                {
+                    IncludeAnnotations = "*"
+                },
+                "http://ggroupp.ru/api/someLink",
+                "odata.include-annotations=*"
+            },
+            new object?[]
+            {
+                new Uri("http://ggroupp.ru", UriKind.Absolute),
+                new DataverseEntitySetGetIn("http://garage.ru/api/someLink"),
+                "http://garage.ru/api/someLink",
+                null
             }
         };
 }

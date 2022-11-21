@@ -29,7 +29,7 @@ partial class DataverseApiClient
         using var httpClient = CreateDataHttpClient();
         var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
 
-        using var content = DataverseHttpHelper.BuildRequestJsonBody(input.EntityData);
+        using var content = input.EntityData.BuildRequestJsonBody();
 
         var response = await httpClient.PatchAsync(entitiyUpdateUrl, content, cancellationToken).ConfigureAwait(false);
         var result = await response.ReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
@@ -46,10 +46,10 @@ partial class DataverseApiClient
     {
         var queryParameters = new Dictionary<string, string>
         {
-            ["$select"] = QueryParametersBuilder.BuildODataParameterValue(input.SelectFields)
+            ["$select"] = input.SelectFields.BuildODataParameterValue()
         };
 
-        var queryString = QueryParametersBuilder.BuildQueryString(queryParameters);
+        var queryString = queryParameters.BuildQueryString();
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
         return $"{encodedPluralName}({input.EntityKey.Value}){queryString}";
