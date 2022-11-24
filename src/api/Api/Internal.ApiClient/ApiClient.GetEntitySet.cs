@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -13,7 +12,7 @@ partial class DataverseApiClient
     public ValueTask<Result<DataverseEntitySetGetOut<TJson>, Failure<DataverseFailureCode>>> GetEntitySetAsync<TJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken = default)
     {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -26,34 +25,38 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseEntitySetGetOut<TJson>, Failure<DataverseFailureCode>>> InnerGetEntitySetAsync<TJson>(
         DataverseEntitySetGetIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = string.IsNullOrEmpty(input.NextLink) ? CreateDataHttpClient() : CreateHttpClient(input.NextLink);
-        using var request = CreateEntitySetGetRequest(input);
+        var request = new DataverseHttpRequest<Unit>(
+            verb: DataverseHttpVerb.Get,
+            url: BuildEntitySetGetUri(input),
+            headers: GetHeaders(),
+            content: default);
 
-        var response = await httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<DataverseEntitySetJsonGetOut<TJson>>(cancellationToken).ConfigureAwait(false);
-
+        var result = await httpApi.InvokeAsync<Unit, DataverseEntitySetJsonGetOut<TJson>>(request, cancellationToken).ConfigureAwait(false);
         return result.MapSuccess(MapSuccess);
 
         static DataverseEntitySetGetOut<TJson> MapSuccess(DataverseEntitySetJsonGetOut<TJson> success)
             =>
             new(success.Value, success.NextLink);
+
+        FlatArray<DataverseHttpHeader> GetHeaders()
+        {
+            var preferValue = BuildPreferValue(input.IncludeAnnotations, input.MaxPageSize);
+
+            if (string.IsNullOrEmpty(preferValue))
+            {
+                return GetAllHeaders();
+            }
+
+            return GetAllHeaders(
+                new DataverseHttpHeader(PreferHeaderName, preferValue));
+        }
     }
 
-    private static HttpRequestMessage CreateEntitySetGetRequest(DataverseEntitySetGetIn input)
-        =>
-        new HttpRequestMessage()
-        {
-            Method = HttpMethod.Get,
-            RequestUri = BuildEntitySetGetUri(input)
-        }
-        .SetPreferHeaderValue(
-            input.IncludeAnnotations, input.MaxPageSize);
-
-    private static Uri? BuildEntitySetGetUri(DataverseEntitySetGetIn input)
+    private static string BuildEntitySetGetUri(DataverseEntitySetGetIn input)
     {
         if (string.IsNullOrEmpty(input.NextLink) is false)
         {
-            return null;
+            return input.NextLink;
         }
 
         var queryParameters = new Dictionary<string, string>
@@ -71,7 +74,7 @@ partial class DataverseApiClient
         var queryString = queryParameters.BuildQueryString();
 
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
-        return new Uri(encodedPluralName + queryString, UriKind.Relative);
+        return BuildDataRequestUrl(encodedPluralName + queryString);
     }
 
     private static string GetOrderByValue(DataverseOrderParameter orderParameter)

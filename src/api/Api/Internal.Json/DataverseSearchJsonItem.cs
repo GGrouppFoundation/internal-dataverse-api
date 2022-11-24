@@ -17,5 +17,5 @@ internal sealed record class DataverseSearchJsonItem
     public Guid ObjectId { get; init; }
 
     [JsonExtensionData]
-    public Dictionary<string, JsonElement>? ExtensionData { get; set; }
+    public Dictionary<string, JsonElement>? ExtensionData { get; init; }
 }

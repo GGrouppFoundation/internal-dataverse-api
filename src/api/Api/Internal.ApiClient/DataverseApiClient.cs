@@ -1,6 +1,5 @@
 using System;
-using System.Globalization;
-using System.Net.Http;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,56 +11,71 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ApiTypeData = "data";
 
-    private const string ApiVersionSearch = "1.0";
-
-    private const string ApiTypeSearch = "search";
-
-    private const string ApiSearchType = "query";
-
     private const string WhoAmIRelativeUrl = "WhoAmI";
 
     private const string CallerIdHeaderName = "MSCRMCallerID";
 
-    private readonly HttpMessageHandler messageHandler;
+    private const string PreferHeaderName = "Prefer";
 
-    private readonly Uri dataverseBaseUri;
+    private const string ReturnRepresentationValue = "return=representation";
+
+    private const string SearchRequestUrl = "/api/search/v1.0/query";
+
+    private readonly IDataverseHttpApi httpApi;
 
     private readonly Guid? callerId;
 
-    internal DataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri)
-    {
-        this.messageHandler = messageHandler;
-        this.dataverseBaseUri = dataverseBaseUri;
-    }
-
-    private DataverseApiClient(HttpMessageHandler messageHandler, Uri dataverseBaseUri, Guid callerId)
-    {
-        this.messageHandler = messageHandler;
-        this.dataverseBaseUri = dataverseBaseUri;
-        this.callerId = callerId;
-    }
-
-    private HttpClient CreateDataHttpClient()
+    internal DataverseApiClient(IDataverseHttpApi httpApi)
         =>
-        CreateHttpClient($"/api/{ApiTypeData}/v{ApiVersionData}/");
+        this.httpApi = httpApi;
 
-    private HttpClient CreateSearchHttpClient()
+    private DataverseApiClient(IDataverseHttpApi httpApi, Guid callerId)
         =>
-        CreateHttpClient($"/api/{ApiTypeSearch}/v{ApiVersionSearch}/{ApiSearchType}");
+        (this.httpApi, this.callerId) = (httpApi, callerId);
 
-    private HttpClient CreateHttpClient(string relativeUrl)
+    private static string BuildDataRequestUrl(string dataUrl)
+        =>
+        $"/api/{ApiTypeData}/v{ApiVersionData}/{dataUrl}";
+
+    private FlatArray<DataverseHttpHeader> GetAllHeaders(params DataverseHttpHeader[] headers)
     {
-        var httpClient = new HttpClient(messageHandler, disposeHandler: false)
+        if (callerId is null && headers.Length is 0)
         {
-            BaseAddress = new(dataverseBaseUri, relativeUrl)
-        };
-
-        if (callerId is not null)
-        {
-            httpClient.DefaultRequestHeaders.Add(CallerIdHeaderName, callerId.Value.ToString("D", CultureInfo.InvariantCulture));
+            return default;
         }
 
-        return httpClient;
+        if (callerId is null)
+        {
+            return new(headers);
+        }
+
+        var builder = FlatArray<DataverseHttpHeader>.Builder.Create(headers.Length + 1);
+        builder[0] = new(CallerIdHeaderName, callerId.Value.ToString("D"));
+
+        for (var i = 0; i < headers.Length; i++)
+        {
+            builder[i + 1] = headers[i];
+        }
+
+        return builder.Build();
+    }
+
+    private static string BuildPreferValue(string? includeAnnotations, int? maxPageSize = null)
+    {
+        return string.Join(',', GetPreferValues());
+
+        IEnumerable<string> GetPreferValues()
+        {
+            if (maxPageSize is not null)
+            {
+                yield return $"odata.maxpagesize={maxPageSize}";
+            }
+
+            if (string.IsNullOrEmpty(includeAnnotations) is false)
+            {
+                yield return $"odata.include-annotations={includeAnnotations}";
+            }
+        }
     }
 
     private static ValueTask<Result<T, Failure<DataverseFailureCode>>> GetCanceledAsync<T>(CancellationToken cancellationToken)
