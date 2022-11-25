@@ -20,11 +20,13 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseWhoAmIOut, Failure<DataverseFailureCode>>> InnerWhoAmIAsync(
         CancellationToken cancellationToken)
     {
-        using var httpClient = CreateDataHttpClient();
+        var request = new DataverseHttpRequest<Unit>(
+            verb: DataverseHttpVerb.Get,
+            url: BuildDataRequestUrl(WhoAmIRelativeUrl),
+            headers: GetAllHeaders(),
+            content: default);
 
-        var response = await httpClient.GetAsync(WhoAmIRelativeUrl, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<DataverseWhoAmIOutJson>(cancellationToken).ConfigureAwait(false);
-
+        var result = await httpApi.InvokeAsync<Unit, DataverseWhoAmIOutJson>(request, cancellationToken).ConfigureAwait(false);
         return result.MapSuccess(MapSuccess);
 
         static DataverseWhoAmIOut MapSuccess(DataverseWhoAmIOutJson @out)

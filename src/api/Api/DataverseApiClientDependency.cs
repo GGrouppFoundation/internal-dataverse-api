@@ -7,6 +7,7 @@ using PrimeFuncPack;
 using static Microsoft.Extensions.Configuration.DataverseApiClientConfigurationExtensions;
 
 [assembly: InternalsVisibleTo("GGroupp.Infra.Dataverse.Api.Test")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 
 namespace GGroupp.Infra;
 
@@ -48,6 +49,8 @@ public static class DataverseApiClientDependency
         _ = option ?? throw new ArgumentNullException(nameof(option));
 
         var authenticationHandler = new AuthenticationHandler(httpMessageHandler, option);
-        return new DataverseApiClient(authenticationHandler, new(option.ServiceUrl, UriKind.Absolute));
+        var dataverseHttpApi = new DataverseHttpApi(authenticationHandler, new(option.ServiceUrl, UriKind.Absolute));
+
+        return new DataverseApiClient(dataverseHttpApi);
     }
 }

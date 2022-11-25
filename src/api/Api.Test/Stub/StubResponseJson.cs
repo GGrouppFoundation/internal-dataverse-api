@@ -1,6 +1,6 @@
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
-public sealed record class StubResponseJson
+internal sealed record class StubResponseJson
 {
     public int Id { get; init; }
 

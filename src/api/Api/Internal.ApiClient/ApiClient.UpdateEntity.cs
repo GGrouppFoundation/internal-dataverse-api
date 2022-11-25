@@ -12,7 +12,7 @@ partial class DataverseApiClient
         DataverseEntityUpdateIn<TInJson> input, CancellationToken cancellationToken = default)
         where TInJson : notnull
     {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -26,32 +26,26 @@ partial class DataverseApiClient
         DataverseEntityUpdateIn<TInJson> input, CancellationToken cancellationToken)
         where TInJson : notnull
     {
-        using var httpClient = CreateDataHttpClient();
-        var entitiyUpdateUrl = BuildEntityUpdateUrl(input);
-
-        using var content = input.EntityData.BuildRequestJsonBody();
-
-        var response = await httpClient.PatchAsync(entitiyUpdateUrl, content, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<TOutJson>(cancellationToken).ConfigureAwait(false);
-
-        return result.MapSuccess(MapSuccess);
-
-        static DataverseEntityUpdateOut<TOutJson> MapSuccess(TOutJson? @out)
-            =>
-            new(@out);
-    }
-
-    private static string BuildEntityUpdateUrl<TInJson>(DataverseEntityUpdateIn<TInJson> input)
-        where TInJson : notnull
-    {
         var queryParameters = new Dictionary<string, string>
         {
             ["$select"] = input.SelectFields.BuildODataParameterValue()
         };
 
         var queryString = queryParameters.BuildQueryString();
-
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
-        return $"{encodedPluralName}({input.EntityKey.Value}){queryString}";
+
+        var request = new DataverseHttpRequest<TInJson>(
+            verb: DataverseHttpVerb.Patch,
+            url: BuildDataRequestUrl($"{encodedPluralName}({input.EntityKey.Value}){queryString}"),
+            headers: GetAllHeaders(
+                new DataverseHttpHeader(PreferHeaderName, ReturnRepresentationValue)),
+            content: new(input.EntityData));
+
+        var result = await httpApi.InvokeAsync<TInJson, TOutJson>(request, cancellationToken).ConfigureAwait(false);
+        return result.MapSuccess(MapSuccess);
+
+        static DataverseEntityUpdateOut<TOutJson> MapSuccess(TOutJson? @out)
+            =>
+            new(@out);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +12,7 @@ partial class DataverseApiClient
     public ValueTask<Result<DataverseSearchOut, Failure<DataverseFailureCode>>> SearchAsync(
         DataverseSearchIn input, CancellationToken cancellationToken = default)
     {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -26,8 +25,6 @@ partial class DataverseApiClient
     private async ValueTask<Result<DataverseSearchOut, Failure<DataverseFailureCode>>> InnerSearchAsync(
         DataverseSearchIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = CreateSearchHttpClient();
-
         var searchIn = new DataverseSearchJsonIn
         {
             Search = input.Search,
@@ -52,15 +49,13 @@ partial class DataverseApiClient
             }
         };
 
-        var requestMessage = new HttpRequestMessage()
-        { 
-            Method = HttpMethod.Post,
-            Content = searchIn.BuildRequestJsonBody() 
-        };
+        var request = new DataverseHttpRequest<DataverseSearchJsonIn>(
+            verb: DataverseHttpVerb.Post,
+            url: SearchRequestUrl,
+            headers: GetAllHeaders(),
+            content: new(searchIn));
 
-        var response = await httpClient.SendAsync(requestMessage, cancellationToken).ConfigureAwait(false);
-        var result = await response.ReadDataverseResultAsync<DataverseSearchJsonOut>(cancellationToken).ConfigureAwait(false);
-
+        var result = await httpApi.InvokeAsync<DataverseSearchJsonIn, DataverseSearchJsonOut>(request, cancellationToken).ConfigureAwait(false);
         return result.MapSuccess(MapSuccess);
 
         static DataverseSearchOut MapSuccess(DataverseSearchJsonOut @out)

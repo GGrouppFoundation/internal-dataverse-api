@@ -10,7 +10,7 @@ partial class DataverseApiClient
     public ValueTask<Result<Unit, Failure<DataverseFailureCode>>> DeleteEntityAsync(
         DataverseEntityDeleteIn input, CancellationToken cancellationToken = default)
     {
-        _ = input ?? throw new ArgumentNullException(nameof(input));
+        ArgumentNullException.ThrowIfNull(input);
 
         if (cancellationToken.IsCancellationRequested)
         {
@@ -20,15 +20,17 @@ partial class DataverseApiClient
         return InnerDeleteEntityAsync(input, cancellationToken);
     }
 
-    private async ValueTask<Result<Unit, Failure<DataverseFailureCode>>> InnerDeleteEntityAsync(
+    private ValueTask<Result<Unit, Failure<DataverseFailureCode>>> InnerDeleteEntityAsync(
         DataverseEntityDeleteIn input, CancellationToken cancellationToken)
     {
-        using var httpClient = CreateDataHttpClient();
-
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
-        var entitiyDeleteUrl = $"{encodedPluralName}({input.EntityKey.Value})";
 
-        var response = await httpClient.DeleteAsync(entitiyDeleteUrl, cancellationToken).ConfigureAwait(false);
-        return await response.ReadDataverseResultAsync<Unit>(cancellationToken).ConfigureAwait(false);
+        var request = new DataverseHttpRequest<Unit>(
+            verb: DataverseHttpVerb.Delete,
+            url: BuildDataRequestUrl($"{encodedPluralName}({input.EntityKey.Value})"),
+            headers: GetAllHeaders(),
+            content: default);
+        
+        return httpApi.InvokeAsync<Unit, Unit>(request, cancellationToken);
     }
 }
