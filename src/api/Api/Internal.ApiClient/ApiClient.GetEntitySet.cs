@@ -62,6 +62,7 @@ partial class DataverseApiClient
         var queryParameters = new Dictionary<string, string>
         {
             ["$select"] = input.SelectFields.BuildODataParameterValue(),
+            ["$expand"] = input.ExpandFields.Map(QueryParametersBuilder.BuildExpandFieldValue).BuildODataParameterValue(),
             ["$filter"] = input.Filter,
             ["$orderby"] = input.OrderBy.Map(GetOrderByValue).BuildODataParameterValue()
         };

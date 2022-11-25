@@ -15,7 +15,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 7.0.x
-        include-prerelease: false 
 
      # Add NuGet Sources
 
@@ -62,6 +61,17 @@ jobs:
 
     - name: Test Api.Core.EntityKey.Tests
       run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
+
+    # Api.Core.ExpandedField
+
+    - name: Restore Api.Core.ExpandedField
+      run: dotnet restore ./src/*/*/Api.Core.ExpandedField.csproj
+
+    - name: Build Api.Core.ExpandedField
+      run: dotnet build ./src/*/*/Api.Core.ExpandedField.csproj --no-restore  -c Release
+
+    - name: Pack Api.Core.ExpandedField
+      run: dotnet pack ./src/*/*/Api.Core.ExpandedField.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions.Impersonate
 

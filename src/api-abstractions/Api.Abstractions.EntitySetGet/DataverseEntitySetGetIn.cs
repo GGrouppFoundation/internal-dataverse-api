@@ -15,12 +15,14 @@ public sealed record class DataverseEntitySetGetIn
     public DataverseEntitySetGetIn(
         string entityPluralName,
         FlatArray<string> selectFields,
-        [AllowNull] string filter,
+        [AllowNull] string filter = null,
+        FlatArray<DataverseExpandedField> expandFields = default,
         FlatArray<DataverseOrderParameter> orderBy = default,
         int? top = null)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         SelectFields = selectFields;
+        ExpandFields = expandFields;
         Filter = filter ?? string.Empty;
         OrderBy = orderBy;
         Top = top;
@@ -31,6 +33,8 @@ public sealed record class DataverseEntitySetGetIn
     public string EntityPluralName { get; }
 
     public FlatArray<string> SelectFields { get; }
+
+    public FlatArray<DataverseExpandedField> ExpandFields { get; }
 
     public string Filter { get; }
 

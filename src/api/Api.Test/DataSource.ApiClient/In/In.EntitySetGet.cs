@@ -15,6 +15,13 @@ partial class ApiClientTestDataSource
                 new DataverseEntitySetGetIn(
                     entityPluralName: "SomeEntities",
                     selectFields: new("field1", "field2"),
+                    expandFields: new FlatArray<DataverseExpandedField>(
+                       new("LookupOne", new("field1.1", "field1.2")),
+                        new(
+                            fieldName: "LookupTwo",
+                            selectFields: default,
+                            expandFields: new(
+                                new DataverseExpandedField("field2.1", default)))),
                     filter: "id eq 15",
                     orderBy: new DataverseOrderParameter[]
                     {
@@ -25,7 +32,9 @@ partial class ApiClientTestDataSource
                     top: 15),
                 new DataverseHttpRequest<Unit>(
                     verb: DataverseHttpVerb.Get,
-                    url: "/api/data/v9.2/SomeEntities?$select=field1,field2&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
+                    url: "/api/data/v9.2/SomeEntities?$select=field1,field2" +
+                        "&$expand=LookupOne($select=field1.1,field1.2),LookupTwo($expand=field2.1)" +
+                        "&$filter=id eq 15&$orderby=field3 desc,field4,field5 asc&$top=15",
                     headers: default,
                     content: default)
             },
@@ -88,6 +97,8 @@ partial class ApiClientTestDataSource
                 new DataverseEntitySetGetIn(
                     entityPluralName: "SomeEntities",
                     selectFields: default,
+                    expandFields: new(
+                        new DataverseExpandedField("Field1", new("Lookup Field"))),
                     filter: default)
                     {
                         MaxPageSize = -5,
@@ -95,7 +106,7 @@ partial class ApiClientTestDataSource
                     },
                 new DataverseHttpRequest<Unit>(
                     verb: DataverseHttpVerb.Get,
-                    url: "/api/data/v9.2/SomeEntities",
+                    url: "/api/data/v9.2/SomeEntities?$expand=Field1($select=Lookup Field)",
                     headers: new(
                         CreateCallerIdHeader("d44c6578-1f2e-4edd-8897-77aaf8bd524a"),
                         new("Prefer", "odata.maxpagesize=-5,odata.include-annotations=*")),
