@@ -66,7 +66,7 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetFailuretTestData), MemberType = typeof(HttpApiTestDataSource))]
+    [MemberData(nameof(HttpApiTestDataSource.GetFailureTestData), MemberType = typeof(HttpApiTestDataSource))]
     public async Task InvokeAsync_ResponseIsFailure_ExpectFailure(
         HttpStatusCode statusCode, StringContent? responseContent, Failure<DataverseFailureCode> expected)
     {

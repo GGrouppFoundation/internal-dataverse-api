@@ -7,7 +7,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> GetFailuretTestData()
+    public static IEnumerable<object?[]> GetFailureTestData()
     {
         yield return new object?[]
         {
