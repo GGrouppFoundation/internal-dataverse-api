@@ -3,51 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3B974303-ABAE-4300-A6AB-52A116CD6FE0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api", "api", "{934945D0-F542-4DC9-94E7-27F59949329E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "src\api\Api\Api.csproj", "{78683BE7-E87B-4C7A-877E-F59667344E68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "api\Api\Api.csproj", "{78683BE7-E87B-4C7A-877E-F59667344E68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "src\api\Api.Test\Api.Test.csproj", "{BB85E6BF-7113-4AD9-BC8A-5888B1D3B852}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Test", "api\Api.Test\Api.Test.csproj", "{BB85E6BF-7113-4AD9-BC8A-5888B1D3B852}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-abstractions", "api-abstractions", "{228C2466-F9EC-4C0F-A39F-2E41571C0209}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions", "src\api-abstractions\Api.Abstractions\Api.Abstractions.csproj", "{0E266740-ADA0-42F8-829D-BEBC57B02DC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions", "api-abstractions\Api.Abstractions\Api.Abstractions.csproj", "{0E266740-ADA0-42F8-829D-BEBC57B02DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityCreate", "src\api-abstractions\Api.Abstractions.EntityCreate\Api.Abstractions.EntityCreate.csproj", "{3CBA6D6B-2738-4AB1-BE4D-1C6B760D6631}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityCreate", "api-abstractions\Api.Abstractions.EntityCreate\Api.Abstractions.EntityCreate.csproj", "{3CBA6D6B-2738-4AB1-BE4D-1C6B760D6631}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityDelete", "src\api-abstractions\Api.Abstractions.EntityDelete\Api.Abstractions.EntityDelete.csproj", "{479FFC2B-550E-448C-9F8A-70A19EE22F30}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityDelete", "api-abstractions\Api.Abstractions.EntityDelete\Api.Abstractions.EntityDelete.csproj", "{479FFC2B-550E-448C-9F8A-70A19EE22F30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityGet", "src\api-abstractions\Api.Abstractions.EntityGet\Api.Abstractions.EntityGet.csproj", "{F51476BD-5EC8-485B-AE0D-91AD0E07A3D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityGet", "api-abstractions\Api.Abstractions.EntityGet\Api.Abstractions.EntityGet.csproj", "{F51476BD-5EC8-485B-AE0D-91AD0E07A3D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntitySetGet", "src\api-abstractions\Api.Abstractions.EntitySetGet\Api.Abstractions.EntitySetGet.csproj", "{B71F35CD-06E6-47A1-A643-C2A75509F050}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntitySetGet", "api-abstractions\Api.Abstractions.EntitySetGet\Api.Abstractions.EntitySetGet.csproj", "{B71F35CD-06E6-47A1-A643-C2A75509F050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityUpdate", "src\api-abstractions\Api.Abstractions.EntityUpdate\Api.Abstractions.EntityUpdate.csproj", "{D6C0DC9C-C2BC-4648-850D-E855F6FEB381}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EntityUpdate", "api-abstractions\Api.Abstractions.EntityUpdate\Api.Abstractions.EntityUpdate.csproj", "{D6C0DC9C-C2BC-4648-850D-E855F6FEB381}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.Impersonate", "src\api-abstractions\Api.Abstractions.Impersonate\Api.Abstractions.Impersonate.csproj", "{6A765C37-3B89-45B0-AEA1-4D8B42D13F8A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.Impersonate", "api-abstractions\Api.Abstractions.Impersonate\Api.Abstractions.Impersonate.csproj", "{6A765C37-3B89-45B0-AEA1-4D8B42D13F8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.Search", "src\api-abstractions\Api.Abstractions.Search\Api.Abstractions.Search.csproj", "{0A8E22B5-1151-42D6-BC29-22D4430BDDA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.Search", "api-abstractions\Api.Abstractions.Search\Api.Abstractions.Search.csproj", "{0A8E22B5-1151-42D6-BC29-22D4430BDDA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.WhoAmI", "src\api-abstractions\Api.Abstractions.WhoAmI\Api.Abstractions.WhoAmI.csproj", "{0BA741D8-8765-4079-A8A9-B0EC6DB146D8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.WhoAmI", "api-abstractions\Api.Abstractions.WhoAmI\Api.Abstractions.WhoAmI.csproj", "{0BA741D8-8765-4079-A8A9-B0EC6DB146D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-core", "api-core", "{6FDF12B8-636E-4707-A8A9-E418BDB1EC28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey", "src\api-core\Api.Core.EntityKey\Api.Core.EntityKey.csproj", "{36B655B3-14FA-481F-AA41-77D5779F9BE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey", "api-core\Api.Core.EntityKey\Api.Core.EntityKey.csproj", "{36B655B3-14FA-481F-AA41-77D5779F9BE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Tests", "src\api-core\Api.Core.EntityKey.Tests\Api.Core.EntityKey.Tests.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Tests", "api-core\Api.Core.EntityKey.Tests\Api.Core.EntityKey.Tests.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.ExpandedField", "src\api-core\Api.Core.ExpandedField\Api.Core.ExpandedField.csproj", "{E5A29788-B68B-4450-8301-AB1AB0DBB5E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.ExpandedField", "api-core\Api.Core.ExpandedField\Api.Core.ExpandedField.csproj", "{E5A29788-B68B-4450-8301-AB1AB0DBB5E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.FailureCode", "src\api-core\Api.Core.FailureCode\Api.Core.FailureCode.csproj", "{3B3EAA98-09CD-416E-A12C-3B71DAD66A75}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.FailureCode", "api-core\Api.Core.FailureCode\Api.Core.FailureCode.csproj", "{3B3EAA98-09CD-416E-A12C-3B71DAD66A75}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-impersonation", "api-impersonation", "{CC304FA9-6862-4341-BF33-827F8DA796A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation", "src\api-impersonation\Api.Impersonation\Api.Impersonation.csproj", "{09471DF1-5A91-489B-8E8A-5F1121E02F88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation", "api-impersonation\Api.Impersonation\Api.Impersonation.csproj", "{09471DF1-5A91-489B-8E8A-5F1121E02F88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation.Test", "src\api-impersonation\Api.Impersonation.Test\Api.Impersonation.Test.csproj", "{F8D9D1C8-0220-4382-AC47-33F024DC988B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation.Test", "api-impersonation\Api.Impersonation.Test\Api.Impersonation.Test.csproj", "{F8D9D1C8-0220-4382-AC47-33F024DC988B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{FEEC3869-B9C3-4832-8102-1FE282901788}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{FEEC3869-B9C3-4832-8102-1FE282901788}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
@@ -132,10 +130,8 @@ Global
 		{F8D9D1C8-0220-4382-AC47-33F024DC988B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{934945D0-F542-4DC9-94E7-27F59949329E} = {3B974303-ABAE-4300-A6AB-52A116CD6FE0}
 		{78683BE7-E87B-4C7A-877E-F59667344E68} = {934945D0-F542-4DC9-94E7-27F59949329E}
 		{BB85E6BF-7113-4AD9-BC8A-5888B1D3B852} = {934945D0-F542-4DC9-94E7-27F59949329E}
-		{228C2466-F9EC-4C0F-A39F-2E41571C0209} = {3B974303-ABAE-4300-A6AB-52A116CD6FE0}
 		{0E266740-ADA0-42F8-829D-BEBC57B02DC4} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 		{3CBA6D6B-2738-4AB1-BE4D-1C6B760D6631} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 		{479FFC2B-550E-448C-9F8A-70A19EE22F30} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
@@ -145,12 +141,10 @@ Global
 		{6A765C37-3B89-45B0-AEA1-4D8B42D13F8A} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 		{0A8E22B5-1151-42D6-BC29-22D4430BDDA8} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 		{0BA741D8-8765-4079-A8A9-B0EC6DB146D8} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
-		{6FDF12B8-636E-4707-A8A9-E418BDB1EC28} = {3B974303-ABAE-4300-A6AB-52A116CD6FE0}
 		{36B655B3-14FA-481F-AA41-77D5779F9BE3} = {6FDF12B8-636E-4707-A8A9-E418BDB1EC28}
 		{380BBF61-AA27-44E9-BDFC-FA544CE1C59F} = {6FDF12B8-636E-4707-A8A9-E418BDB1EC28}
 		{E5A29788-B68B-4450-8301-AB1AB0DBB5E4} = {6FDF12B8-636E-4707-A8A9-E418BDB1EC28}
 		{3B3EAA98-09CD-416E-A12C-3B71DAD66A75} = {6FDF12B8-636E-4707-A8A9-E418BDB1EC28}
-		{CC304FA9-6862-4341-BF33-827F8DA796A0} = {3B974303-ABAE-4300-A6AB-52A116CD6FE0}
 		{09471DF1-5A91-489B-8E8A-5F1121E02F88} = {CC304FA9-6862-4341-BF33-827F8DA796A0}
 		{F8D9D1C8-0220-4382-AC47-33F024DC988B} = {CC304FA9-6862-4341-BF33-827F8DA796A0}
 	EndGlobalSection

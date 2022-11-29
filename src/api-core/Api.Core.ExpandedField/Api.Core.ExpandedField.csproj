@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Core.ExpandedField</AssemblyName>
-    <Version>1.0.1</Version>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
