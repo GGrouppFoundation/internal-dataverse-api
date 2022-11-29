@@ -3,18 +3,18 @@
   <PropertyGroup>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>3.3.0</Version>
+    <Version>3.3.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="3.3.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="3.3.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="3.3.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="3.0.1" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="3.3.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Impersonate" Version="2.0.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="3.3.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.WhoAmI" Version="1.0.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="3.3.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="3.3.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="3.3.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="3.0.2" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="3.3.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Impersonate" Version="2.0.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="3.3.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.WhoAmI" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

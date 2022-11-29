@@ -5,20 +5,6 @@ namespace GGroupp.Infra;
 
 internal readonly record struct DataverseSearchJsonIn
 {
-    public DataverseSearchJsonIn(string? search)
-    {
-        Entities = default;
-        Facets = default;
-        Filter = default;
-        ReturnTotalRecordCount = default;
-        Skip = default;
-        Top = default;
-        OrderBy = default;
-        SearchMode = default;
-        SearchType = default;
-        Search = default;
-    }
-
     [JsonPropertyName("search")]
     public string? Search { get; init; }
 
