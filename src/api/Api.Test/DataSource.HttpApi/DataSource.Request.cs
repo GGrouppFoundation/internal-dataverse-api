@@ -16,10 +16,8 @@ partial class HttpApiTestDataSource
                 url: "/some/data?$select=field1,field2",
                 headers: default,
                 content: default),
-            new StubHttpRequestData
+            new StubHttpRequestData(HttpMethod.Get, "https://some.crm4.dynamics.com/some/data?$select=field1,field2")
             {
-                Method = HttpMethod.Get,
-                RequestUrl = "https://some.crm4.dynamics.com/some/data?$select=field1,field2",
                 Headers = default,
                 Content = default
             }
@@ -41,10 +39,8 @@ partial class HttpApiTestDataSource
                 url: "http://site.com/some/data?$select=field1,field2&$filter=a eq 1",
                 headers: default,
                 content: new(secondRequestJson)),
-            new StubHttpRequestData
+            new StubHttpRequestData(HttpMethod.Post, "http://site.com/some/data?$select=field1,field2&$filter=a eq 1")
             {
-                Method = HttpMethod.Post,
-                RequestUrl = "http://site.com/some/data?$select=field1,field2&$filter=a eq 1",
                 Headers = new(
                     new("Content-Type", "application/json; charset=utf-8"),
                     new("Content-Length", secondContentJson.Length.ToString())),
@@ -66,10 +62,8 @@ partial class HttpApiTestDataSource
                     new("second", "two"),
                     new("first", "three,fourth")),
                 content: new(thirdRequestJson)),
-            new StubHttpRequestData
+            new StubHttpRequestData(HttpMethod.Patch, "https://some.crm4.dynamics.com/some/data")
             {
-                Method = HttpMethod.Patch,
-                RequestUrl = "https://some.crm4.dynamics.com/some/data",
                 Headers = new(
                     new("first", "one ,three,fourth"),
                     new("second", "two"),
@@ -90,10 +84,8 @@ partial class HttpApiTestDataSource
                     new("second", string.Empty),
                     new("third", " three ")),
                 content: default),
-            new StubHttpRequestData
+            new StubHttpRequestData(HttpMethod.Delete, "http://some.crm4.dynamics.com/some/data?$select=field 1,field 2#1")
             {
-                Method = HttpMethod.Delete,
-                RequestUrl = "http://some.crm4.dynamics.com/some/data?$select=field 1,field 2#1",
                 Headers = new(
                     new("first", "one"),
                     new("second", string.Empty),
