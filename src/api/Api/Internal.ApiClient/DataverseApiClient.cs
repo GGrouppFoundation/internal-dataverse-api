@@ -49,7 +49,7 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
             return new(headers);
         }
 
-        var builder = FlatArray<DataverseHttpHeader>.Builder.Create(headers.Length + 1);
+        var builder = FlatArray<DataverseHttpHeader>.Builder.OfLength(headers.Length + 1);
         builder[0] = new(CallerIdHeaderName, callerId.Value.ToString("D"));
 
         for (var i = 0; i < headers.Length; i++)
