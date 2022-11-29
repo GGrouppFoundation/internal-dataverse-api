@@ -57,7 +57,7 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
             builder[i + 1] = headers[i];
         }
 
-        return builder.Build();
+        return builder.MoveToArray();
     }
 
     private static string BuildPreferValue(string? includeAnnotations, int? maxPageSize = null)

@@ -41,6 +41,6 @@ internal static class FlatArrayExtensions
             index++;
         }
 
-        return builder.Build();
+        return builder.MoveToArray();
     }
 }
