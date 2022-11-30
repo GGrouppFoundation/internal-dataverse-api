@@ -32,7 +32,7 @@ internal static class FlatArrayExtensions
             return default;
         }
 
-        var builder = FlatArray<TResult>.Builder.Create(source.Length);
+        var builder = FlatArray<TResult>.Builder.OfLength(source.Length);
         var index = 0;
 
         foreach (var item in source)
@@ -41,6 +41,6 @@ internal static class FlatArrayExtensions
             index++;
         }
 
-        return builder.Build();
+        return builder.MoveToArray();
     }
 }

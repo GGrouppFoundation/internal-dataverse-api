@@ -12,7 +12,7 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
 {
     static DataverseHttpApi()
         =>
-        SerializerOptions = new(JsonSerializerOptions.Default)
+        SerializerOptions = new()
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };

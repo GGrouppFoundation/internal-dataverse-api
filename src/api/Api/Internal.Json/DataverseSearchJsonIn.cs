@@ -6,7 +6,7 @@ namespace GGroupp.Infra;
 internal readonly record struct DataverseSearchJsonIn
 {
     [JsonPropertyName("search")]
-    public required string? Search { get; init; }
+    public string? Search { get; init; }
 
     [JsonPropertyName("entities")]
     public FlatArray<string>? Entities { get; init; }
