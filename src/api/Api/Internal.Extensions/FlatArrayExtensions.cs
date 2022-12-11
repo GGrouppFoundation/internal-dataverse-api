@@ -14,12 +14,16 @@ internal static class FlatArrayExtensions
 
         var list = new List<string>(source.Length);
 
-        foreach (var item in source)
+        for (var i = 0; i < source.Length; i++)
         {
-            if (string.IsNullOrEmpty(item) is false)
+            var item = source[i];
+
+            if (string.IsNullOrEmpty(item))
             {
-                list.Add(item);
+                continue;
             }
+
+            list.Add(item);
         }
 
         return list;
@@ -32,15 +36,14 @@ internal static class FlatArrayExtensions
             return default;
         }
 
-        var builder = FlatArray<TResult>.Builder.OfLength(source.Length);
-        var index = 0;
+        var array = new TResult[source.Length];
 
-        foreach (var item in source)
+        for (var i = 0; i < source.Length; i++)
         {
-            builder[index] = map.Invoke(item);
-            index++;
+            var item = source[i];
+            array[i] = map.Invoke(item);
         }
 
-        return builder.MoveToArray();
+        return array;
     }
 }

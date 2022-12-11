@@ -3,5 +3,6 @@
 public enum DataverseSearchMode
 {
     Any,
+
     All
 }

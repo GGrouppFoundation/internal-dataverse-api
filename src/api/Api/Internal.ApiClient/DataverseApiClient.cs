@@ -49,15 +49,15 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
             return new(headers);
         }
 
-        var builder = FlatArray<DataverseHttpHeader>.Builder.OfLength(headers.Length + 1);
-        builder[0] = new(CallerIdHeaderName, callerId.Value.ToString("D"));
+        var array = new DataverseHttpHeader[headers.Length + 1];
+        array[0] = new(CallerIdHeaderName, callerId.Value.ToString("D"));
 
         for (var i = 0; i < headers.Length; i++)
         {
-            builder[i + 1] = headers[i];
+            array[i + 1] = headers[i];
         }
 
-        return builder.MoveToArray();
+        return array;
     }
 
     private static string BuildPreferValue(string? includeAnnotations, int? maxPageSize = null)
