@@ -3,5 +3,6 @@
 public enum DataverseSearchType
 {
     Simple,
+
     Full
 }
