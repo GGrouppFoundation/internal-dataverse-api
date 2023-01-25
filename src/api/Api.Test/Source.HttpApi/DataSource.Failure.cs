@@ -244,6 +244,38 @@ partial class HttpApiTestDataSource
             Failure.Create(DataverseFailureCode.Throttling, throttlingCodeFailure.Failure.Message)
         };
 
+        var duplicateRecordsFoundFailure = new StubFailureJson
+        {
+            Failure = new()
+            {
+                Code = "0x80040333",
+                Message = "A record was not created or updated because a duplicate of the current record already exists."
+            }
+        };
+
+        yield return new object?[]
+        {
+            HttpStatusCode.InternalServerError,
+            duplicateRecordsFoundFailure.ToJsonContent(),
+            Failure.Create(DataverseFailureCode.DuplicateRecord, duplicateRecordsFoundFailure.Failure.Message)
+        };
+
+        var duplicateRecordEntityKeyFailure = new StubFailureJson
+        {
+            Error = new()
+            {
+                Code = "0x80060892",
+                Description = "Some duplicate record failure message"
+            }
+        };
+
+        yield return new object?[]
+        {
+            HttpStatusCode.BadRequest,
+            duplicateRecordEntityKeyFailure.ToJsonContent(),
+            Failure.Create(DataverseFailureCode.DuplicateRecord, duplicateRecordEntityKeyFailure.Error.Description)
+        };
+
         var unknownFailure = new StubFailureJson
         {
             Failure = new()

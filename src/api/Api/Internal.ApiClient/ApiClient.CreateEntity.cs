@@ -37,8 +37,7 @@ partial class DataverseApiClient
         var request = new DataverseHttpRequest<TInJson>(
             verb: DataverseHttpVerb.Post,
             url: BuildDataRequestUrl($"{encodedPluralName}{queryString}"),
-            headers: GetAllHeaders(
-                new DataverseHttpHeader(PreferHeaderName, ReturnRepresentationValue)),
+            headers: GetModificationHeaders(input.SuppressDuplicateDetection),
             content: new(input.EntityData));
 
         var result = await httpApi.InvokeAsync<TInJson, TOutJson>(request, cancellationToken).ConfigureAwait(false);

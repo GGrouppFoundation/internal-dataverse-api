@@ -127,6 +127,7 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
             "0x80040225" or "0x8004d24b" => DataverseFailureCode.UserNotEnabled,
             "SearchableEntityNotFound" => DataverseFailureCode.SearchableEntityNotFound,
             "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => DataverseFailureCode.Throttling,
+            "0x80040333" or "0x80060892" => DataverseFailureCode.DuplicateRecord,
             _ => DataverseFailureCode.Unknown
         };
     }

@@ -19,6 +19,8 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string ReturnRepresentationValue = "return=representation";
 
+    private const string SuppressDuplicateDetectionHeaderName = "MSCRM.SuppressDuplicateDetection";
+
     private const string SearchRequestUrl = "/api/search/v1.0/query";
 
     private readonly IDataverseHttpApi httpApi;
@@ -36,6 +38,19 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
     private static string BuildDataRequestUrl(string dataUrl)
         =>
         $"/api/{ApiTypeData}/v{ApiVersionData}/{dataUrl}";
+
+    private FlatArray<DataverseHttpHeader> GetModificationHeaders(bool? suppressDuplicateDetection)
+    {
+        var preferHeader = new DataverseHttpHeader(PreferHeaderName, ReturnRepresentationValue);
+        if (suppressDuplicateDetection is null)
+        {
+            return GetAllHeaders(preferHeader);
+        }
+
+        return GetAllHeaders(
+            preferHeader,
+            new(SuppressDuplicateDetectionHeaderName, GetHeaderValue(suppressDuplicateDetection.Value)));
+    }
 
     private FlatArray<DataverseHttpHeader> GetAllHeaders(params DataverseHttpHeader[] headers)
     {
@@ -77,6 +92,10 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
             }
         }
     }
+
+    private static string GetHeaderValue(bool value)
+        =>
+        value ? "true" : "false";
 
     private static ValueTask<Result<T, Failure<DataverseFailureCode>>> GetCanceledAsync<T>(CancellationToken cancellationToken)
         =>

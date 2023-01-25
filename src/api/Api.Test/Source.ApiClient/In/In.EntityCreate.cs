@@ -36,13 +36,17 @@ partial class ApiClientTestDataSource
                 new DataverseEntityCreateIn<StubRequestJson>(
                     entityPluralName: "SomeEntities",
                     selectFields: new[] { string.Empty, "field 1" },
-                    entityData: new()),
+                    entityData: new())
+                {
+                    SuppressDuplicateDetection = false
+                },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/SomeEntities?$select=field 1",
                     headers: new(
                         CreateCallerIdHeader("cf6678d2-2963-4f14-8dff-21c956ae9695"),
-                        PreferRepresentationHeader),
+                        PreferRepresentationHeader,
+                        CreateSuppressDuplicateDetectionHeader("false")),
                     content: new StubRequestJson())
             },
             new object?[]
@@ -51,11 +55,16 @@ partial class ApiClientTestDataSource
                 new DataverseEntityCreateIn<StubRequestJson>(
                     entityPluralName: "Some/Entities",
                     selectFields: default,
-                    entityData: new()),
+                    entityData: new())
+                {
+                    SuppressDuplicateDetection = true
+                },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/Some%2fEntities",
-                    headers: new(PreferRepresentationHeader),
+                    headers: new(
+                        PreferRepresentationHeader,
+                        CreateSuppressDuplicateDetectionHeader("true")),
                     content: new StubRequestJson())
             }
         };
