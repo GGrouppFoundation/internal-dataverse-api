@@ -16,5 +16,7 @@ public enum DataverseFailureCode
 
     Throttling,
 
-    SearchableEntityNotFound
+    SearchableEntityNotFound,
+
+    DuplicateRecord
 }

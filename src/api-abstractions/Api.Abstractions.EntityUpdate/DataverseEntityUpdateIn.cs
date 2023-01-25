@@ -24,4 +24,6 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
     public TInJson EntityData { get; }
 
     public IDataverseEntityKey EntityKey { get; }
+
+    public bool? SuppressDuplicateDetection { get; init; }
 }

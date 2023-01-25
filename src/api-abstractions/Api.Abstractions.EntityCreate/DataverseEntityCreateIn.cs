@@ -17,4 +17,6 @@ public sealed record class DataverseEntityCreateIn<TInJson>
     public FlatArray<string> SelectFields { get; }
 
     public TInJson EntityData { get; }
+
+    public bool? SuppressDuplicateDetection { get; init; }
 }

@@ -9,4 +9,8 @@ internal static partial class ApiClientTestDataSource
     private static DataverseHttpHeader CreateCallerIdHeader(string callerId)
         =>
         new("MSCRMCallerID", callerId);
+
+    private static DataverseHttpHeader CreateSuppressDuplicateDetectionHeader(string value)
+        =>
+        new("MSCRM.SuppressDuplicateDetection", value);
 }
