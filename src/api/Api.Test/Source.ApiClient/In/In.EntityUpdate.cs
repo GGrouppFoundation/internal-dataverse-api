@@ -63,10 +63,16 @@ partial class ApiClientTestDataSource
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some Key"),
                     selectFields: default,
-                    entityData: new()),
+                    entityData: new())
+                {
+                    ExpandFields = new DataverseExpandedField[]
+                    {
+                        new("Field1", new("Lookup Field"))
+                    }
+                },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Patch,
-                    url: "/api/data/v9.2/Some%2fEntities(Some Key)",
+                    url: "/api/data/v9.2/Some%2fEntities(Some Key)?$expand=Field1($select=Lookup Field)",
                     headers: new(PreferRepresentationHeader),
                     content: new StubRequestJson())
             }

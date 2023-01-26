@@ -25,5 +25,7 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
 
     public IDataverseEntityKey EntityKey { get; }
 
+    public FlatArray<DataverseExpandedField> ExpandFields { get; init; }
+
     public bool? SuppressDuplicateDetection { get; init; }
 }
