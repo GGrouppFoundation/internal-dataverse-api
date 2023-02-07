@@ -10,6 +10,10 @@ public sealed record class DataverseAlternateKey : IDataverseEntityKey
         =>
         Value = BuildValue(idArguments);
 
+    public DataverseAlternateKey(string fieldName, string fieldValue)
+        =>
+        Value = BuildAlternateKeyItem(fieldName ?? string.Empty, fieldValue ?? string.Empty);
+
     public string Value { get; }
 
     private static string BuildValue(IReadOnlyCollection<KeyValuePair<string, string>>? idArguments)
@@ -27,6 +31,10 @@ public sealed record class DataverseAlternateKey : IDataverseEntityKey
 
         static string BuildValueItem(KeyValuePair<string, string> kv)
             =>
-            WebUtility.UrlEncode($"{kv.Key}={kv.Value}");
+            BuildAlternateKeyItem(kv.Key, kv.Value);
     }
+
+    private static string BuildAlternateKeyItem(string key, string value)
+        =>
+        WebUtility.UrlEncode($"{key}={value}");
 }
