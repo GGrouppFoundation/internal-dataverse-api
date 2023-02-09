@@ -17,12 +17,6 @@ partial class DataverseApiClient
             return GetCanceledAsync<Unit>(cancellationToken);
         }
 
-        return InnerDeleteEntityAsync(input, cancellationToken);
-    }
-
-    private ValueTask<Result<Unit, Failure<DataverseFailureCode>>> InnerDeleteEntityAsync(
-        DataverseEntityDeleteIn input, CancellationToken cancellationToken)
-    {
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
 
         var request = new DataverseHttpRequest<Unit>(

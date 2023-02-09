@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,7 +7,7 @@ namespace GGroupp.Infra;
 
 partial class DataverseApiClient
 {
-    public ValueTask<Result<DataverseEntityCreateOut<TOutJson>, Failure<DataverseFailureCode>>> CreateEntityAsync<TInJson, TOutJson>(
+    public ValueTask<Result<Unit, Failure<DataverseFailureCode>>> CreateEntityAsync<TInJson>(
         DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken = default)
         where TInJson : notnull
     {
@@ -16,36 +15,17 @@ partial class DataverseApiClient
 
         if (cancellationToken.IsCancellationRequested)
         {
-            return GetCanceledAsync<DataverseEntityCreateOut<TOutJson>>(cancellationToken);
+            return GetCanceledAsync<Unit>(cancellationToken);
         }
 
-        return InnerCreateEntityAsync<TInJson, TOutJson>(input, cancellationToken);
-    }
-
-    private async ValueTask<Result<DataverseEntityCreateOut<TOutJson>, Failure<DataverseFailureCode>>> InnerCreateEntityAsync<TInJson, TOutJson>(
-        DataverseEntityCreateIn<TInJson> input, CancellationToken cancellationToken)
-        where TInJson : notnull
-    {
-        var queryParameters = new Dictionary<string, string>
-        {
-            ["$select"] = input.SelectFields.BuildODataParameterValue(),
-            ["$expand"] = input.ExpandFields.Map(QueryParametersBuilder.BuildExpandFieldValue).BuildODataParameterValue()
-        };
-
-        var queryString = queryParameters.BuildQueryString();
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
 
         var request = new DataverseHttpRequest<TInJson>(
             verb: DataverseHttpVerb.Post,
-            url: BuildDataRequestUrl($"{encodedPluralName}{queryString}"),
-            headers: GetModificationHeaders(input.SuppressDuplicateDetection),
+            url: BuildDataRequestUrl(encodedPluralName),
+            headers: GetAllHeadersWithoutRepresentation(input.SuppressDuplicateDetection),
             content: new(input.EntityData));
 
-        var result = await httpApi.InvokeAsync<TInJson, TOutJson>(request, cancellationToken).ConfigureAwait(false);
-        return result.MapSuccess(MapSuccess);
-
-        static DataverseEntityCreateOut<TOutJson> MapSuccess(TOutJson? success)
-            =>
-            new(success);
+        return httpApi.InvokeAsync<TInJson, Unit>(request, cancellationToken);
     }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate</AssemblyName>
-    <Version>3.7.1</Version>
+    <Version>3.8.0-preview.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

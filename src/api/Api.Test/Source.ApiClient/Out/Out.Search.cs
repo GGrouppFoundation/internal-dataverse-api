@@ -5,7 +5,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> GetSearchOutputTestData()
+    public static IEnumerable<object?[]> SearchOutputTestData
         =>
         new[]
         {

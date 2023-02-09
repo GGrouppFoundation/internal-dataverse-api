@@ -5,33 +5,36 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> GetSuccessTestData()
+    public static IEnumerable<object?[]> SuccessTestData
     {
-        yield return new object?[]
+        get
         {
-            null,
-            default(StubResponseJson)
-        };
-
-        yield return new object?[]
-        {
-            new StringContent(string.Empty),
-            default(StubResponseJson)
-        };
-
-        yield return new object?[]
-        {
-            new StubResponseJson
+            yield return new object?[]
             {
-                Id = 15,
-                Name = "Some name"
-            }
-            .CreateResponseContentJson(),
-            new StubResponseJson
+                null,
+                default(StubResponseJson)
+            };
+
+            yield return new object?[]
             {
-                Id = 15,
-                Name = "Some name"
-            }
-        };
+                new StringContent(string.Empty),
+                default(StubResponseJson)
+            };
+
+            yield return new object?[]
+            {
+                new StubResponseJson
+                {
+                    Id = 15,
+                    Name = "Some name"
+                }
+                .CreateResponseContentJson(),
+                new StubResponseJson
+                {
+                    Id = 15,
+                    Name = "Some name"
+                }
+            };
+        }
     }
 }
