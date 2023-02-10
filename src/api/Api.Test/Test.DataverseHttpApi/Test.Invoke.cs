@@ -11,8 +11,8 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseHttpApiTest
 {
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetRequestTestData), MemberType = typeof(HttpApiTestDataSource))]
-    internal async Task InvokeAsync_ExpectSendAsyncCalledOnce(
+    [MemberData(nameof(HttpApiTestDataSource.RequestTestData), MemberType = typeof(HttpApiTestDataSource))]
+    internal static async Task InvokeAsync_ExpectSendAsyncCalledOnce(
         Uri dataverseUri, DataverseHttpRequest<StubRequestJson> request, StubHttpRequestData expetedHttpRequestData)
     {
         using var response = new HttpResponseMessage();
@@ -42,8 +42,8 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetUnauthorizedTestData), MemberType = typeof(HttpApiTestDataSource))]
-    public async Task InvokeAsync_ResponseIsUnauthorized_ExpectUnauthorizedFailure(
+    [MemberData(nameof(HttpApiTestDataSource.UnauthorizedTestData), MemberType = typeof(HttpApiTestDataSource))]
+    public static async Task InvokeAsync_ResponseIsUnauthorized_ExpectUnauthorizedFailure(
         StringContent? responseContent, string failureMessage)
     {
         using var response = new HttpResponseMessage
@@ -66,8 +66,8 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetFailureTestData), MemberType = typeof(HttpApiTestDataSource))]
-    public async Task InvokeAsync_ResponseIsFailure_ExpectFailure(
+    [MemberData(nameof(HttpApiTestDataSource.FailureTestData), MemberType = typeof(HttpApiTestDataSource))]
+    public static async Task InvokeAsync_ResponseIsFailure_ExpectFailure(
         HttpStatusCode statusCode, StringContent? responseContent, Failure<DataverseFailureCode> expected)
     {
         using var response = new HttpResponseMessage
@@ -88,8 +88,8 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetUnitSuccessTestData), MemberType = typeof(HttpApiTestDataSource))]
-    public async Task InvokeAsync_HttpResponseIsSuccessWhenUnitIsOutType_ExpectSuccess(
+    [MemberData(nameof(HttpApiTestDataSource.UnitSuccessTestData), MemberType = typeof(HttpApiTestDataSource))]
+    public static async Task InvokeAsync_HttpResponseIsSuccessWhenUnitIsOutType_ExpectSuccess(
         StringContent? responseContent)
     {
         using var response = new HttpResponseMessage
@@ -112,8 +112,8 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
-    [MemberData(nameof(HttpApiTestDataSource.GetSuccessTestData), MemberType = typeof(HttpApiTestDataSource))]
-    internal async Task GetEntityAsync_HttpResponseIsSuccess_ExpectSuccess(
+    [MemberData(nameof(HttpApiTestDataSource.SuccessTestData), MemberType = typeof(HttpApiTestDataSource))]
+    internal static async Task GetEntityAsync_HttpResponseIsSuccess_ExpectSuccess(
         StringContent? responseContent, StubResponseJson? expected)
     {
         using var response = new HttpResponseMessage

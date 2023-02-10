@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
 
@@ -12,10 +11,7 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
 {
     static DataverseHttpApi()
         =>
-        SerializerOptions = new()
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-        };
+        SerializerOptions = new(JsonSerializerDefaults.Web);
 
     private static readonly JsonSerializerOptions SerializerOptions;
 

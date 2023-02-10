@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public void WhoAmIAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static void WhoAmIAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -21,8 +21,8 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetWhoAmIInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task WhoAmIAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    [MemberData(nameof(ApiClientTestDataSource.WhoAmIInputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    internal static async Task WhoAmIAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseHttpRequest<Unit> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
@@ -35,19 +35,19 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task WhoAmIAsync_ResponseIsFailure_ExpectFailure(
+    [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public static async Task WhoAmIAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(failure);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var actual = await dataverseApiClient.WhoAmIAsync(default, CancellationToken.None);
-        Assert.Equal(failure, actual);
+        Assert.StrictEqual(failure, actual);
     }
 
     [Fact]
-    public async Task WhoAmIAsync_ResponseIsSuccess_ExpectSuccess()
+    public static async Task WhoAmIAsync_ResponseIsSuccess_ExpectSuccess()
     {
         var success = new DataverseWhoAmIOutJson
         {
@@ -66,6 +66,6 @@ partial class DataverseApiClientTest
             userId: Guid.Parse("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
             organizationId: Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae"));
 
-        Assert.Equal(expected, actual);
+        Assert.StrictEqual(expected, actual);
     }
 }

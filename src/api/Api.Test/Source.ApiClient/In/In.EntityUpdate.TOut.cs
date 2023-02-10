@@ -5,7 +5,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityUpdateInputTestData
+    public static IEnumerable<object?[]> EntityUpdateWithTOutInputTestData
         =>
         new[]
         {
@@ -15,6 +15,7 @@ partial class ApiClientTestDataSource
                 new DataverseEntityUpdateIn<StubRequestJson>(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
+                    selectFields: new[] { "field1", "field2" },
                     entityData: new()
                     {
                         Id = 101,
@@ -25,9 +26,10 @@ partial class ApiClientTestDataSource
                 },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Patch,
-                    url: "/api/data/v9.2/SomeEntities(SomeKey)",
+                    url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2",
                     headers: new(
                         CreateCallerIdHeader("9fdea890-f164-47c1-bb51-d3865229fa9b"),
+                        PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("true")),
                     content: new StubRequestJson
                     {
@@ -48,8 +50,9 @@ partial class ApiClientTestDataSource
                 },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Patch,
-                    url: "/api/data/v9.2/SomeEntities(SomeKey)",
+                    url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field 1",
                     headers: new(
+                        PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("false")),
                     content: new StubRequestJson())
             },
@@ -69,8 +72,8 @@ partial class ApiClientTestDataSource
                 },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Patch,
-                    url: "/api/data/v9.2/Some%2fEntities(Some Key)",
-                    headers: default,
+                    url: "/api/data/v9.2/Some%2fEntities(Some Key)?$expand=Field1($select=Lookup Field)",
+                    headers: new(PreferRepresentationHeader),
                     content: new StubRequestJson())
             }
         };

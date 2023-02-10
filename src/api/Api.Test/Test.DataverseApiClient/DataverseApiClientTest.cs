@@ -4,7 +4,7 @@ using Moq;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
-public sealed partial class DataverseApiClientTest
+public static partial class DataverseApiClientTest
 {
     private static readonly DataverseEntityGetIn SomeDataverseEntityGetInput
         =

@@ -3,15 +3,15 @@
   <PropertyGroup>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>3.7.1</Version>
+    <Version>3.8.0-preview.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="3.7.0" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityCreate" Version="3.8.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityDelete" Version="3.2.1" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityGet" Version="3.6.1" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntitySetGet" Version="3.6.0" />
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="3.7.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.EntityUpdate" Version="3.8.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Impersonate" Version="2.1.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.Search" Version="3.6.0" />
     <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions.WhoAmI" Version="1.2.0" />
