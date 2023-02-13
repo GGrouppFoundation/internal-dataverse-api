@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public async Task DeleteEntityAsync_InputIsNull_ExpectArgumentNullException()
+    public static  async Task DeleteEntityAsync_InputIsNull_ExpectArgumentNullException()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -25,7 +25,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public void DeleteEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static  void DeleteEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -38,7 +38,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetEntityDeleteInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task DeleteEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    internal static  async Task DeleteEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseEntityDeleteIn input, DataverseHttpRequest<Unit> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(SomeResponseJson);
@@ -52,7 +52,7 @@ partial class DataverseApiClientTest
     
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task DeleteEntityAsync_ResponseIsFailure_ExpectFailure(
+    public static  async Task DeleteEntityAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, Unit>(failure);
@@ -63,7 +63,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public async Task DeleteEntityAsync_ResponseIsSuccess_ExpectSuccess()
+    public static  async Task DeleteEntityAsync_ResponseIsSuccess_ExpectSuccess()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);

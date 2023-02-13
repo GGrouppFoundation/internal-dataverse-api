@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public async Task GetEntitySetAsync_InputIsNull_ExpectArgumentNullException()
+    public static  async Task GetEntitySetAsync_InputIsNull_ExpectArgumentNullException()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseEntitySetJsonGetOut<StubResponseJson>>(SomeResponseJsonSet);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -26,7 +26,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public void GetEntitySetAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static  void GetEntitySetAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseEntitySetJsonGetOut<StubResponseJson>>(SomeResponseJsonSet);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -40,7 +40,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetEntitySetGetInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task GetEntitySetAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    internal static  async Task GetEntitySetAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseEntitySetGetIn input, DataverseHttpRequest<Unit> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseEntitySetJsonGetOut<StubResponseJson>>(SomeResponseJsonSet);
@@ -54,7 +54,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntitySetAsync_ResponseIsFailure_ExpectFailure(
+    public static  async Task GetEntitySetAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseEntitySetJsonGetOut<StubResponseJson>>(failure);
@@ -68,7 +68,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task GetEntitySetAsync_ResponseIsSuccess_ExpectSuccess(
+    internal static  async Task GetEntitySetAsync_ResponseIsSuccess_ExpectSuccess(
         DataverseEntitySetJsonGetOut<StubResponseJson> success, DataverseEntitySetGetOut<StubResponseJson> expected)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseEntitySetJsonGetOut<StubResponseJson>>(success);

@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public void WhoAmIAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static  void WhoAmIAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -22,7 +22,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetWhoAmIInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task WhoAmIAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    internal static  async Task WhoAmIAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseHttpRequest<Unit> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
@@ -36,7 +36,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task WhoAmIAsync_ResponseIsFailure_ExpectFailure(
+    public static  async Task WhoAmIAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(failure);
@@ -47,7 +47,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public async Task WhoAmIAsync_ResponseIsSuccess_ExpectSuccess()
+    public static  async Task WhoAmIAsync_ResponseIsSuccess_ExpectSuccess()
     {
         var success = new DataverseWhoAmIOutJson
         {

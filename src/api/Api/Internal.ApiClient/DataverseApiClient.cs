@@ -26,7 +26,7 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
     private readonly IDataverseHttpApi httpApi;
 
     private readonly Guid? callerId;
-
+    
     internal DataverseApiClient(IDataverseHttpApi httpApi)
         =>
         this.httpApi = httpApi;

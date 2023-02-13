@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public async Task SearchAsync_InputIsNull_ExpectArgumentNullException()
+    public static  async Task SearchAsync_InputIsNull_ExpectArgumentNullException()
     {
         var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -25,7 +25,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public void SearchAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static  void SearchAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -38,7 +38,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetSearchInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task SearchAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    internal static  async Task SearchAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseSearchIn input, DataverseHttpRequest<DataverseSearchJsonIn> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
@@ -52,7 +52,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task SearchAsync_ResponseIsFailure_ExpectFailure(
+    public static  async Task SearchAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(failure);
@@ -64,7 +64,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetSearchOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task SearchAsync_ResponseIsSuccess_ExpectSuccess(
+    internal static  async Task SearchAsync_ResponseIsSuccess_ExpectSuccess(
         DataverseSearchJsonOut success, DataverseSearchOut expected)
     {
         var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(success);

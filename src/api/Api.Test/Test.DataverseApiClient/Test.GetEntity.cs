@@ -9,7 +9,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public async Task GetEntityAsync_InputIsNull_ExpectArgumentNullException()
+    public static  async Task GetEntityAsync_InputIsNull_ExpectArgumentNullException()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, StubResponseJson>(SomeResponseJson);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -25,7 +25,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    public void GetEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static  void GetEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<Unit, StubResponseJson>(SomeResponseJson);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
@@ -38,7 +38,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetEntityGetInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task GetEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
+    internal static  async Task GetEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseEntityGetIn input, DataverseHttpRequest<Unit> expectedRequest)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, StubResponseJson>(SomeResponseJson);
@@ -52,7 +52,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public async Task GetEntityAsync_ResponseIsFailure_ExpectFailure(
+    public static  async Task GetEntityAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, StubResponseJson>(failure);
@@ -64,7 +64,7 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal async Task GetEntityAsync_ResponseIsSuccess_ExpectSuccess(
+    internal static  async Task GetEntityAsync_ResponseIsSuccess_ExpectSuccess(
         StubResponseJson? success)
     {
         var mockHttpApi = CreateMockHttpApi<Unit, StubResponseJson>(success);

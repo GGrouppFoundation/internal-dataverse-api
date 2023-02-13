@@ -4,7 +4,7 @@ using Moq;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
-public sealed partial class DataverseApiClientTest
+public static partial class DataverseApiClientTest
 {
     private static readonly DataverseEntityGetIn SomeDataverseEntityGetInput
         =
@@ -117,6 +117,48 @@ public sealed partial class DataverseApiClientTest
             UserId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843"),
             OrganizationId = Guid.Parse("4ab18f9f-84a5-4b38-a217-cfd0e774cd53")
         };
+
+    private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJsonOut
+        =
+        new()
+        {
+            ActivityId = Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b") 
+        };
+
+    private static readonly DataverseEmailCreateIn SomeEmailCreateIn
+        =
+        new(
+            subject: "subject",
+            body: "body",
+            sender: new("email@email.com"),
+            recipients: new FlatArray<DataverseEmailRecipient>(
+                new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient))
+            );
+
+    private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
+        =
+        new(Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b"));
+    
+    private static readonly DataverseEmailSendIn SomeEmailSendInWithOutEmailId
+        =
+        new(
+            subject: "subject",
+            body: "body",
+            sender: new("email@email.com"),
+            recipients: new FlatArray<DataverseEmailRecipient>(
+                new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient))
+            );
+
+    private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJson
+        =
+        new()
+        {
+            ActivityId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843")
+        };
+
+
 
     private static IDataverseApiClient CreateDataverseApiClient(
         IDataverseHttpApi httpApi, Guid? callerId = null)
