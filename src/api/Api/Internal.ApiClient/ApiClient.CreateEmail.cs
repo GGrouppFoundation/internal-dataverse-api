@@ -9,8 +9,7 @@ namespace GGroupp.Infra;
 internal sealed partial class DataverseApiClient
 {
     public ValueTask<Result<DataverseEmailCreateOut, Failure<DataverseFailureCode>>> CreateEmailAsync(
-        DataverseEmailCreateIn input,
-        CancellationToken cancellationToken = default)
+        DataverseEmailCreateIn input, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(input);
 
@@ -23,8 +22,7 @@ internal sealed partial class DataverseApiClient
     }
     
     private async ValueTask<Result<DataverseEmailCreateOut, Failure<DataverseFailureCode>>> InnerCreateEmailAsync(
-        DataverseEmailCreateIn input,
-        CancellationToken cancellationToken = default)
+        DataverseEmailCreateIn input, CancellationToken cancellationToken = default)
     {
         if (IsInputInvalid(input))
         {
