@@ -167,5 +167,4 @@ partial class ApiClientTestDataSource
 
         yield return new object[] { invalidRecipient };
     }
-        
 }
