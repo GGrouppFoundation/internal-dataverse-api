@@ -56,17 +56,17 @@ partial class ApiClientTestDataSource
                                 ParticipationTypeMask = 2,
                                 AddressUsed = emails[1]
                             },
-                            new ()
+                            new()
                             {
                                 AccountIdParty = $"/accounts({memberIds[0]:D})",
                                 ParticipationTypeMask = 2,
                             },
-                            new ()
+                            new()
                             {
                                 ContactIdParty = $"/contacts({memberIds[1]:D})",
                                 ParticipationTypeMask = 3,
                             },
-                            new ()
+                            new()
                             {
                                 SystemUserIdParty = $"/systemusers({memberIds[2]:D})",
                                 ParticipationTypeMask = 4,
@@ -82,9 +82,9 @@ partial class ApiClientTestDataSource
         }
         
         var senderEmail = fixture.Create<MailAddress>().Address;
-        var recipientEmails = fixture.CreateMany<MailAddress>(15).Select(ma => ma.Address).ToArray();
+        var recipientEmails = fixture.CreateMany<MailAddress>(15).Select(static ma => ma.Address).ToArray();
         var recipients = recipientEmails
-            .Select(email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
+            .Select(static email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
             .ToFlatArray();
 
         var activityParties = new List<DataverseEmailActivityPartyJson>()
@@ -95,7 +95,7 @@ partial class ApiClientTestDataSource
                 ParticipationTypeMask = 1
             }
         };
-        activityParties.AddRange(recipientEmails.Select(e => new DataverseEmailActivityPartyJson()
+        activityParties.AddRange(recipientEmails.Select(static e => new DataverseEmailActivityPartyJson()
         {
             AddressUsed = e,
             ParticipationTypeMask = 2
