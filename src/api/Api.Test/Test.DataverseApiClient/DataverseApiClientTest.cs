@@ -133,8 +133,7 @@ public static partial class DataverseApiClientTest
             sender: new("email@email.com"),
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
-                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient))
-            );
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
         =
@@ -148,8 +147,7 @@ public static partial class DataverseApiClientTest
             sender: new("email@email.com"),
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
-                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient))
-            );
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
 
     private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJson
         =
@@ -157,8 +155,6 @@ public static partial class DataverseApiClientTest
         {
             ActivityId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843")
         };
-
-
 
     private static IDataverseApiClient CreateDataverseApiClient(
         IDataverseHttpApi httpApi, Guid? callerId = null)
