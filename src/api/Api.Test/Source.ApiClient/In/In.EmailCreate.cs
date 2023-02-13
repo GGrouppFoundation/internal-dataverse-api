@@ -8,9 +8,11 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static readonly FlatArray<DataverseHttpHeader> DefaultSendEmailHeaders = new (
-        new("Accept", "application/json"), 
-        new("Prefer", "return=representation"));
+    public static readonly FlatArray<DataverseHttpHeader> DefaultSendEmailHeaders
+        =
+        new (
+            new("Accept", "application/json"), 
+            new("Prefer", "return=representation"));
     
     public static IEnumerable<object?[]> GetEmailCreateInputTestData()
     {
