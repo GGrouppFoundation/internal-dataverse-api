@@ -36,5 +36,5 @@ public sealed record class DataverseAlternateKey : IDataverseEntityKey
 
     private static string BuildAlternateKeyItem(string key, string value)
         =>
-        WebUtility.UrlEncode($"{key}={value}");
+        $"{key}={value}";
 }

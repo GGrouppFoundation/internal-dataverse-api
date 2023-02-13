@@ -160,6 +160,17 @@ jobs:
 
     - name: Pack Api.Abstractions.EntityGet
       run: dotnet pack ./src/*/*/Api.Abstractions.EntityGet.csproj --no-restore -o ~/nuget  -c Release
+        
+    # Api.Abstractions.EmailSend
+
+    - name: Restore Api.Abstractions.EmailSend
+      run: dotnet restore ./src/*/*/Api.Abstractions.EmailSend.csproj
+
+    - name: Build Api.Abstractions.EmailSend
+      run: dotnet build ./src/*/*/Api.Abstractions.EmailSend.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.EmailSend
+      run: dotnet pack ./src/*/*/Api.Abstractions.EmailSend.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions
 

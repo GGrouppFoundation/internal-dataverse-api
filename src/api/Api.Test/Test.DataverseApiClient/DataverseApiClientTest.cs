@@ -118,6 +118,44 @@ public static partial class DataverseApiClientTest
             OrganizationId = Guid.Parse("4ab18f9f-84a5-4b38-a217-cfd0e774cd53")
         };
 
+    private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJsonOut
+        =
+        new()
+        {
+            ActivityId = Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b") 
+        };
+
+    private static readonly DataverseEmailCreateIn SomeEmailCreateIn
+        =
+        new(
+            subject: "subject",
+            body: "body",
+            sender: new("email@email.com"),
+            recipients: new FlatArray<DataverseEmailRecipient>(
+                new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
+
+    private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
+        =
+        new(Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b"));
+    
+    private static readonly DataverseEmailSendIn SomeEmailSendInWithOutEmailId
+        =
+        new(
+            subject: "subject",
+            body: "body",
+            sender: new("email@email.com"),
+            recipients: new FlatArray<DataverseEmailRecipient>(
+                new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
+
+    private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJson
+        =
+        new()
+        {
+            ActivityId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843")
+        };
+
     private static IDataverseApiClient CreateDataverseApiClient(
         IDataverseHttpApi httpApi, Guid? callerId = null)
     {
@@ -135,6 +173,27 @@ public static partial class DataverseApiClientTest
             .Setup(p => p.InvokeAsync<TIn, TOut>(It.IsAny<DataverseHttpRequest<TIn>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(result);
 
+        return mock;
+    }
+    
+    private static Mock<IDataverseHttpApi> CreateMockHttpApiSendEmail(
+        Result<DataverseEmailCreateJsonOut, Failure<DataverseFailureCode>> creationResult,
+        Result<Unit, Failure<DataverseFailureCode>> sendingResult)
+    {
+        var mock = new Mock<IDataverseHttpApi>();
+
+        _ = mock
+            .Setup(
+                p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(
+                    It.IsAny<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(), It.IsAny<CancellationToken>()))!
+            .ReturnsAsync(creationResult);
+
+        _ = mock
+            .Setup(
+                p => p.InvokeAsync<DataverseEmailSendJsonIn, Unit>(
+                    It.IsAny<DataverseHttpRequest<DataverseEmailSendJsonIn>>(), It.IsAny<CancellationToken>()))!
+            .ReturnsAsync(sendingResult);
+        
         return mock;
     }
 }

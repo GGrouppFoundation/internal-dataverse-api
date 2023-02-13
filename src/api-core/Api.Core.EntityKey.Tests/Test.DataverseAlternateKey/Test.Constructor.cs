@@ -29,7 +29,7 @@ partial class DataverseAlternateKeyTest
         };
 
         var entityKey = new DataverseAlternateKey(idArguments: input);
-        Assert.Equal(expected: "a%3Db", actual: entityKey.Value);
+        Assert.Equal(expected: "a=b", actual: entityKey.Value);
     }
 
     [Fact]
@@ -41,7 +41,7 @@ partial class DataverseAlternateKeyTest
         };
 
         var entityKey = new DataverseAlternateKey(idArguments: input);
-        Assert.Equal(expected: "a%3Db,ad%3Db,ab%3Dab", actual: entityKey.Value);
+        Assert.Equal(expected: "a=b,ad=b,ab=ab", actual: entityKey.Value);
     }
 
     [Fact]
@@ -53,7 +53,7 @@ partial class DataverseAlternateKeyTest
         };
 
         var entityKey = new DataverseAlternateKey(idArguments: input);
-        Assert.Equal(expected: @"a%3Db,a%3Dd%3Db+,a%2Fb%3Da%5Cb", actual: entityKey.Value);
+        Assert.Equal(expected: @"a=b,a=d=b ,a/b=a\b", actual: entityKey.Value);
     }
 
     [Fact]
