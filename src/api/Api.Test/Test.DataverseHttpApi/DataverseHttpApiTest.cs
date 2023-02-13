@@ -7,7 +7,7 @@ using Moq;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
-public sealed partial class DataverseHttpApiTest
+public static partial class DataverseHttpApiTest
 {
     private static readonly Uri SomeDataverseBaseUri
         =

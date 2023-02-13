@@ -5,7 +5,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityCreateInputTestData
+    public static IEnumerable<object?[]> EntityCreateWithTOutInputTestData
         =>
         new[]
         {
@@ -14,6 +14,7 @@ partial class ApiClientTestDataSource
                 null,
                 new DataverseEntityCreateIn<StubRequestJson>(
                     entityPluralName: "SomeEntities",
+                    selectFields: new[] { "field1", "field2" },
                     entityData:  new()
                     {
                         Id = 17,
@@ -21,8 +22,8 @@ partial class ApiClientTestDataSource
                     }),
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Post,
-                    url: "/api/data/v9.2/SomeEntities",
-                    headers: default,
+                    url: "/api/data/v9.2/SomeEntities?$select=field1,field2",
+                    headers: new(PreferRepresentationHeader),
                     content: new StubRequestJson
                     {
                         Id = 17,
@@ -52,9 +53,11 @@ partial class ApiClientTestDataSource
                 },
                 new DataverseHttpRequest<StubRequestJson>(
                     verb: DataverseHttpVerb.Post,
-                    url: "/api/data/v9.2/SomeEntities",
+                    url: "/api/data/v9.2/SomeEntities?$select=field 1" +
+                        "&$expand=LookupOne($select=field1.1,field1.2),LookupTwo($expand=field2.1)",
                     headers: new(
                         CreateCallerIdHeader("cf6678d2-2963-4f14-8dff-21c956ae9695"),
+                        PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("false")),
                     content: new StubRequestJson())
             },
@@ -72,6 +75,7 @@ partial class ApiClientTestDataSource
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/Some%2fEntities",
                     headers: new(
+                        PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("true")),
                     content: new StubRequestJson())
             }

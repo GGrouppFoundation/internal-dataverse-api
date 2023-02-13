@@ -5,7 +5,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> GetUnitSuccessTestData()
+    public static IEnumerable<object?[]> UnitSuccessTestData
         =>
         new[]
         {

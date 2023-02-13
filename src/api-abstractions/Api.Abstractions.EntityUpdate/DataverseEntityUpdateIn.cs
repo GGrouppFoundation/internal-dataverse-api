@@ -17,6 +17,17 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
         EntityData = entityData;
     }
 
+    public DataverseEntityUpdateIn(
+        string entityPluralName,
+        IDataverseEntityKey entityKey,
+        TInJson entityData)
+    {
+        EntityPluralName = entityPluralName ?? string.Empty;
+        EntityKey = entityKey;
+        SelectFields = default;
+        EntityData = entityData;
+    }
+
     public string EntityPluralName { get; }
 
     public FlatArray<string> SelectFields { get; }

@@ -9,9 +9,9 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 partial class DataverseApiClientTest
 {
     [Fact]
-    public static  async Task UpdateEntityAsync_InputIsNull_ExpectArgumentNullException()
+    public static async Task UpdateEntityAsync_InputIsNull_ExpectArgumentNullException()
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson?>(SomeResponseJson);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var token = new CancellationToken(canceled: false);
@@ -21,62 +21,59 @@ partial class DataverseApiClientTest
 
         Task InnerUpdateEntityAsync()
             =>
-            dataverseApiClient.UpdateEntityAsync<StubRequestJson, StubResponseJson?>(null!, token).AsTask();
+            dataverseApiClient.UpdateEntityAsync<StubRequestJson>(null!, token).AsTask();
     }
 
     [Fact]
-    public static  void UpdateEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static void UpdateEntityAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var input = SomeDataverseEntityUpdateInput;
-        var token = new CancellationToken(canceled: true);
+        var cancellationToken = new CancellationToken(canceled: true);
 
-        var actualTask = dataverseApiClient.UpdateEntityAsync<StubRequestJson, Unit>(input, token);
+        var actualTask = dataverseApiClient.UpdateEntityAsync(input, cancellationToken);
         Assert.True(actualTask.IsCanceled);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetEntityUpdateInputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.EntityUpdateInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     internal static async Task UpdateEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseEntityUpdateIn<StubRequestJson> input, DataverseHttpRequest<StubRequestJson> expectedRequest)
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(SomeResponseJson);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, callerId);
 
         var token = new CancellationToken(canceled: false);
-        _ = await dataverseApiClient.UpdateEntityAsync<StubRequestJson, StubResponseJson>(input, token);
+        _ = await dataverseApiClient.UpdateEntityAsync(input, token);
 
-        mockHttpApi.Verify(p => p.InvokeAsync<StubRequestJson, StubResponseJson>(expectedRequest, token), Times.Once);
+        mockHttpApi.Verify(p => p.InvokeAsync<StubRequestJson, Unit>(expectedRequest, token), Times.Once);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public static  async Task UpdateEntityAsync_ResponseIsFailure_ExpectFailure(
+    [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public static async Task UpdateEntityAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(failure);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(failure);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var input = SomeDataverseEntityUpdateInput;
-        var actual = await dataverseApiClient.UpdateEntityAsync<StubRequestJson, StubResponseJson>(input, default);
+        var actual = await dataverseApiClient.UpdateEntityAsync(input, default);
 
-        Assert.Equal(failure, actual);
+        Assert.StrictEqual(failure, actual);
     }
 
-    [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal static  async Task UpdateEntityAsync_ResponseIsSuccess_ExpectSuccess(
-        StubResponseJson? success)
+    [Fact]
+    public static async Task UpdateEntityAsync_ResponseIsSuccess_ExpectSuccess()
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson?>(success);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
-        var input = SomeDataverseEntityUpdateInput;
-        var actual = await dataverseApiClient.UpdateEntityAsync<StubRequestJson, StubResponseJson>(input, default);
+        var actual = await dataverseApiClient.UpdateEntityAsync(SomeDataverseEntityUpdateInput, default);
+        var expected = default(Unit);
 
-        var expected = new DataverseEntityUpdateOut<StubResponseJson>(success);
-        Assert.Equal(expected, actual);
+        Assert.StrictEqual(expected, actual);
     }
 }

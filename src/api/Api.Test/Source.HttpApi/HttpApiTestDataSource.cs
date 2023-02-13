@@ -2,12 +2,17 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
 internal static partial class HttpApiTestDataSource
 {
+    private static readonly JsonSerializerOptions SerializerOptions;
+
+    static HttpApiTestDataSource()
+        =>
+        SerializerOptions = new(JsonSerializerDefaults.Web);
+
     private static StringContent CreateResponseContentJson<TJson>(this TJson responseJson)
         =>
         new(
@@ -19,12 +24,7 @@ internal static partial class HttpApiTestDataSource
 
     private static string Serialize<T>(this T value)
         =>
-        JsonSerializer.Serialize(
-            value,
-            new JsonSerializerOptions
-            {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            });
+        JsonSerializer.Serialize(value, SerializerOptions);
 
     private static string GetDefaultFailureMessage(this HttpStatusCode statusCode)
         =>

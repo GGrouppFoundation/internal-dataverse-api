@@ -4,7 +4,7 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> GetStubResponseJsonSetOutputTestData()
+    public static IEnumerable<object?[]> StubResponseJsonSetOutputTestData
         =>
         new[]
         {

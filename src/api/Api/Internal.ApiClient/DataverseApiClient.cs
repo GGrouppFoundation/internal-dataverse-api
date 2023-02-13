@@ -39,7 +39,7 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
         =>
         $"/api/{ApiTypeData}/v{ApiVersionData}/{dataUrl}";
 
-    private FlatArray<DataverseHttpHeader> GetModificationHeaders(bool? suppressDuplicateDetection)
+    private FlatArray<DataverseHttpHeader> GetAllHeadersWithRepresentation(bool? suppressDuplicateDetection)
     {
         var preferHeader = new DataverseHttpHeader(PreferHeaderName, ReturnRepresentationValue);
         if (suppressDuplicateDetection is null)
@@ -49,7 +49,18 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
         return GetAllHeaders(
             preferHeader,
-            new(SuppressDuplicateDetectionHeaderName, GetHeaderValue(suppressDuplicateDetection.Value)));
+            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection.Value));
+    }
+
+    private FlatArray<DataverseHttpHeader> GetAllHeadersWithoutRepresentation(bool? suppressDuplicateDetection)
+    {
+        if (suppressDuplicateDetection is null)
+        {
+            return GetAllHeaders();
+        }
+
+        return GetAllHeaders(
+            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection.Value));
     }
 
     private FlatArray<DataverseHttpHeader> GetAllHeaders(params DataverseHttpHeader[] headers)
@@ -74,6 +85,12 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
         return array;
     }
+
+    private static DataverseHttpHeader GetSuppressDuplicateDetectionHeader(bool suppressDuplicateDetection)
+        =>
+        new(
+            SuppressDuplicateDetectionHeaderName,
+            GetHeaderValue(suppressDuplicateDetection));
 
     private static string BuildPreferValue(string? includeAnnotations, int? maxPageSize = null)
     {

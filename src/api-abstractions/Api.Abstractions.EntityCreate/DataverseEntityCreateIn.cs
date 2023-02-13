@@ -12,6 +12,13 @@ public sealed record class DataverseEntityCreateIn<TInJson>
         EntityData = entityData;
     }
 
+    public DataverseEntityCreateIn(string entityPluralName, TInJson entityData)
+    {
+        EntityPluralName = entityPluralName ?? string.Empty;
+        SelectFields = default;
+        EntityData = entityData;
+    }
+
     public string EntityPluralName { get; }
 
     public FlatArray<string> SelectFields { get; }

@@ -11,7 +11,7 @@ partial class DataverseApiClientTest
     [Fact]
     public static async Task CreateEntityAsync_InputIsNull_ExpectArgumentNullException()
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(SomeResponseJson);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var token = new CancellationToken(canceled: false);
@@ -21,7 +21,7 @@ partial class DataverseApiClientTest
 
         Task InnerCreateEntityAsync()
             =>
-            dataverseApiClient.CreateEntityAsync<StubRequestJson, StubResponseJson>(null!, token).AsTask();
+            dataverseApiClient.CreateEntityAsync<StubRequestJson>(null!, token).AsTask();
     }
 
     [Fact]
@@ -31,53 +31,48 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var token = new CancellationToken(canceled: true);
-
-        var actualTask = dataverseApiClient.CreateEntityAsync<StubRequestJson, Unit>(
-            SomeDataverseEntityCreateInput, token);
+        var actualTask = dataverseApiClient.CreateEntityAsync(SomeDataverseEntityCreateInput, token);
 
         Assert.True(actualTask.IsCanceled);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetEntityCreateInputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.EntityCreateInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     internal static async Task CreateEntityAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
         Guid? callerId, DataverseEntityCreateIn<StubRequestJson> input, DataverseHttpRequest<StubRequestJson> expectedRequest)
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(SomeResponseJson);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, callerId);
 
         var token = new CancellationToken(canceled: false);
-        _ = await dataverseApiClient.CreateEntityAsync<StubRequestJson, StubResponseJson>(input, token);
+        _ = await dataverseApiClient.CreateEntityAsync(input, token);
 
-        mockHttpApi.Verify(p => p.InvokeAsync<StubRequestJson, StubResponseJson>(expectedRequest, token), Times.Once);
+        mockHttpApi.Verify(p => p.InvokeAsync<StubRequestJson, Unit>(expectedRequest, token), Times.Once);
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    public static  async Task CreateEntityAsync_ResponseIsFailure_ExpectFailure(
+    [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    public static async Task CreateEntityAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(failure);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
-
-        var actual = await dataverseApiClient.CreateEntityAsync<StubRequestJson, StubResponseJson>(
-            SomeDataverseEntityCreateInput, CancellationToken.None);
-
-        Assert.Equal(failure, actual);
-    }
-
-    [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetStubResponseJsonOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal static  async Task CreateEntityAsync_ResponseIsSuccess_ExpectSuccess(
-        StubResponseJson? success)
-    {
-        var mockHttpApi = CreateMockHttpApi<StubRequestJson, StubResponseJson>(success);
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(failure);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
 
         var input = SomeDataverseEntityCreateInput;
-        var actual = await dataverseApiClient.CreateEntityAsync<StubRequestJson, StubResponseJson>(input, default);
+        var actual = await dataverseApiClient.CreateEntityAsync(input, default);
 
-        var expected = new DataverseEntityCreateOut<StubResponseJson>(success);
-        Assert.Equal(expected, actual);
+        Assert.StrictEqual(failure, actual);
+    }
+
+    [Fact]
+    public static async Task CreateEntityAsync_ResponseIsSuccess_ExpectSuccess()
+    {
+        var mockHttpApi = CreateMockHttpApi<StubRequestJson, Unit>(default(Unit));
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+
+        var actual = await dataverseApiClient.CreateEntityAsync(SomeDataverseEntityCreateInput, default);
+        var expected = default(Unit);
+
+        Assert.StrictEqual(expected, actual);
     }
 }
