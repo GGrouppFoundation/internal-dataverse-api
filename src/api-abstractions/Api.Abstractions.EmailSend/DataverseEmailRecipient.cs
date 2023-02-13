@@ -4,7 +4,7 @@ public sealed record class DataverseEmailRecipient
 {
     public DataverseEmailRecipient(string email, DataverseEmailRecipientType emailRecipientType)
     {
-        SenderRecipientEmail = email;
+        SenderRecipientEmail = email ?? string.Empty;
         EmailMember = default;
         EmailRecipientType = emailRecipientType;
     }
