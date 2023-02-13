@@ -97,7 +97,7 @@ partial class DataverseApiClientTest
     }
     
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public static  async Task SendEmailAsync_ResponseIsFailure_ExpectFailureInEmailCreation(
         Failure<DataverseFailureCode> failure)
     {
@@ -114,7 +114,7 @@ partial class DataverseApiClientTest
     }
     
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.GetFailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public static  async Task SendEmailAsync_ResponseIsFailure_ExpectFailureInEmailSending(
         Failure<DataverseFailureCode> failure)
     {
