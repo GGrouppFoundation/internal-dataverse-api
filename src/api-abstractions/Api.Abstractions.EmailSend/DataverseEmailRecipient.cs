@@ -1,6 +1,6 @@
 ﻿namespace GGroupp.Infra;
 
-public sealed record DataverseEmailRecipient
+public sealed record class DataverseEmailRecipient
 {
     public DataverseEmailRecipient(string email, DataverseEmailRecipientType emailRecipientType)
     {

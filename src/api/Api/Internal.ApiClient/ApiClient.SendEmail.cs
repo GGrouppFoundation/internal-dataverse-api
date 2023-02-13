@@ -63,5 +63,4 @@ internal sealed partial class DataverseApiClient
             url: BuildDataRequestUrl($"emails({emailId:D})/Microsoft.Dynamics.CRM.SendEmail"),
             headers: FlatArray<DataverseHttpHeader>.Empty,
             content: new DataverseEmailSendJsonIn { IssueSend = true });
-
 }

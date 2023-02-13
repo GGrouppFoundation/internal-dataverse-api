@@ -2,9 +2,8 @@
 
 namespace GGroupp.Infra;
 
-public sealed record class DataverseEmailSendOut
+public readonly record struct DataverseEmailSendOut
 {
-    
     public DataverseEmailSendOut(Guid emailId) 
         => 
         EmailId = emailId;

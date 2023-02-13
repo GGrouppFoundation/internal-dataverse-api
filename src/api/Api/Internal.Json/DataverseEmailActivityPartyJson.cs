@@ -2,7 +2,7 @@
 
 namespace GGroupp.Infra;
 
-public record DataverseEmailActivityPartyJson
+internal sealed record class DataverseEmailActivityPartyJson
 {
     [JsonPropertyName("partyid_systemuser@odata.bind")]
     public string? SystemUserIdParty {get; init;}

@@ -11,8 +11,7 @@ public sealed record class DataverseEmailMember
         MemberId = memberId;
         MemberType = memberType;
     }
-
-
+    
     public Guid MemberId { get; }
     
     public DataverseEmailMemberType MemberType { get; }
