@@ -9,30 +9,8 @@ namespace GGroupp.Infra.Dataverse.Api.Test;
 
 partial class DataverseApiClientTest
 {
-    
-    private static Mock<IDataverseHttpApi> CreateMockHttpApiSendEmail(
-        Result<DataverseEmailCreateJsonOut, Failure<DataverseFailureCode>> creationResult,
-        Result<Unit, Failure<DataverseFailureCode>> sendingResult)
-    {
-        var mock = new Mock<IDataverseHttpApi>();
-
-        _ = mock
-            .Setup(
-                p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(
-                    It.IsAny<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(), It.IsAny<CancellationToken>()))!
-            .ReturnsAsync(creationResult);
-
-        _ = mock
-            .Setup(
-                p => p.InvokeAsync<DataverseEmailSendJsonIn, Unit>(
-                    It.IsAny<DataverseHttpRequest<DataverseEmailSendJsonIn>>(), It.IsAny<CancellationToken>()))!
-            .ReturnsAsync(sendingResult);
-        
-        return mock;
-    }
-    
     [Fact]
-    internal static async Task SendEmailAsync_InputIsNull_ExpectArgumentNullException()
+    public static async Task SendEmailAsync_InputIsNull_ExpectArgumentNullException()
     {
         // Arrange
         var mockHttpApi = CreateMockHttpApiSendEmail(SomeEmailCreateJsonOut, default(Unit));
@@ -52,7 +30,7 @@ partial class DataverseApiClientTest
     }
 
     [Fact]
-    internal static void SendEmailAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
+    public static void SendEmailAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
         // Arrange
         var mockHttpApi = CreateMockHttpApiSendEmail(SomeEmailCreateJsonOut, default(Unit));
@@ -129,6 +107,4 @@ partial class DataverseApiClientTest
         // Assert
         Assert.Equal(failure, actual);
     }
-    
 }
-
