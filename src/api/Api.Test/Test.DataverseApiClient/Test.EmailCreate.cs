@@ -1,9 +1,6 @@
 using System;
-using System.IO;
-using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture;
 using Moq;
 using Xunit;
 
@@ -68,7 +65,8 @@ partial class DataverseApiClientTest
 
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.GetInvalidEmailCreateInputTestData), MemberType = typeof(ApiClientTestDataSource))]
-    internal static async Task CreateEmailAsync_PassNoSender_ExpectFailure(DataverseEmailCreateIn invalidInput)
+    internal static async Task CreateEmailAsync_PassInvalidInput_ExpectFailure(
+        DataverseEmailCreateIn invalidInput, Failure<DataverseFailureCode> expectedFailure)
     {
         // Arrange
         var mockHttpApi = CreateMockHttpApi<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(SomeEmailCreateJsonOut);
@@ -80,7 +78,7 @@ partial class DataverseApiClientTest
         var result = await dataverseApiClient.CreateEmailAsync(invalidInput, token);
         
         // Assert
-        Assert.Equal(Failure.Create(DataverseFailureCode.Unknown, "Input is invalid"), result);
+        Assert.Equal(expectedFailure, result);
     }
     
     [Theory]

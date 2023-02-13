@@ -136,8 +136,10 @@ partial class ApiClientTestDataSource
                 new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
                 new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
                     DataverseEmailRecipientType.ToRecipient)));
+        
+        var noSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is missing");
 
-        yield return new object[] { noSenderInput };
+        yield return new object[] { noSenderInput, noSenderFailure };
         
         var invalidSenderInput = new DataverseEmailCreateIn(
             subject: fixture.Create<MailMessage>().Subject,
@@ -147,8 +149,10 @@ partial class ApiClientTestDataSource
                 new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
                 new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
                     DataverseEmailRecipientType.ToRecipient)));
-
-        yield return new object[] { invalidSenderInput };
+        
+        var invalidSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is invalid");
+        
+        yield return new object[] { invalidSenderInput, invalidSenderFailure };
         
         var noRecipientInput = new DataverseEmailCreateIn(
             subject: fixture.Create<MailMessage>().Subject,
@@ -156,7 +160,9 @@ partial class ApiClientTestDataSource
             sender: new(fixture.Create<MailAddress>().Address),
             recipients: FlatArray<DataverseEmailRecipient>.Empty);
 
-        yield return new object[] { noRecipientInput };
+        var noRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are missing");
+        
+        yield return new object[] { noRecipientInput, noRecipientFailure };
         
         var invalidRecipient = new DataverseEmailCreateIn(
             subject: fixture.Create<MailMessage>().Subject,
@@ -165,6 +171,8 @@ partial class ApiClientTestDataSource
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new DataverseEmailRecipient(string.Empty, DataverseEmailRecipientType.ToRecipient)));
 
-        yield return new object[] { invalidRecipient };
+        var invalidRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are invalid");
+        
+        yield return new object[] { invalidRecipient, invalidRecipientFailure };
     }
 }

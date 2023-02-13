@@ -24,9 +24,9 @@ internal sealed partial class DataverseApiClient
     private async ValueTask<Result<DataverseEmailCreateOut, Failure<DataverseFailureCode>>> InnerCreateEmailAsync(
         DataverseEmailCreateIn input, CancellationToken cancellationToken = default)
     {
-        if (IsInputInvalid(input))
+        if (IsInputInvalid(input, out var validationFailure))
         {
-            return Failure.Create(DataverseFailureCode.Unknown, "Input is invalid");
+            return validationFailure;
         }
 
         var request = new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
@@ -48,20 +48,23 @@ internal sealed partial class DataverseApiClient
         =>
         new(@out?.ActivityId ?? Guid.Empty);
 
-    private static bool IsInputInvalid(DataverseEmailCreateIn input)
+    private static bool IsInputInvalid(DataverseEmailCreateIn input, out Failure<DataverseFailureCode> failure)
     {
         if (input.Sender is null)
         {
+            failure = CreateFailure("Input sender is missing");
             return true;
         }
         
         if (string.IsNullOrEmpty(input.Sender.SenderEmail) && input.Sender.SenderMember is null)
         {
+            failure = CreateFailure("Input sender is invalid");
             return true;
         }
 
         if (input.Recipients.IsEmpty)
         {
+            failure = CreateFailure("Input recipients are missing");
             return true;
         }
 
@@ -69,10 +72,16 @@ internal sealed partial class DataverseApiClient
         {
             if (string.IsNullOrEmpty(recipient.SenderRecipientEmail) && recipient.EmailMember is null)
             {
+                failure = CreateFailure("Input recipients are invalid");
                 return true;
             }
         }
 
+        failure = default;
         return false;
+
+        static Failure<DataverseFailureCode> CreateFailure(string message)
+            => 
+            Failure.Create(DataverseFailureCode.Unknown, message);
     }
 }
