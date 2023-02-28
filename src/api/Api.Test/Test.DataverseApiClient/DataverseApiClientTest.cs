@@ -202,7 +202,8 @@ public static partial class DataverseApiClientTest
     
     private static DataverseHttpRequest<DataverseEmailCreateJsonIn> VerifyEmailCreateResults(
         DataverseHttpRequest<DataverseEmailCreateJsonIn> expectedRequest)
-        => It.Is<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(a => AreEqual(a, expectedRequest));
+        => 
+        It.Is<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(a => AreEqual(a, expectedRequest));
     
     private static bool AreEqual(
         DataverseHttpRequest<DataverseEmailCreateJsonIn> actual,
