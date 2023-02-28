@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -67,13 +66,14 @@ partial class DataverseApiClientTest
         if (expectedCreationRequest is not null)
         {
             mockHttpApi.Verify(
-                p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(expectedCreationRequest.Value, token), Times.Once);
+                p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(
+                    VerifyEmailCreateResults(expectedCreationRequest.Value), token), Times.Once);
         }
         
         mockHttpApi.Verify(
             p => p.InvokeAsync<DataverseEmailSendJsonIn, Unit>(expectedSendingRequest, token), Times.Once);
     }
-    
+
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.FailureOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     public static  async Task SendEmailAsync_ResponseIsFailure_ExpectFailureInEmailCreation(

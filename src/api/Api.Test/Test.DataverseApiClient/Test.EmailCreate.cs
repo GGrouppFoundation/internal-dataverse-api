@@ -60,7 +60,8 @@ partial class DataverseApiClientTest
         _ = await dataverseApiClient.CreateEmailAsync(input, token);
 
         // Assert
-        mockHttpApi.Verify(p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(expectedRequest, token), Times.Once);
+        mockHttpApi.Verify(p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(
+            VerifyEmailCreateResults(expectedRequest), token), Times.Once);
     }
 
     [Theory]

@@ -54,7 +54,8 @@ internal sealed partial class DataverseApiClient
             subject: input.Subject,
             body: input.Body,
             sender: input.Sender,
-            recipients: input.Recipients);
+            recipients: input.Recipients,
+            extensionData: input.ExtensionData);
 
     private static DataverseHttpRequest<DataverseEmailSendJsonIn> CreateEmailSendRequest(Guid? emailId)
         =>

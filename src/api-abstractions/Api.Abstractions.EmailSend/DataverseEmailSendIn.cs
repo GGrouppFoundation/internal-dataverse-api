@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace GGroupp.Infra;
 
@@ -11,19 +13,22 @@ public sealed record class DataverseEmailSendIn
         Body = string.Empty;
         Sender = new(string.Empty);
         Recipients = new FlatArray<DataverseEmailRecipient>();
+        ExtensionData = default;
     }
     
     public DataverseEmailSendIn(
         string subject,
         string body,
         DataverseEmailSender sender,
-        FlatArray<DataverseEmailRecipient> recipients)
+        FlatArray<DataverseEmailRecipient> recipients,
+        FlatArray<KeyValuePair<string, JsonElement>> extensionData = default)
     {
         Subject = subject ?? string.Empty;
         Body = body ?? string.Empty;
         Sender = sender;
         Recipients = recipients;
         EmailId = null;
+        ExtensionData = extensionData;
     }
     
     public Guid? EmailId { get; }
@@ -35,4 +40,6 @@ public sealed record class DataverseEmailSendIn
     public DataverseEmailSender Sender { get; }
     
     public FlatArray<DataverseEmailRecipient> Recipients { get; }
+    
+    public FlatArray<KeyValuePair<string, JsonElement>> ExtensionData { get; }
 }

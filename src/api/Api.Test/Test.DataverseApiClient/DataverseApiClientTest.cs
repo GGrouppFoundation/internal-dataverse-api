@@ -1,6 +1,8 @@
 using System;
 using System.Threading;
+using DeepEqual.Syntax;
 using Moq;
+using Xunit;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
 
@@ -133,7 +135,8 @@ public static partial class DataverseApiClientTest
             sender: new("email@email.com"),
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
-                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
+                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)),
+            extensionData: default);
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
         =
@@ -195,5 +198,27 @@ public static partial class DataverseApiClientTest
             .ReturnsAsync(sendingResult);
         
         return mock;
+    }
+    
+    private static DataverseHttpRequest<DataverseEmailCreateJsonIn> VerifyEmailCreateResults(
+        DataverseHttpRequest<DataverseEmailCreateJsonIn> expectedRequest)
+        => 
+        It.Is<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(a => AreEqual(a, expectedRequest));
+    
+    private static bool AreEqual(
+        DataverseHttpRequest<DataverseEmailCreateJsonIn> actual,
+        DataverseHttpRequest<DataverseEmailCreateJsonIn> expected)
+    {
+        actual.WithDeepEqual(expected).IgnoreSourceProperty(a => a.Content).Assert();
+        if (expected.Content.IsPresent)
+        {
+            Assert.True(actual.Content.IsPresent);
+            actual.Content.OrThrow().ShouldDeepEqual(expected.Content.OrThrow());
+        }
+        else
+        {
+            Assert.True(actual.Content.IsAbsent);
+        }
+        return true;
     }
 }

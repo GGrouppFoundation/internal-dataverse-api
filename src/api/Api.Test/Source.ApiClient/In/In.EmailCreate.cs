@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text.Json;
 using AutoFixture;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
@@ -35,7 +36,8 @@ partial class ApiClientTestDataSource
                         new(emailMember: new(memberIds[0], DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient),
                         new(emailMember: new(memberIds[1], DataverseEmailMemberType.Contact), DataverseEmailRecipientType.CcRecipient),
                         new(emailMember: new(memberIds[2], DataverseEmailMemberType.SystemUser), DataverseEmailRecipientType.BccRecipient),
-                        new(emails[2], DataverseEmailRecipientType.ToRecipient))
+                        new(emails[2], DataverseEmailRecipientType.ToRecipient)),
+                    extensionData: default
                 ),
                 new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
                     verb: DataverseHttpVerb.Post,
@@ -76,52 +78,64 @@ partial class ApiClientTestDataSource
                                 ParticipationTypeMask = 2,
                                 AddressUsed = emails[2]
                             }
-                        )
+                        ),
+                        ExtensionData = new()
                     })
             };
         }
         
-        var senderEmail = fixture.Create<MailAddress>().Address;
-        var recipientEmails = fixture.CreateMany<MailAddress>(15).Select(static ma => ma.Address).ToArray();
-        var recipients = recipientEmails
-            .Select(static email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
-            .ToFlatArray();
+        fixture.Register<JsonElement>(() => JsonSerializer.SerializeToElement(fixture.Create<string>()));
+        
+        for (int i = 0; i < 20; i++)
+        {
+            var senderEmail = fixture.Create<MailAddress>().Address;
+            var recipientEmails = fixture.CreateMany<MailAddress>(i + 1).Select(static ma => ma.Address).ToArray();
+            var recipients = recipientEmails
+                .Select(static email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
+                .ToFlatArray();
 
-        var activityParties = new List<DataverseEmailActivityPartyJson>()
-        {
-            new()
+            var activityParties = new List<DataverseEmailActivityPartyJson>()
             {
-                AddressUsed = senderEmail,
-                ParticipationTypeMask = 1
-            }
-        };
-        activityParties.AddRange(recipientEmails.Select(static e => new DataverseEmailActivityPartyJson()
-        {
-            AddressUsed = e,
-            ParticipationTypeMask = 2
-        }));
-        
-        var emailMessage2 = fixture.Create<MailMessage>();
-        
-        yield return new object[]
-        {
-            new DataverseEmailCreateIn(
-                subject: emailMessage2.Subject,
-                body: emailMessage2.Body,
-                sender: new(senderEmail),
-                recipients: recipients
-            ),
-            new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
-                verb: DataverseHttpVerb.Post,
-                url: "/api/data/v9.2/emails?$select=activityid",
-                headers: DefaultSendEmailHeaders,
-                content: new DataverseEmailCreateJsonIn
+                new()
                 {
-                    Description = emailMessage2.Body,
-                    Subject = emailMessage2.Subject,
-                    ActivityParties = activityParties.ToFlatArray()
-                })
-        };
+                    AddressUsed = senderEmail,
+                    ParticipationTypeMask = 1
+                }
+            };
+            activityParties.AddRange(recipientEmails.Select(static e => new DataverseEmailActivityPartyJson()
+            {
+                AddressUsed = e,
+                ParticipationTypeMask = 2
+            }));
+            
+            var emailMessage2 = fixture.Create<MailMessage>();
+            var extensionData = fixture
+                .CreateMany<KeyValuePair<string, JsonElement>>(i + 1)
+                .DistinctBy(k => k.Key)
+                .ToDictionary(k => k.Key, k => k.Value);
+            
+            yield return new object[]
+            {
+                new DataverseEmailCreateIn(
+                    subject: emailMessage2.Subject,
+                    body: emailMessage2.Body,
+                    sender: new(senderEmail),
+                    recipients: recipients,
+                    extensionData: extensionData.ToFlatArray()
+                ),
+                new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
+                    verb: DataverseHttpVerb.Post,
+                    url: "/api/data/v9.2/emails?$select=activityid",
+                    headers: DefaultSendEmailHeaders,
+                    content: new DataverseEmailCreateJsonIn
+                    {
+                        Description = emailMessage2.Body,
+                        Subject = emailMessage2.Subject,
+                        ActivityParties = activityParties.ToFlatArray(),
+                        ExtensionData = extensionData
+                    })
+            };
+        }
     }
 
     public static IEnumerable<object?[]> GetInvalidEmailCreateInputTestData()
@@ -135,7 +149,8 @@ partial class ApiClientTestDataSource
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
                 new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
-                    DataverseEmailRecipientType.ToRecipient)));
+                    DataverseEmailRecipientType.ToRecipient)),
+            extensionData: default);
         
         var noSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is missing");
 
@@ -148,7 +163,8 @@ partial class ApiClientTestDataSource
             recipients: new FlatArray<DataverseEmailRecipient>(
                 new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
                 new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
-                    DataverseEmailRecipientType.ToRecipient)));
+                    DataverseEmailRecipientType.ToRecipient)),
+            extensionData: default);
         
         var invalidSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is invalid");
         
@@ -158,7 +174,8 @@ partial class ApiClientTestDataSource
             subject: fixture.Create<MailMessage>().Subject,
             body: fixture.Create<MailMessage>().Body,
             sender: new(fixture.Create<MailAddress>().Address),
-            recipients: FlatArray<DataverseEmailRecipient>.Empty);
+            recipients: FlatArray<DataverseEmailRecipient>.Empty,
+            extensionData: default);
 
         var noRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are missing");
         
@@ -169,7 +186,8 @@ partial class ApiClientTestDataSource
             body: fixture.Create<MailMessage>().Body,
             sender: new(fixture.Create<MailAddress>().Address),
             recipients: new FlatArray<DataverseEmailRecipient>(
-                new DataverseEmailRecipient(string.Empty, DataverseEmailRecipientType.ToRecipient)));
+                new DataverseEmailRecipient(string.Empty, DataverseEmailRecipientType.ToRecipient)),
+            extensionData: default);
 
         var invalidRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are invalid");
         

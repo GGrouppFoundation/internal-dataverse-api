@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace GGroupp.Infra;
@@ -13,4 +15,7 @@ internal sealed record class DataverseEmailCreateJsonIn
     
     [JsonPropertyName("email_activity_parties")]
     public FlatArray<DataverseEmailActivityPartyJson> ActivityParties { get; init; }
+    
+    [JsonExtensionData]
+    public Dictionary<string, JsonElement>? ExtensionData { get; init; }
 }
