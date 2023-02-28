@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace GGroupp.Infra;
 
@@ -11,7 +11,10 @@ internal static class CreateEmailExtension
         {
             Subject = input.Subject,
             Description = input.Body,
-            ActivityParties = input.MapSenderRecipient()
+            ActivityParties = input.MapSenderRecipient(),
+            ExtensionData = input.ExtensionData.AsEnumerable().ToDictionary(
+                static kv => kv.Key, 
+                static kv => kv.Value)
         };
     
     private static FlatArray<DataverseEmailActivityPartyJson> MapSenderRecipient(this DataverseEmailCreateIn input)

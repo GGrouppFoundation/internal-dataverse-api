@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
+using System.Text.Json;
 using AutoFixture;
 
 namespace GGroupp.Infra.Dataverse.Api.Test;
@@ -89,7 +90,8 @@ partial class ApiClientTestDataSource
                                 ParticipationTypeMask = 2,
                                 AddressUsed = emails[2]
                             }
-                        )
+                        ),
+                        ExtensionData = new()
                     }),
                 new DataverseHttpRequest<DataverseEmailSendJsonIn>(
                     verb: DataverseHttpVerb.Post,
@@ -106,59 +108,71 @@ partial class ApiClientTestDataSource
             };
         }
         
-        var senderEmail = fixture.Create<MailAddress>().Address;
-        var recipientEmails = fixture.CreateMany<MailAddress>(15).Select(ma => ma.Address).ToArray();
-        var recipients = recipientEmails
-            .Select(email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
-            .ToFlatArray();
-
-        var activityParties = new List<DataverseEmailActivityPartyJson>()
-        {
-            new()
-            {
-                AddressUsed = senderEmail,
-                ParticipationTypeMask = 1
-            }
-        };
-        activityParties.AddRange(recipientEmails.Select(e => new DataverseEmailActivityPartyJson()
-        {
-            AddressUsed = e,
-            ParticipationTypeMask = 2
-        }));
-
-        var emailMessage2 = fixture.Create<MailMessage>();
-        var createdEmailId = fixture.Create<Guid>();
+        fixture.Register<JsonElement>(() => JsonSerializer.SerializeToElement(fixture.Create<string>()));
         
-        yield return new object[]
+        for (int i = 0; i < 20; i++)
         {
-            new DataverseEmailSendIn(
-                subject: emailMessage2.Subject,
-                body: emailMessage2.Body,
-                sender: new(senderEmail),
-                recipients: recipients
-            ),
-            new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
-                verb: DataverseHttpVerb.Post,
-                url: "/api/data/v9.2/emails?$select=activityid",
-                headers: DefaultSendEmailHeaders,
-                content: new DataverseEmailCreateJsonIn
-                {
-                    Description = emailMessage2.Body,
-                    Subject = emailMessage2.Subject,
-                    ActivityParties = activityParties.ToFlatArray()
-                }),
-            new DataverseHttpRequest<DataverseEmailSendJsonIn>(
-                verb: DataverseHttpVerb.Post,
-                url: $"/api/data/v9.2/emails({createdEmailId:D})/Microsoft.Dynamics.CRM.SendEmail",
-                headers: FlatArray<DataverseHttpHeader>.Empty, 
-                content: new DataverseEmailSendJsonIn
-                {
-                    IssueSend = true
-                }),
-            new DataverseEmailCreateJsonOut()
+            var senderEmail = fixture.Create<MailAddress>().Address;
+            var recipientEmails = fixture.CreateMany<MailAddress>(i + 1).Select(ma => ma.Address).ToArray();
+            var recipients = recipientEmails
+                .Select(email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
+                .ToFlatArray();
+
+            var activityParties = new List<DataverseEmailActivityPartyJson>()
             {
-                ActivityId = createdEmailId
-            }
-        };
+                new()
+                {
+                    AddressUsed = senderEmail,
+                    ParticipationTypeMask = 1
+                }
+            };
+            activityParties.AddRange(recipientEmails.Select(e => new DataverseEmailActivityPartyJson()
+            {
+                AddressUsed = e,
+                ParticipationTypeMask = 2
+            }));
+
+            var emailMessage2 = fixture.Create<MailMessage>();
+            var createdEmailId = fixture.Create<Guid>();
+            
+            var extensionData = fixture
+                .CreateMany<KeyValuePair<string, JsonElement>>(i + 1)
+                .DistinctBy(k => k.Key)
+                .ToDictionary(k => k.Key, k => k.Value);
+            
+            yield return new object[]
+            {
+                new DataverseEmailSendIn(
+                    subject: emailMessage2.Subject,
+                    body: emailMessage2.Body,
+                    sender: new(senderEmail),
+                    recipients: recipients,
+                    extensionData: extensionData.ToFlatArray()
+                ),
+                new DataverseHttpRequest<DataverseEmailCreateJsonIn>(
+                    verb: DataverseHttpVerb.Post,
+                    url: "/api/data/v9.2/emails?$select=activityid",
+                    headers: DefaultSendEmailHeaders,
+                    content: new DataverseEmailCreateJsonIn
+                    {
+                        Description = emailMessage2.Body,
+                        Subject = emailMessage2.Subject,
+                        ActivityParties = activityParties.ToFlatArray(),
+                        ExtensionData = extensionData
+                    }),
+                new DataverseHttpRequest<DataverseEmailSendJsonIn>(
+                    verb: DataverseHttpVerb.Post,
+                    url: $"/api/data/v9.2/emails({createdEmailId:D})/Microsoft.Dynamics.CRM.SendEmail",
+                    headers: FlatArray<DataverseHttpHeader>.Empty,
+                    content: new DataverseEmailSendJsonIn
+                    {
+                        IssueSend = true
+                    }),
+                new DataverseEmailCreateJsonOut()
+                {
+                    ActivityId = createdEmailId
+                }
+            };
+        }
     }
 }
