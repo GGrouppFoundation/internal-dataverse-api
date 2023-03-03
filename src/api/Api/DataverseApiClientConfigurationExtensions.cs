@@ -37,7 +37,8 @@ public static class DataverseApiClientConfigurationExtensions
     private static DataverseApiClientOption GetDataverseApiClientOption(this IConfigurationSection section)
         =>
         new(
-            serviceUrl: section["ServiceUrl"].OrEmpty());
+            serviceUrl: section["ServiceUrl"].OrEmpty(),
+            httpTimeOut:  GetTimeSpanOrDefault(section, "HttpTimeOut"));
 
     private static DataverseApiClientAuthOption GetDataverseApiClientAuthOption(this IConfigurationSection section)
         =>
@@ -45,7 +46,8 @@ public static class DataverseApiClientConfigurationExtensions
             serviceUrl: section["ServiceUrl"].OrEmpty(),
             authTenantId: section.GetGuid("AuthTenantId"),
             authClientId: section["AuthClientId"].OrEmpty(),
-            authClientSecret: section["AuthClientSecret"].OrEmpty());
+            authClientSecret: section["AuthClientSecret"].OrEmpty(),
+            httpTimeOut: GetTimeSpanOrDefault(section, "HttpTimeOut"));
 
     private static Guid GetGuid(this IConfiguration configuration, string key)
     {
@@ -57,5 +59,17 @@ public static class DataverseApiClientConfigurationExtensions
         }
 
         return Guid.Parse(value);
+    }
+
+    private static TimeSpan? GetTimeSpanOrDefault(this IConfiguration configuration, string key)
+    {
+        var value = configuration[key];
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return default;
+        }
+
+        return TimeSpan.Parse(value);
     }
 }

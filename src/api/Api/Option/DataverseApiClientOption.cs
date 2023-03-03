@@ -4,9 +4,11 @@ namespace GGroupp.Infra;
 
 public record class DataverseApiClientOption
 {
-    public DataverseApiClientOption(string serviceUrl)
+    public DataverseApiClientOption(string serviceUrl, TimeSpan? httpTimeOut = null)
         =>
-        ServiceUrl = serviceUrl.OrEmpty();
+        (ServiceUrl, HttpTimeOut) = (serviceUrl.OrEmpty(), httpTimeOut);
 
     public string ServiceUrl { get; }
+    
+    public TimeSpan? HttpTimeOut { get; }
 }
