@@ -49,7 +49,7 @@ public static class DataverseApiClientDependency
         _ = option ?? throw new ArgumentNullException(nameof(option));
 
         var authenticationHandler = new AuthenticationHandler(httpMessageHandler, option);
-        var dataverseHttpApi = new DataverseHttpApi(authenticationHandler, new(option.ServiceUrl, UriKind.Absolute));
+        var dataverseHttpApi = new DataverseHttpApi(authenticationHandler, new(option.ServiceUrl, UriKind.Absolute), option.HttpTimeOut);
 
         return new DataverseApiClient(dataverseHttpApi);
     }

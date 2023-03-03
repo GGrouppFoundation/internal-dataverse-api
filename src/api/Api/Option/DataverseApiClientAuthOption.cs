@@ -4,8 +4,13 @@ namespace GGroupp.Infra;
 
 public sealed record class DataverseApiClientAuthOption : DataverseApiClientOption
 {
-    public DataverseApiClientAuthOption(string serviceUrl, Guid authTenantId, string authClientId, string authClientSecret)
-        : base(serviceUrl)
+    public DataverseApiClientAuthOption(
+        string serviceUrl, 
+        Guid authTenantId, 
+        string authClientId, 
+        string authClientSecret, 
+        TimeSpan? httpTimeOut = null)
+        : base(serviceUrl, httpTimeOut)
     {
         AuthTenantId = authTenantId;
         AuthClientId = authClientId.OrEmpty();
