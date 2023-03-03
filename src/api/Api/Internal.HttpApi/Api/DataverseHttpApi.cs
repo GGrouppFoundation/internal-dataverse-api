@@ -19,22 +19,29 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
 
     private readonly Uri dataverseBaseUri;
 
-    private readonly TimeSpan httpClientTimeOut;
+    private readonly TimeSpan? httpClientTimeOut;
     
     internal DataverseHttpApi(HttpMessageHandler messageHandler, Uri dataverseBaseUri, TimeSpan? httpClientTimeOut = null)
     {
         this.messageHandler = messageHandler;
         this.dataverseBaseUri = dataverseBaseUri;
-        this.httpClientTimeOut = httpClientTimeOut ?? TimeSpan.FromSeconds(100);
+        this.httpClientTimeOut = httpClientTimeOut;
     }
 
     private HttpClient CreateHttpClient(string? relativeUrl)
-        =>
-        new(messageHandler, disposeHandler: false)
+    {
+        var httpClient = new HttpClient(messageHandler, disposeHandler: false)
         {
             BaseAddress = new(dataverseBaseUri, relativeUrl),
-            Timeout = httpClientTimeOut
         };
+
+        if (httpClientTimeOut is not null)
+        {
+            httpClient.Timeout = httpClientTimeOut.Value;
+        }
+
+        return httpClient;
+    }
 
     private static HttpContent? BuildRequestJsonBody<TRequestJson>(TRequestJson input)
         where TRequestJson : notnull
