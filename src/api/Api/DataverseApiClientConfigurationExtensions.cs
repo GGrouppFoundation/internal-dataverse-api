@@ -70,6 +70,6 @@ public static class DataverseApiClientConfigurationExtensions
             return default;
         }
 
-        return TimeSpan.TryParse(value, out var timeOut) ? timeOut : null;
+        return TimeSpan.Parse(value);
     }
 }
