@@ -38,5 +38,17 @@ partial class ApiClientTestDataSource
         var nullCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(nullCookieValue);
         
         yield return new object?[] { nullCookieSuccess, nullCookieExpected };
+        
+        var emptyCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
+        
+        var emptyCookieSuccess = new DataverseFetchXmlOutJson<StubResponseJson>
+        {
+            Value = emptyCookieValue,
+            PagingCookie = string.Empty
+        };
+        
+        var emptyCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(emptyCookieValue);
+        
+        yield return new object?[] { emptyCookieSuccess, emptyCookieExpected };
     }
 }

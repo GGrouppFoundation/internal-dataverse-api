@@ -38,12 +38,12 @@ internal sealed partial class DataverseApiClient
         {
             var pagingCookie = success.PagingCookie;
             
-            if (pagingCookie is not null)
+            if (string.IsNullOrEmpty(pagingCookie) is false)
             {
-                var html = new XmlDocument();
-                html.LoadXml(pagingCookie);
+                var xmlPagingCookie = new XmlDocument();
+                xmlPagingCookie.LoadXml(pagingCookie);
                 
-                var innerCookie = html.DocumentElement?.Attributes.GetNamedItem(PagingCookieAttributeName)?.Value;
+                var innerCookie = xmlPagingCookie.DocumentElement?.Attributes.GetNamedItem(PagingCookieAttributeName)?.Value;
                 var decodedPagingCookie = WebUtility.UrlDecode(WebUtility.UrlDecode(innerCookie));
                 
                 var htmlEncodedPagingCookie = WebUtility.HtmlEncode(decodedPagingCookie);
