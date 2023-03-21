@@ -4,6 +4,6 @@ public interface IDataverseApiClient :
     IDataverseImpersonateSupplier<IDataverseApiClient>,
     IDataverseEntitySetGetSupplier, IDataverseEntityGetSupplier, IDataverseEntityCreateSupplier,
     IDataverseEntityDeleteSupplier, IDataverseEntityUpdateSupplier, IDataverseSearchSupplier, 
-    IDataverseWhoAmISupplier, IDataverseEmailSendSupplier, IDataverseFetchXmlQuery
+    IDataverseWhoAmISupplier, IDataverseEmailSendSupplier, IDataverseFetchXmlQuerySupplier
 {
 }

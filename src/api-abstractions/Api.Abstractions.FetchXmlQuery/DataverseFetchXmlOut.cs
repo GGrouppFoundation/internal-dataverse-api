@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace GGroupp.Infra;
 
-public record DataverseFetchXmlOut<TEntityJson>
+public sealed record class DataverseFetchXmlOut<TEntityJson>
 {
     public DataverseFetchXmlOut(
         FlatArray<TEntityJson> value, 
