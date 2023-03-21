@@ -3,11 +3,11 @@
   <PropertyGroup>
     <RootNamespace>GGroupp.Infra</RootNamespace>
     <AssemblyName>GGroupp.Infra.Dataverse.Api</AssemblyName>
-    <Version>3.8.3</Version>
+    <Version>3.8.4</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="3.8.1" />
+    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Abstractions" Version="3.8.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.49.1" />
     <PackageReference Include="PrimeFuncPack.Dependency" Version="2.0.2" />

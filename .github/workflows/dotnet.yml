@@ -171,6 +171,17 @@ jobs:
 
     - name: Pack Api.Abstractions.EmailSend
       run: dotnet pack ./src/*/*/Api.Abstractions.EmailSend.csproj --no-restore -o ~/nuget  -c Release
+        
+    # Api.Abstractions.EmailSend
+
+    - name: Restore Api.Abstractions.FetchXmlQuery
+      run: dotnet restore ./src/*/*/Api.Abstractions.FetchXmlQuery.csproj
+
+    - name: Build Api.Abstractions.FetchXmlQuery
+      run: dotnet build ./src/*/*/Api.Abstractions.FetchXmlQuery.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.FetchXmlQuery
+      run: dotnet pack ./src/*/*/Api.Abstractions.FetchXmlQuery.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions
 

@@ -23,6 +23,8 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string SearchRequestUrl = "/api/search/v1.0/query";
 
+    private const string PagingCookieAttributeName = "pagingcookie";
+
     private readonly IDataverseHttpApi httpApi;
 
     private readonly Guid? callerId;
