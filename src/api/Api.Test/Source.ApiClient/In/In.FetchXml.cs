@@ -11,8 +11,12 @@ partial class ApiClientTestDataSource
     public static IEnumerable<object?[]> GetFetchXmlInputTestData()
     {
         var fixture = new Fixture();
-        
-        var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).ToArray();
+        var annotationNullInput = fixture.Create<DataverseFetchXmlIn>() with
+        {
+            IncludeAnnotations = null
+        };
+            
+        var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).Append(annotationNullInput).ToArray();
         var outputs = inputs.Select(Map);
 
         return inputs.Zip(outputs, static (i, o) => new object[] { i, o });

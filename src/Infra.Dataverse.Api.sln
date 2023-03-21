@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EmailSend", "api-abstractions\Api.Abstractions.EmailSend\Api.Abstractions.EmailSend.csproj", "{68E6B859-4124-4419-AFA0-1EB73B149F0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.FetchXmlQuery", "api-abstractions\Api.Abstractions.FetchXmlQuery\Api.Abstractions.FetchXmlQuery.csproj", "{E04EB511-0DBE-428D-ABD4-84A994ACC15F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.FetchXml", "api-abstractions\Api.Abstractions.FetchXml\Api.Abstractions.FetchXml.csproj", "{E04EB511-0DBE-428D-ABD4-84A994ACC15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
