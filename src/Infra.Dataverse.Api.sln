@@ -48,10 +48,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{FEEC3869-B9C3-4832-8102-1FE282901788}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
-		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EmailSend", "api-abstractions\Api.Abstractions.EmailSend\Api.Abstractions.EmailSend.csproj", "{68E6B859-4124-4419-AFA0-1EB73B149F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.FetchXml", "api-abstractions\Api.Abstractions.FetchXml\Api.Abstractions.FetchXml.csproj", "{E04EB511-0DBE-428D-ABD4-84A994ACC15F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +136,10 @@ Global
 		{68E6B859-4124-4419-AFA0-1EB73B149F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68E6B859-4124-4419-AFA0-1EB73B149F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68E6B859-4124-4419-AFA0-1EB73B149F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E04EB511-0DBE-428D-ABD4-84A994ACC15F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E04EB511-0DBE-428D-ABD4-84A994ACC15F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E04EB511-0DBE-428D-ABD4-84A994ACC15F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E04EB511-0DBE-428D-ABD4-84A994ACC15F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{78683BE7-E87B-4C7A-877E-F59667344E68} = {934945D0-F542-4DC9-94E7-27F59949329E}
@@ -154,5 +160,6 @@ Global
 		{09471DF1-5A91-489B-8E8A-5F1121E02F88} = {CC304FA9-6862-4341-BF33-827F8DA796A0}
 		{F8D9D1C8-0220-4382-AC47-33F024DC988B} = {CC304FA9-6862-4341-BF33-827F8DA796A0}
 		{68E6B859-4124-4419-AFA0-1EB73B149F0B} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
+		{E04EB511-0DBE-428D-ABD4-84A994ACC15F} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 	EndGlobalSection
 EndGlobal
