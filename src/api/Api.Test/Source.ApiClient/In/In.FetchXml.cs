@@ -15,7 +15,7 @@ partial class ApiClientTestDataSource
         var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).ToArray();
         var outputs = inputs.Select(Map);
 
-        return inputs.Zip(outputs, (i, o) => new object[] { i, o });
+        return inputs.Zip(outputs, static (i, o) => new object[] { i, o });
 
         static DataverseHttpRequest<Unit> Map(DataverseFetchXmlIn input)
             =>
