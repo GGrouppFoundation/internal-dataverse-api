@@ -1,4 +1,4 @@
-﻿namespace GGroupp.Infra;
+﻿namespace GarageGroup.Infra;
 
 public sealed record class DataverseEmailSender
 {
@@ -15,6 +15,6 @@ public sealed record class DataverseEmailSender
     }
 
     public string SenderEmail { get; }
-    
+
     public DataverseEmailMember? SenderMember { get; }
 }

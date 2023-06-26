@@ -1,14 +1,30 @@
 using System;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseEntityGetIn
 {
+    public DataverseEntityGetIn(string entityPluralName, IDataverseEntityKey entityKey)
+    {
+        EntityPluralName = entityPluralName ?? string.Empty;
+        EntityKey = entityKey;
+    }
+
     public DataverseEntityGetIn(
         string entityPluralName,
         IDataverseEntityKey entityKey,
-        FlatArray<string> selectFields = default,
-        FlatArray<DataverseExpandedField> expandFields = default)
+        FlatArray<string> selectFields)
+    {
+        EntityPluralName = entityPluralName ?? string.Empty;
+        EntityKey = entityKey;
+        SelectFields = selectFields;
+    }
+
+    public DataverseEntityGetIn(
+        string entityPluralName,
+        IDataverseEntityKey entityKey,
+        FlatArray<string> selectFields,
+        FlatArray<DataverseExpandedField> expandFields)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
         EntityKey = entityKey;
@@ -20,9 +36,9 @@ public sealed record class DataverseEntityGetIn
 
     public IDataverseEntityKey EntityKey { get; }
 
-    public FlatArray<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; init; }
 
-    public FlatArray<DataverseExpandedField> ExpandFields { get; }
+    public FlatArray<DataverseExpandedField> ExpandFields { get; init; }
 
     public string? IncludeAnnotations { get; init; }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal static class QueryParametersBuilder
 {

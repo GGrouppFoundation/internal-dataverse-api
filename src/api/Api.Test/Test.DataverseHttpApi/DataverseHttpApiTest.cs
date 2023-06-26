@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using Moq;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 public static partial class DataverseHttpApiTest
 {

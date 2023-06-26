@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Mime;
 using System.Text.Json;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 internal static partial class HttpApiTestDataSource
 {

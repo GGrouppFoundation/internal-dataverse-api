@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseSearchItem
 {
@@ -13,9 +13,19 @@ public sealed record class DataverseSearchItem
         FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> extensionData)
     {
         SearchScore = searchScore;
-        EntityName = entityName ?? string.Empty;    
+        EntityName = entityName ?? string.Empty;
         ObjectId = objectId;
         ExtensionData = extensionData;
+    }
+
+    public DataverseSearchItem(
+        double searchScore,
+        Guid objectId,
+        [AllowNull] string entityName)
+    {
+        SearchScore = searchScore;
+        EntityName = entityName ?? string.Empty;
+        ObjectId = objectId;
     }
 
     public double SearchScore { get; }
@@ -24,5 +34,5 @@ public sealed record class DataverseSearchItem
 
     public string EntityName { get; }
 
-    public FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> ExtensionData { get; }
+    public FlatArray<KeyValuePair<string, DataverseSearchJsonValue>> ExtensionData { get; init; }
 }

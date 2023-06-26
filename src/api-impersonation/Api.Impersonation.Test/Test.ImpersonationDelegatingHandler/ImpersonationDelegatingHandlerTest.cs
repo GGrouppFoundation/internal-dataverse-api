@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Moq;
 using PrimeFuncPack;
 
-namespace GGroupp.Infra.Dataverse.Api.Impersonation.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Impersonation.Test;
 
-public sealed partial class ImpersonationDelegatingHandlerTest
+public static partial class ImpersonationDelegatingHandlerTest
 {
     private const string CallerIdHeaderName = "MSCRMCallerID";
 

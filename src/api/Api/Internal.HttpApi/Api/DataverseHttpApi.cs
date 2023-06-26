@@ -5,7 +5,7 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal sealed partial class DataverseHttpApi : IDataverseHttpApi
 {

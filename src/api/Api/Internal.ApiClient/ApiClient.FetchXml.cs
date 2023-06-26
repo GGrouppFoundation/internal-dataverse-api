@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal sealed partial class DataverseApiClient
 {

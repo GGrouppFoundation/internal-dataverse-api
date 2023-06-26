@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <RootNamespace>GGroupp.Infra.Dataverse.Api.Core.EntityKey.Tests</RootNamespace>
-    <AssemblyName>GGroupp.Infra.Dataverse.Api.Core.EntityKey.Tests</AssemblyName>
+    <RootNamespace>GarageGroup.Infra.Dataverse.Api.Core.EntityKey.Tests</RootNamespace>
+    <AssemblyName>GarageGroup.Infra.Dataverse.Api.Core.EntityKey.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

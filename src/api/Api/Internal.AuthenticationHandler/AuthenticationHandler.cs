@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Net.Http;
 using Microsoft.Identity.Client;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal sealed partial class AuthenticationHandler : DelegatingHandler
 {

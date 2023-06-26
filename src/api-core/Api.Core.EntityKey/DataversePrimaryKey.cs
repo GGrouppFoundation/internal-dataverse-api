@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataversePrimaryKey : IDataverseEntityKey
 {

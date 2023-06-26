@@ -1,6 +1,6 @@
 using System;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseEntityUpdateIn<TInJson>
     where TInJson : notnull
@@ -30,7 +30,7 @@ public sealed record class DataverseEntityUpdateIn<TInJson>
 
     public string EntityPluralName { get; }
 
-    public FlatArray<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; init; }
 
     public TInJson EntityData { get; }
 

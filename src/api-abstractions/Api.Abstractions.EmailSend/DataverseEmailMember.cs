@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseEmailMember
 {
@@ -13,6 +13,6 @@ public sealed record class DataverseEmailMember
     }
     
     public Guid MemberId { get; }
-    
+
     public DataverseEmailMemberType MemberType { get; }
 }

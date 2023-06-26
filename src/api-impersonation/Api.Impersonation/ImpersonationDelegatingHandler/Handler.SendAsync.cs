@@ -4,13 +4,13 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 partial class ImpersonationDelegatingHandler
 {
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        _ = request ?? throw new ArgumentNullException(nameof(request));
+        ArgumentNullException.ThrowIfNull(request);
 
         if (cancellationToken.IsCancellationRequested)
         {

@@ -4,7 +4,7 @@ using DeepEqual.Syntax;
 using Moq;
 using Xunit;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 public static partial class DataverseApiClientTest
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 internal static class CreateEmailExtension
 {

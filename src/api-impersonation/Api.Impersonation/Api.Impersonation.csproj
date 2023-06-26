@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>GGroupp.Infra</RootNamespace>
-    <AssemblyName>GGroupp.Infra.Dataverse.Api.Impersonation</AssemblyName>
-    <Version>2.1.0</Version>
+    <RootNamespace>GarageGroup.Infra</RootNamespace>
+    <AssemblyName>GarageGroup.Infra.Dataverse.Api.Impersonation</AssemblyName>
+    <Version>2.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
