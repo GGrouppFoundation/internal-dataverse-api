@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseAlternateKey : IDataverseEntityKey
 {

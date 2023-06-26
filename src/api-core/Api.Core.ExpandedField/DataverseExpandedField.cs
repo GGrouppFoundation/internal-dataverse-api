@@ -1,6 +1,6 @@
 using System;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseExpandedField
 {
@@ -17,9 +17,13 @@ public sealed record class DataverseExpandedField
         SelectFields = selectFields;
     }
 
+    public DataverseExpandedField(string fieldName)
+        =>
+        FieldName = fieldName ?? string.Empty;
+
     public string FieldName { get; }
 
-    public FlatArray<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; init; }
 
-    public FlatArray<DataverseExpandedField> ExpandFields { get; }
+    public FlatArray<DataverseExpandedField> ExpandFields { get; init; }
 }

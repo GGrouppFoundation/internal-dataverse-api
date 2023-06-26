@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using Xunit;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class DataverseHttpApiTest
 {

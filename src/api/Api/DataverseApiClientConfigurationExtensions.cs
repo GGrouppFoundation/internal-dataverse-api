@@ -1,6 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
-using GGroupp.Infra;
+using GarageGroup.Infra;
 
 namespace Microsoft.Extensions.Configuration;
 
@@ -11,16 +11,14 @@ public static class DataverseApiClientConfigurationExtensions
     public static DataverseApiClientOption GetDataverseApiClientOption(
         this IConfiguration configuration, [AllowNull] string sectionName = DefaultSectionName)
     {
-        _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
+        ArgumentNullException.ThrowIfNull(configuration);
         return configuration.InternalGetDataverseApiClientOption(sectionName.OrEmpty());
     }
 
     public static DataverseApiClientAuthOption GetDataverseApiClientAuthOption(
         this IConfiguration configuration, [AllowNull] string sectionName = DefaultSectionName)
     {
-        _ = configuration ?? throw new ArgumentNullException(nameof(configuration));
-
+        ArgumentNullException.ThrowIfNull(configuration);
         return configuration.InternalGetDataverseApiClientAuthOption(sectionName.OrEmpty());
     }
 

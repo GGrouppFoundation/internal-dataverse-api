@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseSearchJsonValue
 {

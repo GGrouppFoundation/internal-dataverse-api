@@ -1,6 +1,6 @@
 using System;
 
-namespace GGroupp.Infra;
+namespace GarageGroup.Infra;
 
 public sealed record class DataverseEntityCreateIn<TInJson>
     where TInJson : notnull
@@ -15,13 +15,12 @@ public sealed record class DataverseEntityCreateIn<TInJson>
     public DataverseEntityCreateIn(string entityPluralName, TInJson entityData)
     {
         EntityPluralName = entityPluralName ?? string.Empty;
-        SelectFields = default;
         EntityData = entityData;
     }
 
     public string EntityPluralName { get; }
 
-    public FlatArray<string> SelectFields { get; }
+    public FlatArray<string> SelectFields { get; init; }
 
     public TInJson EntityData { get; }
 

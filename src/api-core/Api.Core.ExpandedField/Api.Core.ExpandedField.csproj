@@ -1,9 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>GGroupp.Infra</RootNamespace>
-    <AssemblyName>GGroupp.Infra.Dataverse.Api.Core.ExpandedField</AssemblyName>
-    <Version>1.3.0</Version>
+    <RootNamespace>GarageGroup.Infra</RootNamespace>
+    <AssemblyName>GarageGroup.Infra.Dataverse.Api.Core.ExpandedField</AssemblyName>
+    <Version>1.4.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

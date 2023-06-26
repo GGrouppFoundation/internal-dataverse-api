@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Moq;
 using Xunit;
 
-namespace GGroupp.Infra.Dataverse.Api.Impersonation.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Impersonation.Test;
 
 partial class ImpersonationDelegatingHandlerTest
 {
     [Fact]
-    public async Task SendAsync_RequestIsNull_ExpectArgumentNullException()
+    public static async Task SendAsync_RequestIsNull_ExpectArgumentNullException()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
         
@@ -30,7 +30,7 @@ partial class ImpersonationDelegatingHandlerTest
     }
 
     [Fact]
-    public void SendAsync_CancellationTokenIsCanceled_ResultTaskIsCanceled()
+    public static void SendAsync_CancellationTokenIsCanceled_ResultTaskIsCanceled()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
         
@@ -52,7 +52,7 @@ partial class ImpersonationDelegatingHandlerTest
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task SendAsync_CancellationTokenIsNotCanceled_ExpectCallInnerHandlerWithCallerId(
+    public static async Task SendAsync_CancellationTokenIsNotCanceled_ExpectCallInnerHandlerWithCallerId(
         bool isSourceRequestWithCallerId)
     {
         const string callerId = "ac3a51a1-c8e1-4848-a556-ca75935d9e8c";
@@ -85,7 +85,7 @@ partial class ImpersonationDelegatingHandlerTest
     }
 
     [Fact]
-    public async Task SendAsync_CancellationTokenIsNotCanceled_ExpectSourceResponse()
+    public static async Task SendAsync_CancellationTokenIsNotCanceled_ExpectSourceResponse()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
         

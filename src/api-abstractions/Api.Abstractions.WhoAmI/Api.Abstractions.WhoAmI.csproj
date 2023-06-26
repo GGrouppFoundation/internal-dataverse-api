@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>GGroupp.Infra</RootNamespace>
-    <AssemblyName>GGroupp.Infra.Dataverse.Api.Abstractions.WhoAmI</AssemblyName>
+    <RootNamespace>GarageGroup.Infra</RootNamespace>
+    <AssemblyName>GarageGroup.Infra.Dataverse.Api.Abstractions.WhoAmI</AssemblyName>
     <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GGroupp.Infra.Dataverse.Api.Core.FailureCode" Version="2.2.0" />
+    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.FailureCode" Version="2.2.0" />
     <PackageReference Include="PrimeFuncPack.Core.Failure" Version="2.0.1" />
     <PackageReference Include="PrimeFuncPack.Core.Result" Version="2.0.2" />
   </ItemGroup>

@@ -5,7 +5,7 @@ using System.Net.Mail;
 using System.Text.Json;
 using AutoFixture;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {

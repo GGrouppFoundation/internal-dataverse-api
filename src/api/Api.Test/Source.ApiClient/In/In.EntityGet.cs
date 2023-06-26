@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
@@ -93,6 +93,21 @@ partial class ApiClientTestDataSource
                         CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27"),
                         new DataverseHttpHeader("Prefer", "odata.include-annotations=*")),
                     content: default)
-            }
+            },
+            new object?[]
+            {
+                Guid.Parse("18945ff7-9433-4e74-a403-abd6db25ef27"),
+                new DataverseEntityGetIn(
+                    entityPluralName: "SomeEntities",
+                    entityKey: new StubEntityKey("SomeKey"),
+                    selectFields: new("field1", "field2"),
+                    expandFields: new DataverseExpandedField("LookupOne").AsFlatArray()),
+                new DataverseHttpRequest<Unit>(
+                    verb: DataverseHttpVerb.Get,
+                    url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2&$expand=LookupOne",
+                    headers: new(
+                        CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")),
+                    content: default)
+            },
         };
 }

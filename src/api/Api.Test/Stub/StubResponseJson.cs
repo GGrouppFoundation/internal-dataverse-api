@@ -1,4 +1,4 @@
-namespace GGroupp.Infra.Dataverse.Api.Test;
+namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 internal sealed record class StubResponseJson
 {
