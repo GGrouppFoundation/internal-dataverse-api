@@ -13,6 +13,10 @@ internal static partial class HttpApiTestDataSource
         =>
         SerializerOptions = new(JsonSerializerDefaults.Web);
 
+    private static HttpMessageContent ToMessageContent(this HttpResponseMessage httpResponse)
+        =>
+        new(httpResponse);
+
     private static StringContent CreateResponseContentJson<TJson>(this TJson responseJson)
         =>
         new(

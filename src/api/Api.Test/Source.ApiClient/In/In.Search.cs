@@ -24,7 +24,7 @@ partial class ApiClientTestDataSource
                     SearchMode = DataverseSearchMode.Any,
                     SearchType = DataverseSearchType.Full
                 },
-                new DataverseHttpRequest<DataverseSearchJsonIn>(
+                new DataverseJsonRequest(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: default,
@@ -40,7 +40,7 @@ partial class ApiClientTestDataSource
                         Entities = new[] { "first", "second", "third" },
                         SearchMode = DataverseSearchModeJson.Any,
                         SearchType = DataverseSearchTypeJson.Full
-                    })
+                    }.InnerToJsonContentIn())
             },
             new object?[]
             {
@@ -51,7 +51,7 @@ partial class ApiClientTestDataSource
                     SearchMode = DataverseSearchMode.All,
                     SearchType = DataverseSearchType.Simple
                 },
-                new DataverseHttpRequest<DataverseSearchJsonIn>(
+                new DataverseJsonRequest(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: new(
@@ -62,20 +62,20 @@ partial class ApiClientTestDataSource
                         OrderBy = new[] { "field 1" },
                         SearchMode = DataverseSearchModeJson.All,
                         SearchType = DataverseSearchTypeJson.Simple
-                    })
+                    }.InnerToJsonContentIn())
             },
             new object?[]
             {
                 null,
                 new DataverseSearchIn(string.Empty),
-                new DataverseHttpRequest<DataverseSearchJsonIn>(
+                new DataverseJsonRequest(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: default,
                     content: new DataverseSearchJsonIn
                     {
                         Search = string.Empty
-                    })
+                    }.InnerToJsonContentIn())
             }
         };
 }

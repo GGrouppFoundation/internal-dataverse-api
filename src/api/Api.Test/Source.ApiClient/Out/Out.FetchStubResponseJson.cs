@@ -6,49 +6,52 @@ namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> FetchStubResponseJsonTestData()
+    public static IEnumerable<object?[]> FetchStubResponseJsonTestData
     {
-        var fixture = new Fixture();
-        var rnd = new Random(DateTime.UnixEpoch.Millisecond);
-        
-        for (int i = 0; i < 50; i++)
+        get
         {
-            var cookie = fixture.Create<string>();
-            var xmlCookie = $"<cookie pagenumber='2' pagingcookie='{cookie}'/>";
-            var value = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
-            var success = new DataverseFetchXmlOutJson<StubResponseJson>
+            var fixture = new Fixture();
+            var rnd = new Random(DateTime.UnixEpoch.Millisecond);
+
+            for (int i = 0; i < 50; i++)
             {
-                Value = value,
-                PagingCookie = xmlCookie
+                var cookie = fixture.Create<string>();
+                var xmlCookie = $"<cookie pagenumber='2' pagingcookie='{cookie}'/>";
+                var value = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
+                var success = new DataverseFetchXmlOutJson<StubResponseJson>
+                {
+                    Value = value,
+                    PagingCookie = xmlCookie
+                };
+
+                var expected = new DataverseFetchXmlOut<StubResponseJson>(value, cookie);
+
+                yield return new object?[] { success, expected };
+            }
+
+            var nullCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
+
+            var nullCookieSuccess = new DataverseFetchXmlOutJson<StubResponseJson>
+            {
+                Value = nullCookieValue,
+                PagingCookie = null
             };
 
-            var expected = new DataverseFetchXmlOut<StubResponseJson>(value, cookie);
-            
-            yield return new object?[] { success, expected };
+            var nullCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(nullCookieValue);
+
+            yield return new object?[] { nullCookieSuccess, nullCookieExpected };
+
+            var emptyCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
+
+            var emptyCookieSuccess = new DataverseFetchXmlOutJson<StubResponseJson>
+            {
+                Value = emptyCookieValue,
+                PagingCookie = string.Empty
+            };
+
+            var emptyCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(emptyCookieValue);
+
+            yield return new object?[] { emptyCookieSuccess, emptyCookieExpected };
         }
-        
-        var nullCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
-        
-        var nullCookieSuccess = new DataverseFetchXmlOutJson<StubResponseJson>
-        {
-            Value = nullCookieValue,
-            PagingCookie = null
-        };
-        
-        var nullCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(nullCookieValue);
-        
-        yield return new object?[] { nullCookieSuccess, nullCookieExpected };
-        
-        var emptyCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
-        
-        var emptyCookieSuccess = new DataverseFetchXmlOutJson<StubResponseJson>
-        {
-            Value = emptyCookieValue,
-            PagingCookie = string.Empty
-        };
-        
-        var emptyCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(emptyCookieValue);
-        
-        yield return new object?[] { emptyCookieSuccess, emptyCookieExpected };
     }
 }

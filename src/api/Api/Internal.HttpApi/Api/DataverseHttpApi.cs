@@ -2,18 +2,12 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mime;
-using System.Text;
-using System.Text.Json;
 
 namespace GarageGroup.Infra;
 
 internal sealed partial class DataverseHttpApi : IDataverseHttpApi
 {
-    static DataverseHttpApi()
-        =>
-        SerializerOptions = new(JsonSerializerDefaults.Web);
-
-    private static readonly JsonSerializerOptions SerializerOptions;
+    private const string HttpVersion = "1.1";
 
     private readonly HttpMessageHandler messageHandler;
 
@@ -28,11 +22,11 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
         this.httpClientTimeOut = httpClientTimeOut;
     }
 
-    private HttpClient CreateHttpClient(string? relativeUrl)
+    private HttpClient CreateHttpClient()
     {
         var httpClient = new HttpClient(messageHandler, disposeHandler: false)
         {
-            BaseAddress = new(dataverseBaseUri, relativeUrl),
+            BaseAddress = dataverseBaseUri,
         };
 
         if (httpClientTimeOut is not null)
@@ -43,28 +37,11 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
         return httpClient;
     }
 
-    private static HttpContent? BuildRequestJsonBody<TRequestJson>(TRequestJson input)
-        where TRequestJson : notnull
-    {
-        var json = JsonSerializer.Serialize(input, SerializerOptions);
-        return new StringContent(json, Encoding.UTF8, MediaTypeNames.Application.Json);
-    }
-
-    private static TOut? DeserializeSuccess<TOut>(string? body)
-    {
-        if (string.IsNullOrEmpty(body))
-        {
-            return default;
-        }
-
-        return JsonSerializer.Deserialize<TOut>(body, SerializerOptions);
-    }
-
     private static DataverseFailureJson? DeserializeFailure(string? body, string? mediaType)
     {
         if (mediaType is MediaTypeNames.Application.Json && string.IsNullOrEmpty(body) is false)
         {
-            return JsonSerializer.Deserialize<DataverseFailureJson>(body, SerializerOptions);
+            return new DataverseJsonContentOut(body).DeserializeOrThrow<DataverseFailureJson>();
         }
 
         return null;

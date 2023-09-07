@@ -8,31 +8,34 @@ namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> GetFetchXmlInputTestData()
+    public static IEnumerable<object?[]> FetchXmlInputTestData
     {
-        var fixture = new Fixture();
-        var annotationNullInput = fixture.Create<DataverseFetchXmlIn>() with
+        get
         {
-            IncludeAnnotations = null
-        };
-            
-        var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).Append(annotationNullInput).ToArray();
-        var outputs = inputs.Select(Map);
+            var fixture = new Fixture();
+            var annotationNullInput = fixture.Create<DataverseFetchXmlIn>() with
+            {
+                IncludeAnnotations = null
+            };
 
-        return inputs.Zip(outputs, static (i, o) => new object[] { i, o });
+            var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).Append(annotationNullInput).ToArray();
+            var outputs = inputs.Select(Map);
 
-        static DataverseHttpRequest<Unit> Map(DataverseFetchXmlIn input)
-            =>
-            new(
-                verb: DataverseHttpVerb.Get,
-                url: $"/api/data/v9.2/{WebUtility.UrlEncode(input.EntityPluralName)}?fetchXml={input.FetchXmlQueryString}",
-                headers: MapHeaders(input),
-                content: default);
+            return inputs.Zip(outputs, static (i, o) => new object[] { i, o });
 
-        static FlatArray<DataverseHttpHeader> MapHeaders(DataverseFetchXmlIn input)
-            =>
-            input.IncludeAnnotations is not null ? 
-            new(item: new("Prefer", $"odata.include-annotations={input.IncludeAnnotations}")) : 
-            default;
+            static DataverseJsonRequest Map(DataverseFetchXmlIn input)
+                =>
+                new(
+                    verb: DataverseHttpVerb.Get,
+                    url: $"/api/data/v9.2/{WebUtility.UrlEncode(input.EntityPluralName)}?fetchXml={input.FetchXmlQueryString}",
+                    headers: MapHeaders(input),
+                    content: default);
+
+            static FlatArray<DataverseHttpHeader> MapHeaders(DataverseFetchXmlIn input)
+                =>
+                input.IncludeAnnotations is not null ?
+                new(item: new("Prefer", $"odata.include-annotations={input.IncludeAnnotations}")) :
+                default;
+        }
     }
 }

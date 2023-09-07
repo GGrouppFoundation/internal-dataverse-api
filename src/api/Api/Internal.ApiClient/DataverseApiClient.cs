@@ -13,6 +13,8 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string WhoAmIRelativeUrl = "WhoAmI";
 
+    private const string BatchRelativeUrl = "$batch";
+
     private const string CallerIdHeaderName = "MSCRMCallerID";
 
     private const string PreferHeaderName = "Prefer";
@@ -27,15 +29,22 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private readonly IDataverseHttpApi httpApi;
 
+    private readonly IGuidProvider guidProvider;
+
     private readonly Guid? callerId;
 
-    internal DataverseApiClient(IDataverseHttpApi httpApi)
-        =>
+    internal DataverseApiClient(IDataverseHttpApi httpApi, IGuidProvider guidProvider)
+    {
         this.httpApi = httpApi;
+        this.guidProvider = guidProvider;
+    }
 
-    private DataverseApiClient(IDataverseHttpApi httpApi, Guid callerId)
-        =>
-        (this.httpApi, this.callerId) = (httpApi, callerId);
+    private DataverseApiClient(IDataverseHttpApi httpApi, IGuidProvider guidProvider, Guid callerId)
+    {
+        this.httpApi = httpApi;
+        this.guidProvider = guidProvider;
+        this.callerId = callerId;
+    }
 
     private static string BuildDataRequestUrl(string dataUrl)
         =>
@@ -115,6 +124,13 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
     private static string GetHeaderValue(bool value)
         =>
         value ? "true" : "false";
+
+    private static Failure<DataverseFailureCode> ToDataverseFailure(Exception exception, string message)
+        =>
+        new(DataverseFailureCode.Unknown, message)
+        {
+            SourceException = exception
+        };
 
     private static ValueTask<Result<T, Failure<DataverseFailureCode>>> GetCanceledAsync<T>(CancellationToken cancellationToken)
         =>
