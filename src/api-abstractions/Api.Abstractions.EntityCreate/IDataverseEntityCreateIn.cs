@@ -7,13 +7,13 @@ public interface IDataverseEntityCreateIn<out TInJson> : IDataverseTransactableI
 {
     string EntityPluralName { get; }
 
-    FlatArray<string> SelectFields { get; init; }
+    FlatArray<string> SelectFields { get; }
 
     TInJson EntityData { get; }
 
-    FlatArray<DataverseExpandedField> ExpandFields { get; init; }
+    FlatArray<DataverseExpandedField> ExpandFields { get; }
 
-    bool? SuppressDuplicateDetection { get; init; }
+    bool? SuppressDuplicateDetection { get; }
 
     TInJson? IDataverseTransactableIn<TInJson>.Entity
         =>
