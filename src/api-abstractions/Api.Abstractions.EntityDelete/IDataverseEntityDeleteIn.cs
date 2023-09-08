@@ -6,7 +6,7 @@ public interface IDataverseEntityDeleteIn : IDataverseTransactableIn<Unit>, IDat
 {
     string EntityPluralName { get; }
 
-    IDataverseEntityKey EntityKey{ get; }
+    IDataverseEntityKey EntityKey { get; }
 
     Unit IDataverseTransactableIn<Unit>.Entity
         =>
