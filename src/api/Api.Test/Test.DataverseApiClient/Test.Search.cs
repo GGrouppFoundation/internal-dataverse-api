@@ -11,8 +11,8 @@ partial class DataverseApiClientTest
     [Fact]
     public static async Task SearchAsync_InputIsNull_ExpectArgumentNullException()
     {
-        var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(SomeSearchJsonOut.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var token = new CancellationToken(canceled: false);
         var ex = await Assert.ThrowsAsync<ArgumentNullException>(InnerSearchAsync);
@@ -27,8 +27,8 @@ partial class DataverseApiClientTest
     [Fact]
     public static void SearchAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
-        var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(SomeSearchJsonOut.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var token = new CancellationToken(canceled: true);
 
@@ -39,15 +39,33 @@ partial class DataverseApiClientTest
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.SearchInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     internal static async Task SearchAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
-        Guid? callerId, DataverseSearchIn input, DataverseHttpRequest<DataverseSearchJsonIn> expectedRequest)
+        Guid? callerId, DataverseSearchIn input, DataverseJsonRequest expectedRequest)
     {
-        var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(SomeSearchJsonOut);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, callerId);
+        var mockHttpApi = CreateMockJsonHttpApi(SomeSearchJsonOut.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider(), callerId);
 
         var token = new CancellationToken(canceled: false);
         _ = await dataverseApiClient.SearchAsync(input, token);
 
-        mockHttpApi.Verify(p => p.InvokeAsync<DataverseSearchJsonIn, DataverseSearchJsonOut>(expectedRequest, token), Times.Once);
+        mockHttpApi.Verify(p => p.SendJsonAsync(expectedRequest, token), Times.Once);
+    }
+
+    [Fact]
+    public static async Task SearchAsync_HttpApiThrowsException_ExpectFailure()
+    {
+        var sourceException = new InvalidOperationException("Some Exception message");
+
+        var mockHttpApi = CreateMockHttpApi(sourceException);
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
+
+        var actual = await dataverseApiClient.SearchAsync(SomeDataverseSearchInput, default);
+
+        var expected = Failure.Create(
+            DataverseFailureCode.Unknown,
+            "An unexpected exception was thrown when trying to search Dataverse entities",
+            sourceException);
+
+        Assert.StrictEqual(expected, actual);
     }
 
     [Theory]
@@ -55,8 +73,8 @@ partial class DataverseApiClientTest
     public static async Task SearchAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
-        var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(failure);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(failure);
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var actual = await dataverseApiClient.SearchAsync(SomeDataverseSearchInput, CancellationToken.None);
         Assert.StrictEqual(failure, actual);
@@ -67,8 +85,8 @@ partial class DataverseApiClientTest
     internal static async Task SearchAsync_ResponseIsSuccess_ExpectSuccess(
         DataverseSearchJsonOut success, DataverseSearchOut expected)
     {
-        var mockHttpApi = CreateMockHttpApi<DataverseSearchJsonIn, DataverseSearchJsonOut>(success);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(success.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var actual = await dataverseApiClient.SearchAsync(SomeDataverseSearchInput, default);
         Assert.StrictEqual(expected, actual);

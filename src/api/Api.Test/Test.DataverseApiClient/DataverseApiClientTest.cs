@@ -1,13 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading;
-using DeepEqual.Syntax;
 using Moq;
-using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 public static partial class DataverseApiClientTest
 {
+    private static readonly JsonSerializerOptions SerializerOptions
+        =
+        new(JsonSerializerDefaults.Web);
+
     private static readonly DataverseEntityGetIn SomeDataverseEntityGetInput
         =
         new(
@@ -140,17 +144,41 @@ public static partial class DataverseApiClientTest
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
         =
-        new(Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b"));
-    
-    private static readonly DataverseEmailSendIn SomeEmailSendInWithOutEmailId
+        new(
+            emailId: Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b"));
+
+    private static readonly DataverseEmailSendIn SomeEmailSendInWithoutEmailId
         =
         new(
             subject: "subject",
             body: "body",
             sender: new("email@email.com"),
-            recipients: new FlatArray<DataverseEmailRecipient>(
-                new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
-                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)));
+            recipients: new(
+                new(
+                    email: "email2@email.com",
+                    emailRecipientType: DataverseEmailRecipientType.ToRecipient),
+                new(
+                    emailMember: new(
+                        memberId: Guid.Parse("00d23c27-b73f-402d-9d0b-b590a513d2aa"),
+                        memberType: DataverseEmailMemberType.Account),
+                    emailRecipientType: DataverseEmailRecipientType.ToRecipient)));
+
+    private static readonly DataverseChangeSetExecuteIn<object> SomeChangeSetInput
+        =
+        new(
+            requests: new FlatArray<IDataverseTransactableIn<object>>(
+                SomeDataverseEntityCreateInput,
+                SomeDataverseEntityUpdateInput,
+                SomeDataverseEntityDeleteInput));
+
+    private static readonly DataverseChangeSetResponse SomeChangeSetResponse
+        =
+        new(
+            responses: new[]
+            {
+                SomeResponseJson.InnerToJsonResponse(),
+                default
+            });
 
     private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJson
         =
@@ -160,65 +188,102 @@ public static partial class DataverseApiClientTest
         };
 
     private static IDataverseApiClient CreateDataverseApiClient(
-        IDataverseHttpApi httpApi, Guid? callerId = null)
+        IDataverseHttpApi httpApi, IGuidProvider guidProvider, Guid? callerId = null)
     {
-        var apiClient = new DataverseApiClient(httpApi);
+        var apiClient = new DataverseApiClient(httpApi, guidProvider);
         return callerId is null ? apiClient : apiClient.Impersonate(callerId.Value);
     }
 
-    private static Mock<IDataverseHttpApi> CreateMockHttpApi<TIn, TOut>(
-        Result<TOut?, Failure<DataverseFailureCode>> result)
-        where TIn : notnull
+    private static DataverseJsonResponse InnerToJsonResponse<T>(this T value)
+        =>
+        new(
+            content: new(JsonSerializer.Serialize(value, SerializerOptions)));
+
+    private static IGuidProvider CreateGuidProvider()
+        =>
+        CreateGuidProvider(Guid.Parse("1415478f-b154-4cc0-9687-90b698d77be4"), Guid.Parse("33160122-a578-456d-8c8d-e4746296cf1d"));
+
+    private static IGuidProvider CreateGuidProvider(params Guid[] guids)
+    {
+        var mock = new Mock<IGuidProvider>();
+        var queue = new Queue<Guid>(guids);
+
+        _ = mock.Setup(p => p.NewGuid()).Returns(queue.Dequeue);
+        return mock.Object;
+    }
+
+    private static Mock<IDataverseHttpApi> CreateMockJsonHttpApi(
+        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> result,
+        Action<DataverseJsonRequest>? callback = null)
+    {
+        var mock = new Mock<IDataverseHttpApi>();
+
+        var m = mock
+            .Setup(p => p.SendJsonAsync(It.IsAny<DataverseJsonRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(result);
+
+        if (callback is not null)
+        {
+            _ = m.Callback<DataverseJsonRequest, CancellationToken>(
+                (r, _) => callback.Invoke(r));
+        }
+
+        return mock;
+    }
+
+    private static Mock<IDataverseHttpApi> CreateMockEmailHttpApi(
+        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> creationResult,
+        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> sendingResult,
+        Action<DataverseJsonRequest>? creationCallback = null)
+    {
+        var mock = new Mock<IDataverseHttpApi>();
+
+        var m = mock
+            .Setup(
+                p => p.SendJsonAsync(It.IsAny<DataverseJsonRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(creationResult);
+
+        if (creationCallback is not null)
+        {
+            _ = m.Callback<DataverseJsonRequest, CancellationToken>(
+                (r, _) => creationCallback.Invoke(r));
+        }
+
+        _ = mock
+            .Setup(
+                p => p.SendJsonAsync(
+                    It.Is<DataverseJsonRequest>(
+                        r => !string.IsNullOrEmpty(r.Url) && r.Url.EndsWith("CRM.SendEmail") == true), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(sendingResult);
+
+        return mock;
+    }
+
+    private static Mock<IDataverseHttpApi> CreateMockChangeSetHttpApi(
+        Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>> result)
     {
         var mock = new Mock<IDataverseHttpApi>();
 
         _ = mock
-            .Setup(p => p.InvokeAsync<TIn, TOut>(It.IsAny<DataverseHttpRequest<TIn>>(), It.IsAny<CancellationToken>()))
+            .Setup(p => p.SendChangeSetAsync(It.IsAny<DataverseChangeSetRequest>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(result);
 
         return mock;
     }
-    
-    private static Mock<IDataverseHttpApi> CreateMockHttpApiSendEmail(
-        Result<DataverseEmailCreateJsonOut, Failure<DataverseFailureCode>> creationResult,
-        Result<Unit, Failure<DataverseFailureCode>> sendingResult)
+
+    private static Mock<IDataverseHttpApi> CreateMockHttpApi(
+        Exception exception)
     {
         var mock = new Mock<IDataverseHttpApi>();
 
         _ = mock
-            .Setup(
-                p => p.InvokeAsync<DataverseEmailCreateJsonIn, DataverseEmailCreateJsonOut>(
-                    It.IsAny<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(), It.IsAny<CancellationToken>()))!
-            .ReturnsAsync(creationResult);
+            .Setup(p => p.SendJsonAsync(It.IsAny<DataverseJsonRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(exception);
 
         _ = mock
-            .Setup(
-                p => p.InvokeAsync<DataverseEmailSendJsonIn, Unit>(
-                    It.IsAny<DataverseHttpRequest<DataverseEmailSendJsonIn>>(), It.IsAny<CancellationToken>()))!
-            .ReturnsAsync(sendingResult);
-        
+            .Setup(p => p.SendChangeSetAsync(It.IsAny<DataverseChangeSetRequest>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(exception);
+
         return mock;
-    }
-    
-    private static DataverseHttpRequest<DataverseEmailCreateJsonIn> VerifyEmailCreateResults(
-        DataverseHttpRequest<DataverseEmailCreateJsonIn> expectedRequest)
-        => 
-        It.Is<DataverseHttpRequest<DataverseEmailCreateJsonIn>>(a => AreEqual(a, expectedRequest));
-    
-    private static bool AreEqual(
-        DataverseHttpRequest<DataverseEmailCreateJsonIn> actual,
-        DataverseHttpRequest<DataverseEmailCreateJsonIn> expected)
-    {
-        actual.WithDeepEqual(expected).IgnoreSourceProperty(a => a.Content).Assert();
-        if (expected.Content.IsPresent)
-        {
-            Assert.True(actual.Content.IsPresent);
-            actual.Content.OrThrow().ShouldDeepEqual(expected.Content.OrThrow());
-        }
-        else
-        {
-            Assert.True(actual.Content.IsAbsent);
-        }
-        return true;
     }
 }

@@ -1,6 +1,6 @@
 namespace GarageGroup.Infra;
 
-public sealed record class DataverseEntityDeleteIn
+public sealed record class DataverseEntityDeleteIn : IDataverseEntityDeleteIn
 {
     public DataverseEntityDeleteIn(string entityPluralName, IDataverseEntityKey entityKey)
     {

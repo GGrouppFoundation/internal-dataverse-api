@@ -11,8 +11,8 @@ partial class DataverseApiClientTest
     [Fact]
     public static void WhoAmIAsync_CancellationTokenIsCanceled_ExpectTaskIsCanceled()
     {
-        var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(SomeWhoAmIOutJson.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var token = new CancellationToken(canceled: true);
         var actualTask = dataverseApiClient.WhoAmIAsync(default, token);
@@ -23,15 +23,33 @@ partial class DataverseApiClientTest
     [Theory]
     [MemberData(nameof(ApiClientTestDataSource.WhoAmIInputTestData), MemberType = typeof(ApiClientTestDataSource))]
     internal static async Task WhoAmIAsync_CancellationTokenIsNotCanceled_ExpectHttpRequestCalledOnce(
-        Guid? callerId, DataverseHttpRequest<Unit> expectedRequest)
+        Guid? callerId, DataverseJsonRequest expectedRequest)
     {
-        var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(SomeWhoAmIOutJson);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, callerId);
+        var mockHttpApi = CreateMockJsonHttpApi(SomeWhoAmIOutJson.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider(), callerId);
 
         var token = new CancellationToken(canceled: false);
         _ = await dataverseApiClient.WhoAmIAsync(default, token);
 
-        mockHttpApi.Verify(p => p.InvokeAsync<Unit, DataverseWhoAmIOutJson>(expectedRequest, token), Times.Once);
+        mockHttpApi.Verify(p => p.SendJsonAsync(expectedRequest, token), Times.Once);
+    }
+
+    [Fact]
+    public static async Task WhoAmIAsync_HttpApiThrowsException_ExpectFailure()
+    {
+        var sourceException = new Exception("Some exception message");
+
+        var mockHttpApi = CreateMockHttpApi(sourceException);
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
+
+        var actual = await dataverseApiClient.WhoAmIAsync(default, CancellationToken.None);
+
+        var expected = Failure.Create(
+            DataverseFailureCode.Unknown,
+            "An unexpected exception was thrown when trying to get a Dataverse current user data",
+            sourceException);
+
+        Assert.StrictEqual(expected, actual);
     }
 
     [Theory]
@@ -39,8 +57,8 @@ partial class DataverseApiClientTest
     public static async Task WhoAmIAsync_ResponseIsFailure_ExpectFailure(
         Failure<DataverseFailureCode> failure)
     {
-        var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(failure);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(failure);
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var actual = await dataverseApiClient.WhoAmIAsync(default, CancellationToken.None);
         Assert.StrictEqual(failure, actual);
@@ -56,8 +74,8 @@ partial class DataverseApiClientTest
             OrganizationId = Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae")
         };
 
-        var mockHttpApi = CreateMockHttpApi<Unit, DataverseWhoAmIOutJson>(success);
-        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object);
+        var mockHttpApi = CreateMockJsonHttpApi(success.InnerToJsonResponse());
+        var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var actual = await dataverseApiClient.WhoAmIAsync(default, CancellationToken.None);
 

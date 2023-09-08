@@ -73,6 +73,17 @@ jobs:
     - name: Pack Api.Core.ExpandedField
       run: dotnet pack ./src/*/*/Api.Core.ExpandedField.csproj --no-restore -o ~/nuget  -c Release
 
+    # Api.Core.Transaction
+
+    - name: Restore Api.Core.Transaction
+      run: dotnet restore ./src/*/*/Api.Core.Transaction.csproj
+
+    - name: Build Api.Core.Transaction
+      run: dotnet build ./src/*/*/Api.Core.Transaction.csproj --no-restore  -c Release
+
+    - name: Pack Api.Core.Transaction
+      run: dotnet pack ./src/*/*/Api.Core.Transaction.csproj --no-restore -o ~/nuget  -c Release
+
     # Api.Abstractions.Impersonate
 
     - name: Restore Api.Abstractions.Impersonate
@@ -171,7 +182,7 @@ jobs:
 
     - name: Pack Api.Abstractions.EmailSend
       run: dotnet pack ./src/*/*/Api.Abstractions.EmailSend.csproj --no-restore -o ~/nuget  -c Release
-        
+
     # Api.Abstractions.FetchXml
 
     - name: Restore Api.Abstractions.FetchXml
@@ -182,6 +193,17 @@ jobs:
 
     - name: Pack Api.Abstractions.FetchXml
       run: dotnet pack ./src/*/*/Api.Abstractions.FetchXml.csproj --no-restore -o ~/nuget  -c Release
+
+    # Api.Abstractions.ChangeSetExecute
+
+    - name: Restore Api.Abstractions.ChangeSetExecute
+      run: dotnet restore ./src/*/*/Api.Abstractions.ChangeSetExecute.csproj
+
+    - name: Build Api.Abstractions.ChangeSetExecute
+      run: dotnet build ./src/*/*/Api.Abstractions.ChangeSetExecute.csproj --no-restore  -c Release
+
+    - name: Pack Api.Abstractions.ChangeSetExecute
+      run: dotnet pack ./src/*/*/Api.Abstractions.ChangeSetExecute.csproj --no-restore -o ~/nuget  -c Release
 
     # Api.Abstractions
 

@@ -1,7 +1,20 @@
+using System;
+using System.Text.Json;
+
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 internal static partial class ApiClientTestDataSource
 {
+    private static readonly JsonSerializerOptions SerializerOptions
+        =
+        new(JsonSerializerDefaults.Web);
+
+    private static readonly FlatArray<DataverseHttpHeader> DefaultSendEmailHeaders
+        =
+        new(
+            new("Accept", "application/json"),
+            new("Prefer", "return=representation"));
+
     private static readonly DataverseHttpHeader PreferRepresentationHeader
         =
         new("Prefer", "return=representation");
@@ -13,4 +26,8 @@ internal static partial class ApiClientTestDataSource
     private static DataverseHttpHeader CreateSuppressDuplicateDetectionHeader(string value)
         =>
         new("MSCRM.SuppressDuplicateDetection", value);
+
+    private static DataverseJsonContentIn InnerToJsonContentIn<T>(this T value)
+        =>
+        new(JsonSerializer.Serialize(value, SerializerOptions));
 }

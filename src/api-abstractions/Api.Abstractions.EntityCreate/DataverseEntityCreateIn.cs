@@ -2,7 +2,7 @@ using System;
 
 namespace GarageGroup.Infra;
 
-public sealed record class DataverseEntityCreateIn<TInJson>
+public sealed record class DataverseEntityCreateIn<TInJson> : IDataverseEntityCreateIn<TInJson>
     where TInJson : notnull
 {
     public DataverseEntityCreateIn(string entityPluralName, FlatArray<string> selectFields, TInJson entityData)

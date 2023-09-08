@@ -2,7 +2,7 @@ using System;
 
 namespace GarageGroup.Infra;
 
-public sealed record class DataverseEntityUpdateIn<TInJson>
+public sealed record class DataverseEntityUpdateIn<TInJson> : IDataverseEntityUpdateIn<TInJson>
     where TInJson : notnull
 {
     public DataverseEntityUpdateIn(

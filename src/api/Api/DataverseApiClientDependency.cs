@@ -18,7 +18,7 @@ public static class DataverseApiClientDependency
     {
         ArgumentNullException.ThrowIfNull(dependency);
 
-        return dependency.Fold(CreateApiClient);
+        return dependency.Fold<IDataverseApiClient>(CreateApiClient);
     }
 
     public static Dependency<IDataverseApiClient> UseDataverseApiClient(
@@ -27,7 +27,7 @@ public static class DataverseApiClientDependency
         ArgumentNullException.ThrowIfNull(dependency);
         ArgumentNullException.ThrowIfNull(optionResolver);
 
-        return dependency.With(optionResolver).Fold(CreateApiClient);
+        return dependency.With(optionResolver).Fold<IDataverseApiClient>(CreateApiClient);
     }
 
     public static Dependency<IDataverseApiClient> UseDataverseApiClient(
@@ -35,22 +35,32 @@ public static class DataverseApiClientDependency
     {
         ArgumentNullException.ThrowIfNull(dependency);
 
-        return dependency.With(ResolveOption).Fold(CreateApiClient);
+        return dependency.Map<IDataverseApiClient>(CreateClient);
 
-        DataverseApiClientAuthOption ResolveOption(IServiceProvider serviceProvider)
-            =>
-            serviceProvider.GetServiceOrThrow<IConfiguration>().InternalGetDataverseApiClientAuthOption(sectionName.OrEmpty());
+        DataverseApiClient CreateClient(IServiceProvider serviceProvider, HttpMessageHandler httpMessageHandler)
+        {
+            ArgumentNullException.ThrowIfNull(serviceProvider);
+            ArgumentNullException.ThrowIfNull(httpMessageHandler);
+
+            var option = serviceProvider.GetServiceOrThrow<IConfiguration>().InternalGetDataverseApiClientAuthOption(sectionName.OrEmpty());
+            return InnerCreateApiClient(httpMessageHandler, option);
+        }
     }
 
-    private static IDataverseApiClient CreateApiClient(
-        HttpMessageHandler httpMessageHandler, DataverseApiClientAuthOption option)
+    private static DataverseApiClient CreateApiClient(HttpMessageHandler httpMessageHandler, DataverseApiClientAuthOption option)
     {
         ArgumentNullException.ThrowIfNull(httpMessageHandler);
         ArgumentNullException.ThrowIfNull(option);
 
+        return InnerCreateApiClient(httpMessageHandler, option);
+    }
+
+    private static DataverseApiClient InnerCreateApiClient(
+        HttpMessageHandler httpMessageHandler, DataverseApiClientAuthOption option)
+    {
         var authenticationHandler = new AuthenticationHandler(httpMessageHandler, option);
         var dataverseHttpApi = new DataverseHttpApi(authenticationHandler, new(option.ServiceUrl, UriKind.Absolute), option.HttpTimeOut);
 
-        return new DataverseApiClient(dataverseHttpApi);
+        return new(dataverseHttpApi, GuidProvider.Instance);
     }
 }
