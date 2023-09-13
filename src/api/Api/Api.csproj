@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api</AssemblyName>
-    <Version>3.11.0</Version>
+    <Version>3.11.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
