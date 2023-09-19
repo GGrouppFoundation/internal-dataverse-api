@@ -12,11 +12,11 @@ partial class ApiClientTestDataSource
             new object?[]
             {
                 Guid.Parse("9fdea890-f164-47c1-bb51-d3865229fa9b"),
-                new DataverseEntityUpdateIn<StubRequestJson>(
+                new DataverseEntityUpdateIn<IStubRequestJson>(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new[] { "field1", "field2" },
-                    entityData: new()
+                    entityData: new StubRequestJson
                     {
                         Id = 101,
                         Name = "First request name"
@@ -40,11 +40,11 @@ partial class ApiClientTestDataSource
             new object?[]
             {
                 null,
-                new DataverseEntityUpdateIn<StubRequestJson>(
+                new DataverseEntityUpdateIn<IStubRequestJson>(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new[] { string.Empty, "field 1" },
-                    entityData: new())
+                    entityData: new StubRequestJson())
                 {
                     SuppressDuplicateDetection = false
                 },
@@ -59,11 +59,11 @@ partial class ApiClientTestDataSource
             new object?[]
             {
                 null,
-                new DataverseEntityUpdateIn<StubRequestJson>(
+                new DataverseEntityUpdateIn<IStubRequestJson>(
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some Key"),
                     selectFields: default,
-                    entityData: new())
+                    entityData: new StubRequestJson())
                 {
                     ExpandFields = new DataverseExpandedField[]
                     {

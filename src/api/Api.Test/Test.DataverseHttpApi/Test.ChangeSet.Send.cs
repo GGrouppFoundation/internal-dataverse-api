@@ -119,6 +119,78 @@ partial class DataverseHttpApiTest
     }
 
     [Theory]
+    [InlineData]
+    [InlineData("Some text")]
+    public static async Task SendChangeSetAsync_ResponseIsMultiPartFailureButContentDoesNotContainFailure_ExpectFailure(
+        params string[] successContents)
+    {
+        using var multipartContent = new MultipartContent("mixed", "batch_78132");
+        foreach (var successContent in successContents)
+        {
+            var successResponse = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent(successContent)
+            };
+
+            var content = new HttpMessageContent(successResponse);
+            multipartContent.Add(content);
+        }
+
+        using var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.BadRequest,
+            Content = new MultipartContent("mixed", "batch_78132")
+        };
+
+        var mockProxyHandler = CreateMockProxyHandler(response);
+
+        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
+        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+
+        var actual = await httpApi.SendChangeSetAsync(SomeChangeSetRequest, default);
+        var expected = Failure.Create(DataverseFailureCode.Unknown, "An unexpected Dataverse respose status: BadRequest");
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(HttpApiTestDataSource.FailureTestData), MemberType = typeof(HttpApiTestDataSource))]
+    public static async Task SendChangeSetAsync_ResponseIsMultiPartFailure_ExpectFailure(
+        HttpStatusCode statusCode, StringContent? responseContent, Failure<DataverseFailureCode> expected)
+    {
+        using var successResponse = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.OK,
+            Content = new StringContent("Some text")
+        };
+
+        using var failureResponse = new HttpResponseMessage
+        {
+            StatusCode = statusCode,
+            Content = responseContent
+        };
+
+        using var response = new HttpResponseMessage
+        {
+            StatusCode = HttpStatusCode.NotFound,
+            Content = new MultipartContent("mixed", "batch_12312")
+            {
+                new HttpMessageContent(successResponse),
+                new HttpMessageContent(failureResponse)
+            }
+        };
+
+        var mockProxyHandler = CreateMockProxyHandler(response);
+
+        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
+        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+
+        var actual = await httpApi.SendChangeSetAsync(SomeChangeSetRequest, CancellationToken.None);
+
+        Assert.Equal(expected, actual);
+    }
+
+    [Theory]
     [MemberData(nameof(HttpApiTestDataSource.FailureTestData), MemberType = typeof(HttpApiTestDataSource))]
     public static async Task SendChangeSetAsync_ResponseContainsFailure_ExpectFailure(
         HttpStatusCode statusCode, StringContent? responseContent, Failure<DataverseFailureCode> expected)
@@ -137,6 +209,7 @@ partial class DataverseHttpApiTest
 
         using var response = new HttpResponseMessage
         {
+            StatusCode = HttpStatusCode.OK,
             Content = new MultipartContent("mixed", "batch_12312")
             {
                 new HttpMessageContent(successResponse),

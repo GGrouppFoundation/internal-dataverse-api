@@ -1,6 +1,6 @@
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
-public sealed record class StubRequestJson
+internal sealed record class StubRequestJson : IStubRequestJson
 {
     public int Id { get; init; }
 

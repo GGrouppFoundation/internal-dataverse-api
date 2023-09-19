@@ -58,17 +58,22 @@ partial class DataverseHttpApi
     private static async ValueTask<Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>>> ReadChangeSetResponseAsync(
         HttpResponseMessage httpResponse, CancellationToken cancellationToken)
     {
-        if (httpResponse.IsSuccessStatusCode is false)
+        if (httpResponse.IsSuccessStatusCode is false && httpResponse.Content.IsMimeMultipartContent() is false)
         {
             return await ReadJsonFailureAsync(httpResponse, cancellationToken).ConfigureAwait(false);
         }
 
         var result = await ParseMultipartContentAsync(httpResponse.Content, cancellationToken).ConfigureAwait(false);
-        return result.MapSuccess(CreateChangeSetResponse);
+        return result.Forward(CreateChangeSetResponseOrFailure);
 
-        static DataverseChangeSetResponse CreateChangeSetResponse(FlatArray<DataverseJsonResponse> responses)
+        Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>> CreateChangeSetResponseOrFailure(
+            FlatArray<DataverseJsonResponse> responses)
             =>
-            new(responses);
+            httpResponse.IsSuccessStatusCode switch
+            {
+                true => Result.Success<DataverseChangeSetResponse>(new(responses)),
+                _ => Failure.Create(DataverseFailureCode.Unknown, GetStatusCodeFailureMessage(httpResponse.StatusCode))
+            };
     }
 
     private static async Task<Result<FlatArray<DataverseJsonResponse>, Failure<DataverseFailureCode>>> ParseMultipartContentAsync(

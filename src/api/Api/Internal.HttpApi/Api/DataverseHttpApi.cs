@@ -88,13 +88,17 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
                 return body;
             }
 
-            return $"Dataverse respose status was {statusCode}";
+            return GetStatusCodeFailureMessage(statusCode);
         }
 
         DataverseFailureCode GetFailureCode(string? code)
             =>
             ToDataverseFailureCode(statusCode, code);
     }
+
+    private static string GetStatusCodeFailureMessage(HttpStatusCode statusCode)
+        =>
+        $"An unexpected Dataverse respose status: {statusCode}";
 
     private static DataverseFailureCode ToDataverseFailureCode(HttpStatusCode statusCode, string? code)
     {
