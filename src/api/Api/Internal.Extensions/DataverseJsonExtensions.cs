@@ -12,9 +12,10 @@ internal static class DataverseJsonExtensions
     private static readonly JsonSerializerOptions SerializerOptions;
 
     internal static DataverseJsonContentIn SerializeOrThrow<T>(this T value)
-        where T : notnull
     {
-        var json = JsonSerializer.Serialize(value, SerializerOptions);
+        var type = value?.GetType() ?? typeof(T);
+        var json = JsonSerializer.Serialize(value, type, SerializerOptions);
+
         return new DataverseJsonContentIn(json.OrEmpty());
     }
 

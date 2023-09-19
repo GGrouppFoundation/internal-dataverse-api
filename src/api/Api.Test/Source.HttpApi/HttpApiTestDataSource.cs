@@ -32,5 +32,5 @@ internal static partial class HttpApiTestDataSource
 
     private static string GetDefaultFailureMessage(this HttpStatusCode statusCode)
         =>
-        $"Dataverse respose status was {statusCode}";
+        $"An unexpected Dataverse respose status: {statusCode}";
 }

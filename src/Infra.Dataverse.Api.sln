@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation", "api-im
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Impersonation.Test", "api-impersonation\Api.Impersonation.Test\Api.Impersonation.Test.csproj", "{F8D9D1C8-0220-4382-AC47-33F024DC988B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".settings", ".settings", "{FEEC3869-B9C3-4832-8102-1FE282901788}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{FEEC3869-B9C3-4832-8102-1FE282901788}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
