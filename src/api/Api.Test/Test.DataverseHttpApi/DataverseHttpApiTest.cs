@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Threading;
-using Moq;
+using System.Threading.Tasks;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
@@ -34,34 +33,14 @@ public static partial class DataverseHttpApiTest
                 new("second", "two")),
             requests: SomeJsonRequest.AsFlatArray());
 
-    private static Mock<IAsyncFunc<HttpRequestMessage, HttpResponseMessage>> CreateMockProxyHandler(
-        HttpResponseMessage responseMessage, Action<HttpRequestMessage>? callback = default)
+    private static async ValueTask<string?> ReadStringContentAsync(this HttpRequestMessage requestMessage)
     {
-        var mock = new Mock<IAsyncFunc<HttpRequestMessage, HttpResponseMessage>>();
-
-        var m = mock
-            .Setup(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(responseMessage);
-
-        if (callback is not null)
+        if (requestMessage.Content is null)
         {
-            _ = m.Callback<HttpRequestMessage, CancellationToken>(
-                (r, _) => callback.Invoke(r));
+            return null;
         }
 
-        return mock;
-    }
-
-    private static Mock<IAsyncFunc<HttpRequestMessage, HttpResponseMessage>> CreateMockProxyHandler(
-        Exception exception)
-    {
-        var mock = new Mock<IAsyncFunc<HttpRequestMessage, HttpResponseMessage>>();
-
-        _ = mock
-            .Setup(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(exception);
-
-        return mock;
+        return await requestMessage.Content.ReadAsStringAsync();
     }
 
     private static FlatArray<KeyValuePair<string, string>> ReadHeaderValues(HttpRequestMessage requestMessage)

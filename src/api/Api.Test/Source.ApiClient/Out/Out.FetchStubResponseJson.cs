@@ -24,7 +24,10 @@ partial class ApiClientTestDataSource
                     PagingCookie = xmlCookie
                 };
 
-                var expected = new DataverseFetchXmlOut<StubResponseJson>(value, cookie);
+                var expected = new DataverseFetchXmlOut<StubResponseJson>(value, cookie)
+                {
+                    MoreRecords = true
+                };
 
                 yield return new object?[] { success, expected };
             }
@@ -37,7 +40,10 @@ partial class ApiClientTestDataSource
                 PagingCookie = null
             };
 
-            var nullCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(nullCookieValue);
+            var nullCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(nullCookieValue)
+            {
+                MoreRecords = false
+            };
 
             yield return new object?[] { nullCookieSuccess, nullCookieExpected };
 
@@ -49,7 +55,10 @@ partial class ApiClientTestDataSource
                 PagingCookie = string.Empty
             };
 
-            var emptyCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(emptyCookieValue);
+            var emptyCookieExpected = new DataverseFetchXmlOut<StubResponseJson>(emptyCookieValue)
+            {
+                MoreRecords = false
+            };
 
             yield return new object?[] { emptyCookieSuccess, emptyCookieExpected };
         }
