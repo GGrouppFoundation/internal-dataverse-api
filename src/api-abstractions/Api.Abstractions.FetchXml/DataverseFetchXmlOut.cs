@@ -16,4 +16,6 @@ public sealed record class DataverseFetchXmlOut<TEntityJson>
     public FlatArray<TEntityJson> Value { get; }
 
     public string? PagingCookie { get; init; }
+
+    public bool MoreRecords { get; init; }
 }

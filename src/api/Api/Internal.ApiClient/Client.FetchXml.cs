@@ -44,10 +44,14 @@ internal sealed partial class DataverseApiClient
         static DataverseFetchXmlOut<TEntityJson> MapSuccess(DataverseJsonResponse response)
         {
             var content = response.Content.DeserializeOrThrow<DataverseFetchXmlOutJson<TEntityJson>>();
+
             var pagingCookie = content.PagingCookie;
+            var moreRecords = false;
 
             if (string.IsNullOrEmpty(pagingCookie) is false)
             {
+                moreRecords = true;
+
                 var xmlPagingCookie = new XmlDocument();
                 xmlPagingCookie.LoadXml(pagingCookie);
 
@@ -58,7 +62,10 @@ internal sealed partial class DataverseApiClient
                 pagingCookie = WebUtility.UrlEncode(htmlEncodedPagingCookie);
             }
 
-            return new(content.Value, pagingCookie);
+            return new(content.Value, pagingCookie)
+            {
+                MoreRecords = moreRecords
+            };
         }
 
         FlatArray<DataverseHttpHeader> GetHeaders()

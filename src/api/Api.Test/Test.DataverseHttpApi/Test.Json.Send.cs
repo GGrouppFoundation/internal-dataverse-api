@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
 using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
@@ -16,24 +15,23 @@ partial class DataverseHttpApiTest
         Uri dataverseUri, DataverseJsonRequest request, StubHttpRequestData expetedHttpRequestData)
     {
         using var response = new HttpResponseMessage();
-        var mockProxyHandler = CreateMockProxyHandler(response, Callback);
 
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var httpApi = new DataverseHttpApi(messageHandler, dataverseUri);
+        using var mockMessageHandler = new MockHttpMessageHandler(response, CallbackAsync);
+        var httpApi = new DataverseHttpApi(mockMessageHandler, dataverseUri);
 
         var cancellationToken = new CancellationToken(canceled: false);
         _ = await httpApi.SendJsonAsync(request, cancellationToken);
 
-        mockProxyHandler.Verify(p => p.InvokeAsync(It.IsAny<HttpRequestMessage>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockMessageHandler.Verify(1);
 
-        void Callback(HttpRequestMessage requestMessage)
+        async Task CallbackAsync(HttpRequestMessage requestMessage)
         {
             Assert.Equal(expetedHttpRequestData.Method, requestMessage.Method);
 
             var actualRequestUrl = requestMessage.RequestUri?.ToString();
             Assert.Equal(expetedHttpRequestData.RequestUrl, actualRequestUrl, ignoreCase: true);
 
-            var actualContent = requestMessage.Content?.ReadAsStringAsync().Result;
+            var actualContent = await requestMessage.ReadStringContentAsync();
             Assert.Equal(expetedHttpRequestData.Content, actualContent);
 
             var actualHeaderValues = ReadHeaderValues(requestMessage);
@@ -52,10 +50,8 @@ partial class DataverseHttpApiTest
             Content = responseContent
         };
 
-        var mockProxyHandler = CreateMockProxyHandler(response);
-
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+        using var mockMessageHandler = new MockHttpMessageHandler(response);
+        var httpApi = new DataverseHttpApi(mockMessageHandler, SomeDataverseBaseUri);
 
         var actual = await httpApi.SendJsonAsync(SomeJsonRequest, default);
         var expected = Failure.Create(DataverseFailureCode.Unauthorized, failureMessage);
@@ -74,10 +70,8 @@ partial class DataverseHttpApiTest
             Content = responseContent
         };
 
-        var mockProxyHandler = CreateMockProxyHandler(response);
-
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+        using var mockMessageHandler = new MockHttpMessageHandler(response);
+        var httpApi = new DataverseHttpApi(mockMessageHandler, SomeDataverseBaseUri);
 
         var actual = await httpApi.SendJsonAsync(SomeJsonRequest, CancellationToken.None);
 
@@ -95,10 +89,8 @@ partial class DataverseHttpApiTest
             Content = responseContent
         };
 
-        var mockProxyHandler = CreateMockProxyHandler(response);
-
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+        using var mockMessageHandler = new MockHttpMessageHandler(response);
+        var httpApi = new DataverseHttpApi(mockMessageHandler, SomeDataverseBaseUri);
 
         var actual = await httpApi.SendJsonAsync(SomeJsonRequest, CancellationToken.None);
         var expected = default(DataverseJsonResponse);
@@ -117,10 +109,8 @@ partial class DataverseHttpApiTest
             Content = responseContent
         };
 
-        var mockProxyHandler = CreateMockProxyHandler(response);
-
-        using var messageHandler = new StubHttpMessageHandler(mockProxyHandler.Object);
-        var httpApi = new DataverseHttpApi(messageHandler, SomeDataverseBaseUri);
+        using var mockMessageHandler = new MockHttpMessageHandler(response);
+        var httpApi = new DataverseHttpApi(mockMessageHandler, SomeDataverseBaseUri);
 
         var actual = await httpApi.SendJsonAsync(SomeJsonRequest, default);
         Assert.Equal(expected, actual);
