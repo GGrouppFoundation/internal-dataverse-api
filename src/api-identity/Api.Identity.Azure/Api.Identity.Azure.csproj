@@ -3,7 +3,7 @@
   <PropertyGroup>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api.Identity.Azure</AssemblyName>
-    <Version>0.0.1-build.4</Version>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
