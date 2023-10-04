@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,9 +10,9 @@ partial class AuthenticationHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var scopes = new[] { option.ServiceUrl + "/.default" };
-        var tokenResult = await GetClientApplication(option).AcquireTokenForClient(scopes).ExecuteAsync(cancellationToken).ConfigureAwait(false);
+        var token = await GetClientApplication(option).AcquireTokenForClient(scopes).ExecuteAsync(cancellationToken).ConfigureAwait(false);
 
-        request.Headers.TryAddWithoutValidation("Authorization", tokenResult.CreateAuthorizationHeader());
+        request.Headers.Authorization = AuthenticationHeaderValue.Parse(token.CreateAuthorizationHeader());
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
     }
 }

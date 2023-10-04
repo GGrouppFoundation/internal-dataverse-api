@@ -34,12 +34,15 @@ public static class DataverseApiClientConfigurationExtensions
 
     internal static DataverseApiClientOption InternalGetDataverseApiClientOption(
         this IConfiguration configuration, string sectionName)
-        =>
-        string.IsNullOrEmpty(configuration[AuthClientSecretKey]) switch
+    {
+        var section = configuration.GetSection(sectionName);
+
+        return string.IsNullOrEmpty(section[AuthClientSecretKey]) switch
         {
-            false => configuration.GetSection(sectionName).GetDataverseApiClientAuthOption(),
-            _ => configuration.GetSection(sectionName).GetDataverseApiClientOption()
+            false => section.GetDataverseApiClientAuthOption(),
+            _ => section.GetDataverseApiClientOption()
         };
+    }
 
     internal static DataverseApiClientAuthOption InternalGetDataverseApiClientAuthOption(
         this IConfiguration configuration, string sectionName)
