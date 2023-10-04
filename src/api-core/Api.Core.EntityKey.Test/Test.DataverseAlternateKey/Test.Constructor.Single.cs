@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace GarageGroup.Infra.Dataverse.Api.Core.EntityKey.Tests;
+namespace GarageGroup.Infra.Dataverse.Api.Core.EntityKey.Test;
 
 partial class DataverseAlternateKeyTest
 {

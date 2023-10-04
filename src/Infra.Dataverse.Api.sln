@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-core", "api-core", "{6F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey", "api-core\Api.Core.EntityKey\Api.Core.EntityKey.csproj", "{36B655B3-14FA-481F-AA41-77D5779F9BE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Tests", "api-core\Api.Core.EntityKey.Tests\Api.Core.EntityKey.Tests.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Test", "api-core\Api.Core.EntityKey.Test\Api.Core.EntityKey.Test.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.ExpandedField", "api-core\Api.Core.ExpandedField\Api.Core.ExpandedField.csproj", "{E5A29788-B68B-4450-8301-AB1AB0DBB5E4}"
 EndProject

@@ -3,13 +3,13 @@
   <PropertyGroup>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api.Abstractions.EntityDelete</AssemblyName>
-    <Version>3.3.0</Version>
+    <Version>3.3.1-build.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.EntityKey" Version="3.1.3" />
-    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.FailureCode" Version="2.2.0" />
-    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.Transaction" Version="1.0.0" />
+    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.EntityKey" Version="3.1.4-build.1" />
+    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.FailureCode" Version="2.2.1-build.1" />
+    <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Core.Transaction" Version="1.0.1-build.1" />
     <PackageReference Include="PrimeFuncPack.Core.Failure" Version="2.1.0" />
     <PackageReference Include="PrimeFuncPack.Core.Result" Version="2.0.2" />
   </ItemGroup>
