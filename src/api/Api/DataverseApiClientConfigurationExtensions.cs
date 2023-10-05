@@ -8,6 +8,16 @@ public static class DataverseApiClientConfigurationExtensions
 {
     internal const string DefaultSectionName = "Dataverse";
 
+    private const string ServiceUrlKey = "ServiceUrl";
+
+    private const string AuthTenantIdKey = "AuthTenantId";
+
+    private const string AuthClientIdKey = "AuthClientId";
+
+    private const string AuthClientSecretKey = "AuthClientSecret";
+
+    private const string HttpTimeOutKey = "HttpTimeOut";
+
     public static DataverseApiClientOption GetDataverseApiClientOption(
         this IConfiguration configuration, [AllowNull] string sectionName = DefaultSectionName)
     {
@@ -24,8 +34,15 @@ public static class DataverseApiClientConfigurationExtensions
 
     internal static DataverseApiClientOption InternalGetDataverseApiClientOption(
         this IConfiguration configuration, string sectionName)
-        =>
-        configuration.GetSection(sectionName).GetDataverseApiClientOption();
+    {
+        var section = configuration.GetSection(sectionName);
+
+        return string.IsNullOrEmpty(section[AuthClientSecretKey]) switch
+        {
+            false => section.GetDataverseApiClientAuthOption(),
+            _ => section.GetDataverseApiClientOption()
+        };
+    }
 
     internal static DataverseApiClientAuthOption InternalGetDataverseApiClientAuthOption(
         this IConfiguration configuration, string sectionName)
@@ -35,17 +52,17 @@ public static class DataverseApiClientConfigurationExtensions
     private static DataverseApiClientOption GetDataverseApiClientOption(this IConfigurationSection section)
         =>
         new(
-            serviceUrl: section["ServiceUrl"].OrEmpty(),
-            httpTimeOut:  GetTimeSpanOrDefault(section, "HttpTimeOut"));
+            serviceUrl: section[ServiceUrlKey].OrEmpty(),
+            httpTimeOut:  GetTimeSpanOrDefault(section, HttpTimeOutKey));
 
     private static DataverseApiClientAuthOption GetDataverseApiClientAuthOption(this IConfigurationSection section)
         =>
         new(
-            serviceUrl: section["ServiceUrl"].OrEmpty(),
-            authTenantId: section.GetGuid("AuthTenantId"),
-            authClientId: section["AuthClientId"].OrEmpty(),
-            authClientSecret: section["AuthClientSecret"].OrEmpty(),
-            httpTimeOut: GetTimeSpanOrDefault(section, "HttpTimeOut"));
+            serviceUrl: section[ServiceUrlKey].OrEmpty(),
+            authTenantId: section.GetGuid(AuthTenantIdKey),
+            authClientId: section[AuthClientIdKey].OrEmpty(),
+            authClientSecret: section[AuthClientSecretKey].OrEmpty(),
+            httpTimeOut: GetTimeSpanOrDefault(section, HttpTimeOutKey));
 
     private static Guid GetGuid(this IConfiguration configuration, string key)
     {

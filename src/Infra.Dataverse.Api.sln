@@ -33,7 +33,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-core", "api-core", "{6F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey", "api-core\Api.Core.EntityKey\Api.Core.EntityKey.csproj", "{36B655B3-14FA-481F-AA41-77D5779F9BE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Tests", "api-core\Api.Core.EntityKey.Tests\Api.Core.EntityKey.Tests.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.EntityKey.Test", "api-core\Api.Core.EntityKey.Test\Api.Core.EntityKey.Test.csproj", "{380BBF61-AA27-44E9-BDFC-FA544CE1C59F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.ExpandedField", "api-core\Api.Core.ExpandedField\Api.Core.ExpandedField.csproj", "{E5A29788-B68B-4450-8301-AB1AB0DBB5E4}"
 EndProject
@@ -58,6 +58,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Core.Transaction", "api-core\Api.Core.Transaction\Api.Core.Transaction.csproj", "{035E41F8-1EE6-46E9-9EBE-289E9003DA00}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.ChangeSetExecute", "api-abstractions\Api.Abstractions.ChangeSetExecute\Api.Abstractions.ChangeSetExecute.csproj", "{9CE871C0-00DD-46F7-A5D7-481E80131A25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "api-identity", "api-identity", "{A8EFFC2A-3ACA-469A-989E-735EBF4077BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Identity.Azure", "api-identity\Api.Identity.Azure\Api.Identity.Azure.csproj", "{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +153,10 @@ Global
 		{9CE871C0-00DD-46F7-A5D7-481E80131A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CE871C0-00DD-46F7-A5D7-481E80131A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CE871C0-00DD-46F7-A5D7-481E80131A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,5 +183,6 @@ Global
 		{E04EB511-0DBE-428D-ABD4-84A994ACC15F} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
 		{035E41F8-1EE6-46E9-9EBE-289E9003DA00} = {6FDF12B8-636E-4707-A8A9-E418BDB1EC28}
 		{9CE871C0-00DD-46F7-A5D7-481E80131A25} = {228C2466-F9EC-4C0F-A39F-2E41571C0209}
+		{E6B5E8C4-8F8E-43B3-A172-66F2A515CEA9} = {A8EFFC2A-3ACA-469A-989E-735EBF4077BE}
 	EndGlobalSection
 EndGlobal

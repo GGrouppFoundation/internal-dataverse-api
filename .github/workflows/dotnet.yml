@@ -15,7 +15,10 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: |
+            6.0.x
+            7.0.x
+            8.0.x
 
     # Add NuGet Sources
 
@@ -27,7 +30,7 @@ jobs:
 
     - name: Add Garage Group NuGet Source
       run: >
-        dotnet nuget add source ${{ secrets.GG_NUGET_SOURCE_URL }}
+        dotnet nuget add source ${{ vars.GG_NUGET_SOURCE_URL }}
         -n garage
         -u ${{ secrets.GG_NUGET_SOURCE_USER_NAME }}
         -p ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
@@ -55,13 +58,13 @@ jobs:
     - name: Pack Api.Core.EntityKey
       run: dotnet pack ./src/*/*/Api.Core.EntityKey.csproj --no-restore -o ~/nuget  -c Release
 
-    # Api.Core.EntityKey.Tests
+    # Api.Core.EntityKey.Test
 
-    - name: Restore Api.Core.EntityKey.Tests
-      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Tests.csproj
+    - name: Restore Api.Core.EntityKey.Test
+      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Test.csproj
 
-    - name: Test Api.Core.EntityKey.Tests
-      run: dotnet test ./src/*/*/Api.Core.EntityKey.Tests.csproj --no-restore  -c Release
+    - name: Test Api.Core.EntityKey.Test
+      run: dotnet test ./src/*/*/Api.Core.EntityKey.Test.csproj --no-restore  -c Release
 
     # Api.Core.ExpandedField
 
@@ -255,12 +258,23 @@ jobs:
     - name: Test Api.Impersonation.Test
       run: dotnet test ./src/*/*/Api.Impersonation.Test.csproj --no-restore -o ~/nuget  -c Release
 
+    # Api.Identity.Azure
+
+    - name: Restore Api.Identity.Azure
+      run: dotnet restore ./src/*/*/Api.Identity.Azure.csproj
+
+    - name: Build Api.Identity.Azure
+      run: dotnet build ./src/*/*/Api.Identity.Azure.csproj --no-restore  -c Release
+
+    - name: Pack Api.Identity.Azure
+      run: dotnet pack ./src/*/*/Api.Identity.Azure.csproj --no-restore -o ~/nuget  -c Release
+
     # Push
 
     - name: Push Packages
       if: ${{ github.ref == 'refs/heads/main' }}
       run: >
         dotnet nuget push "../../../nuget/*.nupkg"
-        -s ${{ secrets.GG_NUGET_SOURCE_URL }}
+        -s ${{ vars.GG_NUGET_SOURCE_URL }}
         -k ${{ secrets.GG_NUGET_SOURCE_USER_PASSWORD }}
         --skip-duplicate
