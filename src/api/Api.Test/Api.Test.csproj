@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Api\Api.csproj" />
+    <PackageReference Include="GarageGroup.Infra.Dataverse.Api" Version="*-*" />
   </ItemGroup>
 
   <ItemGroup>
