@@ -1,39 +1,34 @@
 using System;
 using System.Net.Http;
 using Azure.Core;
-using Azure.Identity;
 
 namespace GarageGroup.Infra;
 
-internal sealed partial class StandardAzureCredentialHandler : DelegatingHandler
+internal sealed partial class AzureCredentialHandler : DelegatingHandler
 {
-    static StandardAzureCredentialHandler()
-    {
-        LazyCredential = new(CreateCredential);
-
-        static TokenCredential CreateCredential()
-            =>
-            new ChainedTokenCredential(
-                new AzureCliCredential(),
-                new ManagedIdentityCredential(),
-                new DefaultAzureCredential());
-    }
-
-    private static readonly Lazy<TokenCredential> LazyCredential;
-
     private const string ScopeRelativeUri = "/.default";
 
     private const string AuthorizationScheme = "Bearer";
 
-    internal StandardAzureCredentialHandler(HttpMessageHandler innerHandler) : base(innerHandler)
-    {
-    }
+    private readonly TokenCredential tokenCredential;
+
+    internal AzureCredentialHandler(HttpMessageHandler innerHandler, TokenCredential tokenCredential) : base(innerHandler)
+        =>
+        this.tokenCredential = tokenCredential;
 
     private static TokenRequestContext CreateRequestContext(Uri requestUri)
         =>
+#if NET8_0_OR_GREATER
+        new(
+            scopes:
+            [
+                new Uri(requestUri, ScopeRelativeUri).ToString()
+            ]);
+#else
         new(
             scopes: new[]
             {
                 new Uri(requestUri, ScopeRelativeUri).ToString()
             });
+#endif
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GarageGroup.Infra;
 
-partial class StandardAzureCredentialHandler
+partial class AzureCredentialHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
@@ -18,7 +18,7 @@ partial class StandardAzureCredentialHandler
 
         var context = CreateRequestContext(request.RequestUri);
 
-        var token = await LazyCredential.Value.GetTokenAsync(context, cancellationToken).ConfigureAwait(false);
+        var token = await tokenCredential.GetTokenAsync(context, cancellationToken).ConfigureAwait(false);
         request.Headers.Authorization = new(AuthorizationScheme, token.Token);
 
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
