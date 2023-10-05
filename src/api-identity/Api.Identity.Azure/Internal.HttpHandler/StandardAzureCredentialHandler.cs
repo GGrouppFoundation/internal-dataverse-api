@@ -5,15 +5,18 @@ using Azure.Identity;
 
 namespace GarageGroup.Infra;
 
-internal sealed partial class DefaultAzureCredentialHandler : DelegatingHandler
+internal sealed partial class StandardAzureCredentialHandler : DelegatingHandler
 {
-    static DefaultAzureCredentialHandler()
+    static StandardAzureCredentialHandler()
     {
         LazyCredential = new(CreateCredential);
 
         static TokenCredential CreateCredential()
             =>
-            new DefaultAzureCredential();
+            new ChainedTokenCredential(
+                new AzureCliCredential(),
+                new ManagedIdentityCredential(),
+                new DefaultAzureCredential());
     }
 
     private static readonly Lazy<TokenCredential> LazyCredential;
@@ -22,7 +25,7 @@ internal sealed partial class DefaultAzureCredentialHandler : DelegatingHandler
 
     private const string AuthorizationScheme = "Bearer";
 
-    internal DefaultAzureCredentialHandler(HttpMessageHandler innerHandler) : base(innerHandler)
+    internal StandardAzureCredentialHandler(HttpMessageHandler innerHandler) : base(innerHandler)
     {
     }
 

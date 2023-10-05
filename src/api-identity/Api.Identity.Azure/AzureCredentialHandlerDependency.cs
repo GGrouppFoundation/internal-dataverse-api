@@ -4,15 +4,15 @@ using PrimeFuncPack;
 
 namespace GarageGroup.Infra;
 
-public static class DefaultAzureCredentialHandlerDependency
+public static class AzureCredentialHandlerDependency
 {
-    public static Dependency<HttpMessageHandler> UseDataverseDefaultAzureCredential(
+    public static Dependency<HttpMessageHandler> UseDataverseAzureCredentialStandard(
         this Dependency<HttpMessageHandler> dependency)
     {
         ArgumentNullException.ThrowIfNull(dependency);
         return dependency.Map<HttpMessageHandler>(CreateHandler);
 
-        static DefaultAzureCredentialHandler CreateHandler(HttpMessageHandler innerHandler)
+        static StandardAzureCredentialHandler CreateHandler(HttpMessageHandler innerHandler)
         {
             ArgumentNullException.ThrowIfNull(innerHandler);
             return new(innerHandler);

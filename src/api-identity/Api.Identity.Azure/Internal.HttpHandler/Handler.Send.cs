@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GarageGroup.Infra;
 
-partial class DefaultAzureCredentialHandler
+partial class StandardAzureCredentialHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
