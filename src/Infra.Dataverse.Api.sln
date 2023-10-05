@@ -49,6 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".sln", ".sln", "{FEEC3869-B
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Abstractions.EmailSend", "api-abstractions\Api.Abstractions.EmailSend\Api.Abstractions.EmailSend.csproj", "{68E6B859-4124-4419-AFA0-1EB73B149F0B}"
