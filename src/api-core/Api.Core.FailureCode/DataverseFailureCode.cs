@@ -18,5 +18,7 @@ public enum DataverseFailureCode
 
     SearchableEntityNotFound,
 
-    DuplicateRecord
+    DuplicateRecord,
+
+    InvalidPayload
 }
