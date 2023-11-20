@@ -233,11 +233,8 @@ jobs:
 
     # Api.Test
 
-    - name: Restore Api.Test
-      run: dotnet restore ./src/*/*/Api.Test.csproj
-
     - name: Test Api.Test
-      run: dotnet test ./src/*/*/Api.Test.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet test ./src/*/*/Api.Test.csproj -o ~/nuget  -c Release
 
     # Api.Impersonation
 
