@@ -60,11 +60,8 @@ jobs:
 
     # Api.Core.EntityKey.Test
 
-    - name: Restore Api.Core.EntityKey.Test
-      run: dotnet restore ./src/*/*/Api.Core.EntityKey.Test.csproj
-
     - name: Test Api.Core.EntityKey.Test
-      run: dotnet test ./src/*/*/Api.Core.EntityKey.Test.csproj --no-restore  -c Release
+      run: dotnet test ./src/*/*/Api.Core.EntityKey.Test.csproj -c Release
 
     # Api.Core.ExpandedField
 
@@ -249,11 +246,8 @@ jobs:
 
     # Api.Impersonation.Test
 
-    - name: Restore Api.Impersonation.Test
-      run: dotnet restore ./src/*/*/Api.Impersonation.Test.csproj
-
     - name: Test Api.Impersonation.Test
-      run: dotnet test ./src/*/*/Api.Impersonation.Test.csproj --no-restore -o ~/nuget  -c Release
+      run: dotnet test ./src/*/*/Api.Impersonation.Test.csproj -o ~/nuget  -c Release
 
     # Api.Identity.Azure
 
