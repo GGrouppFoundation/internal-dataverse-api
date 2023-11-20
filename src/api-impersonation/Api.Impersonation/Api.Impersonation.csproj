@@ -4,7 +4,7 @@
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api.Impersonation</AssemblyName>
-    <Version>2.1.1</Version>
+    <Version>2.1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

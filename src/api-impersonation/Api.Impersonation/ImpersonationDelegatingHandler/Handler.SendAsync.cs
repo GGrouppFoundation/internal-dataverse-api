@@ -22,7 +22,7 @@ partial class ImpersonationDelegatingHandler
 
     private async Task<HttpResponseMessage> InnerSendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        if(request.Headers.Contains(CallerIdHeaderName))
+        if (request.Headers.Contains(CallerIdHeaderName))
         {
             request.Headers.Remove(CallerIdHeaderName);
         }

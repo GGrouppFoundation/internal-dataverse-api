@@ -278,6 +278,38 @@ partial class HttpApiTestDataSource
                 Failure.Create(DataverseFailureCode.DuplicateRecord, duplicateRecordEntityKeyFailure.Error.Description)
             };
 
+            var clientPayloadFailure = new StubFailureJson
+            {
+                Failure = new()
+                {
+                    Code = "0x80048d19",
+                    Message = "Error identified in Payload provided by the user for Entity :''"
+                }
+            };
+
+            yield return new object?[]
+            {
+                HttpStatusCode.BadRequest,
+                clientPayloadFailure.ToJsonContent(),
+                Failure.Create(DataverseFailureCode.InvalidPayload, "Error identified in Payload provided by the user for Entity :''")
+            };
+
+            var invalidArgumentFailure = new StubFailureJson
+            {
+                Failure = new()
+                {
+                    Code = "0x80040203",
+                    Message = "Invalid argument."
+                }
+            };
+
+            yield return new object?[]
+            {
+                HttpStatusCode.BadRequest,
+                invalidArgumentFailure.ToJsonContent(),
+                Failure.Create(DataverseFailureCode.InvalidPayload, "Invalid argument.")
+            };
+
             var unknownFailure = new StubFailureJson
             {
                 Failure = new()

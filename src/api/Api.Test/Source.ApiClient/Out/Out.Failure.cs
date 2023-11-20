@@ -44,6 +44,10 @@ partial class ApiClientTestDataSource
             new object?[]
             {
                 Failure.Create(DataverseFailureCode.SearchableEntityNotFound, "Some failure")
+            },
+            new object?[]
+            {
+                Failure.Create(DataverseFailureCode.InvalidPayload, "Some invalid data")
             }
         };
 }
