@@ -249,17 +249,6 @@ jobs:
     - name: Test Api.Impersonation.Test
       run: dotnet test ./src/*/*/Api.Impersonation.Test.csproj -o ~/nuget  -c Release
 
-    # Api.Identity.Azure
-
-    - name: Restore Api.Identity.Azure
-      run: dotnet restore ./src/*/*/Api.Identity.Azure.csproj
-
-    - name: Build Api.Identity.Azure
-      run: dotnet build ./src/*/*/Api.Identity.Azure.csproj --no-restore  -c Release
-
-    - name: Pack Api.Identity.Azure
-      run: dotnet pack ./src/*/*/Api.Identity.Azure.csproj --no-restore -o ~/nuget  -c Release
-
     # Push
 
     - name: Push Packages
