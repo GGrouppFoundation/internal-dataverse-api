@@ -4,11 +4,11 @@
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api.Impersonation</AssemblyName>
-    <Version>2.2.0</Version>
+    <Version>2.2.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PrimeFuncPack.Core.Func.Abstractions.AsyncValue" Version="2.0.0" />
+    <PackageReference Include="PrimeFuncPack.Core.Func.Abstractions.AsyncValue" Version="2.0.1" />
     <PackageReference Include="PrimeFuncPack.Dependency.Core" Version="2.1.0" />
   </ItemGroup>
 

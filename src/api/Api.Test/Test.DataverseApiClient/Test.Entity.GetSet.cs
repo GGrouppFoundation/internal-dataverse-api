@@ -86,7 +86,7 @@ partial class DataverseApiClientTest
     }
 
     [Theory]
-    [MemberData(nameof(ApiClientTestDataSource.StubResponseJsonSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
+    [MemberData(nameof(ApiClientTestDataSource.StubResponseSetOutputTestData), MemberType = typeof(ApiClientTestDataSource))]
     internal static async Task GetEntitySetAsync_ResponseIsSuccess_ExpectSuccess(
         DataverseEntitySetJsonGetOut<StubResponseJson> success, DataverseEntitySetGetOut<StubResponseJson> expected)
     {

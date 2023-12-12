@@ -1,22 +1,20 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> SearchOutputTestData
+    public static TheoryData<DataverseSearchJsonOut, DataverseSearchOut> SearchOutputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
-                new DataverseSearchJsonOut(),
-                new DataverseSearchOut(default, default)
+                new(),
+                new(default, default)
             },
-            new object?[]
             {
-                new DataverseSearchJsonOut
+                new()
                 {
                     TotalRecordCount = 11,
                     Value = new(
@@ -32,7 +30,7 @@ partial class ApiClientTestDataSource
                             ObjectId = Guid.Parse("38927590-1799-4ded-b922-a2cf38033c38")
                         })
                 },
-                new DataverseSearchOut(
+                new(
                     totalRecordCount: 11,
                     value: new(
                         new(

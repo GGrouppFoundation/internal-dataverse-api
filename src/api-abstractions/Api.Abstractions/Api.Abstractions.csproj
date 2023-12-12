@@ -4,7 +4,7 @@
     <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <RootNamespace>GarageGroup.Infra</RootNamespace>
     <AssemblyName>GarageGroup.Infra.Dataverse.Api.Abstractions</AssemblyName>
-    <Version>3.12.0</Version>
+    <Version>3.13.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +19,7 @@
     <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Abstractions.Impersonate" Version="2.1.1" />
     <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Abstractions.Search" Version="3.9.0" />
     <PackageReference Include="GarageGroup.Infra.Dataverse.Api.Abstractions.WhoAmI" Version="1.4.0" />
+    <PackageReference Include="GarageGroup.Infra.HealthCheck.Api.Contract.Ping" Version="0.0.1" />
   </ItemGroup>
 
 </Project>

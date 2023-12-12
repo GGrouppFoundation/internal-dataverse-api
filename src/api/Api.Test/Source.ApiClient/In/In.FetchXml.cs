@@ -1,14 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using AutoFixture;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> FetchXmlInputTestData
+    public static TheoryData<DataverseFetchXmlIn, DataverseJsonRequest> FetchXmlInputTestData
     {
         get
         {
@@ -19,23 +19,25 @@ partial class ApiClientTestDataSource
             };
 
             var inputs = fixture.CreateMany<DataverseFetchXmlIn>(50).Append(annotationNullInput).ToArray();
-            var outputs = inputs.Select(Map);
 
-            return inputs.Zip(outputs, static (i, o) => new object[] { i, o });
+            var data = new TheoryData<DataverseFetchXmlIn, DataverseJsonRequest>();
 
-            static DataverseJsonRequest Map(DataverseFetchXmlIn input)
-                =>
-                new(
-                    verb: DataverseHttpVerb.Get,
-                    url: $"/api/data/v9.2/{WebUtility.UrlEncode(input.EntityPluralName)}?fetchXml={input.FetchXmlQueryString}",
-                    headers: MapHeaders(input),
-                    content: default);
+            foreach (var input in inputs)
+            {
+                data.Add(
+                    input,
+                    new(
+                        verb: DataverseHttpVerb.Get,
+                        url: $"/api/data/v9.2/{WebUtility.UrlEncode(input.EntityPluralName)}?fetchXml={input.FetchXmlQueryString}",
+                        headers: input.IncludeAnnotations switch
+                        {
+                            not null => new DataverseHttpHeader("Prefer", $"odata.include-annotations={input.IncludeAnnotations}").AsFlatArray(),
+                            _ => default
+                        },
+                        content: default));
+            }
 
-            static FlatArray<DataverseHttpHeader> MapHeaders(DataverseFetchXmlIn input)
-                =>
-                input.IncludeAnnotations is not null ?
-                new(item: new("Prefer", $"odata.include-annotations={input.IncludeAnnotations}")) :
-                default;
+            return data;
         }
     }
 }

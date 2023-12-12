@@ -1,34 +1,32 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityDeleteInputTestData
+    public static TheoryData<Guid?, DataverseEntityDeleteIn, DataverseJsonRequest> EntityDeleteInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 Guid.Parse("91526fc6-1491-4ee9-8b7a-a4ed536de862"),
-                new DataverseEntityDeleteIn(
+                new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey")),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Delete,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)",
                     headers: new(
                         CreateCallerIdHeader("91526fc6-1491-4ee9-8b7a-a4ed536de862")),
                     content: default)
             },
-            new object?[]
             {
                 null,
-                new DataverseEntityDeleteIn(
+                new(
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some=Key")),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Delete,
                     url: "/api/data/v9.2/Some%2fEntities(Some=Key)",
                     headers: default,

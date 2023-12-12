@@ -1,21 +1,19 @@
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> StubResponseJsonSetOutputTestData
+    public static TheoryData<DataverseEntitySetJsonGetOut<StubResponseJson>, DataverseEntitySetGetOut<StubResponseJson>> StubResponseSetOutputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
-                new DataverseEntitySetJsonGetOut<StubResponseJson>(),
-                new DataverseEntitySetGetOut<StubResponseJson>(default)
+                new(),
+                new(default)
             },
-            new object?[]
             {
-                new DataverseEntitySetJsonGetOut<StubResponseJson>
+                new()
                 {
                     Value = new StubResponseJson[]
                     {
@@ -31,7 +29,7 @@ partial class ApiClientTestDataSource
                         }
                     }
                 },
-                new DataverseEntitySetGetOut<StubResponseJson>(
+                new(
                     value: new(
                     new StubResponseJson
                     {
@@ -44,19 +42,17 @@ partial class ApiClientTestDataSource
                         Name = "Some second"
                     }))
             },
-            new object?[]
             {
-                new DataverseEntitySetJsonGetOut<StubResponseJson>
+                new()
                 {
                     NextLink = "Some Link"
                 },
-                new DataverseEntitySetGetOut<StubResponseJson>(
+                new(
                     value: default,
                     nextLink: "Some Link")
             },
-            new object?[]
             {
-                new DataverseEntitySetJsonGetOut<StubResponseJson>
+                new()
                 {
                     Value = new StubResponseJson[]
                     {
@@ -78,7 +74,7 @@ partial class ApiClientTestDataSource
                     },
                     NextLink = "Some Link"
                 },
-                new DataverseEntitySetGetOut<StubResponseJson>(
+                new(
                     value: new(
                         new()
                         {
