@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> WhoAmIInputTestData
+    public static TheoryData<Guid?, DataverseJsonRequest> WhoAmIInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 null,
                 new DataverseJsonRequest(
@@ -18,7 +17,6 @@ partial class ApiClientTestDataSource
                     headers: default,
                     content: default)
             },
-            new object?[]
             {
                 Guid.Parse("68731777-a43a-454c-bd93-7680a887e6eb"),
                 new DataverseJsonRequest(

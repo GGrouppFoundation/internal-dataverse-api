@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> ChangeSetExecuteInputTestData
+    public static TheoryData<Guid?, Guid, Guid, DataverseChangeSetExecuteIn<object>, DataverseChangeSetRequest> ChangeSetExecuteInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 Guid.Parse("947700e6-39fd-411a-a6f8-a39300416985"),
                 Guid.Parse("894354d2-9669-4b19-9998-ae704c68f2b9"),
                 Guid.Parse("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
-                new DataverseChangeSetExecuteIn<object>(
+                new(
                     requests: new IDataverseTransactableIn<object>[]
                     {
                         new DataverseEntityUpdateIn<StubRequestJson>(
@@ -29,7 +28,7 @@ partial class ApiClientTestDataSource
                             SuppressDuplicateDetection = true
                         }
                     }),
-                new DataverseChangeSetRequest(
+                new(
                     url: "/api/data/v9.2/$batch",
                     batchId: Guid.Parse("894354d2-9669-4b19-9998-ae704c68f2b9"),
                     changeSetId: Guid.Parse("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
@@ -49,12 +48,11 @@ partial class ApiClientTestDataSource
                             }.InnerToJsonContentIn())
                     })
             },
-            new object?[]
             {
                 null,
                 Guid.Parse("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
                 Guid.Parse("97a5109b-347b-4ea7-bd3a-790cfed94268"),
-                new DataverseChangeSetExecuteIn<object>(
+                new(
                     requests: new IDataverseTransactableIn<object>[]
                     {
                         new DataverseEntityDeleteIn(
@@ -68,7 +66,7 @@ partial class ApiClientTestDataSource
                                 Name = "First request name"
                             })
                     }),
-                new DataverseChangeSetRequest(
+                new(
                     url: "/api/data/v9.2/$batch",
                     batchId: Guid.Parse("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
                     changeSetId: Guid.Parse("97a5109b-347b-4ea7-bd3a-790cfed94268"),

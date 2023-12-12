@@ -1,15 +1,17 @@
 using System;
-using System.Collections.Generic;
 using AutoFixture;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> FetchStubResponseJsonTestData
+    public static TheoryData<DataverseFetchXmlOutJson<StubResponseJson>, DataverseFetchXmlOut<StubResponseJson>> FetchStubResponseJsonTestData
     {
         get
         {
+            var data = new TheoryData<DataverseFetchXmlOutJson<StubResponseJson>, DataverseFetchXmlOut<StubResponseJson>>();
+
             var fixture = new Fixture();
             var rnd = new Random(DateTime.UnixEpoch.Millisecond);
 
@@ -29,7 +31,7 @@ partial class ApiClientTestDataSource
                     MoreRecords = true
                 };
 
-                yield return new object?[] { success, expected };
+                data.Add(success, expected);
             }
 
             var nullCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
@@ -45,7 +47,7 @@ partial class ApiClientTestDataSource
                 MoreRecords = false
             };
 
-            yield return new object?[] { nullCookieSuccess, nullCookieExpected };
+            data.Add(nullCookieSuccess, nullCookieExpected);
 
             var emptyCookieValue = fixture.CreateMany<StubResponseJson>(rnd.Next(1, 15)).ToFlatArray();
 
@@ -60,7 +62,8 @@ partial class ApiClientTestDataSource
                 MoreRecords = false
             };
 
-            yield return new object?[] { emptyCookieSuccess, emptyCookieExpected };
+            data.Add(emptyCookieSuccess, emptyCookieExpected);
+            return data;
         }
     }
 }

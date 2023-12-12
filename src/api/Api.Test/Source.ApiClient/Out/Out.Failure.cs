@@ -1,51 +1,41 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> FailureOutputTestData
+    public static TheoryData<Failure<DataverseFailureCode>> FailureOutputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.Unknown, string.Empty)
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.Unknown, "Some text")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.Unauthorized, "Some unauthorized failure")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.RecordNotFound, "Some Failure Message")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.PicklistValueOutOfRange, "Error message")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.UserNotEnabled, "User was not found")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.PrivilegeDenied, "Some failure")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.Throttling, "Some Throttling Failure")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.SearchableEntityNotFound, "Some failure")
             },
-            new object?[]
             {
                 Failure.Create(DataverseFailureCode.InvalidPayload, "Some invalid data")
             }

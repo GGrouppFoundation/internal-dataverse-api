@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> ChangeSetExecuteWithTOutInputTestData
+    public static TheoryData<Guid?, Guid, Guid, DataverseChangeSetExecuteIn<object>, DataverseChangeSetRequest> ChangeSetExecuteWithTOutInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 null,
                 Guid.Parse("ce1a0575-e83e-4b5f-865a-8d501df4e40c"),
                 Guid.Parse("d7762c7e-7774-4771-a5dc-64578840a210"),
-                new DataverseChangeSetExecuteIn<object>(
+                new(
                     requests: new IDataverseTransactableIn<object>[]
                     {
                         new DataverseEntityCreateIn<StubRequestJson>(
@@ -36,7 +35,7 @@ partial class ApiClientTestDataSource
                             SuppressDuplicateDetection = false
                         }
                     }),
-                new DataverseChangeSetRequest(
+                new(
                     url: "/api/data/v9.2/$batch",
                     batchId: Guid.Parse("ce1a0575-e83e-4b5f-865a-8d501df4e40c"),
                     changeSetId: Guid.Parse("d7762c7e-7774-4771-a5dc-64578840a210"),
@@ -53,12 +52,11 @@ partial class ApiClientTestDataSource
                         content: new StubRequestJson().InnerToJsonContentIn())
                     })
             },
-            new object?[]
             {
                 Guid.Parse("e97607f1-8716-4efc-947c-c631d81be853"),
                 Guid.Parse("1f23da9e-be1b-4967-9aff-f0723876d275"),
                 Guid.Parse("f2882787-a456-4ff5-bb13-87fdb377849f"),
-                new DataverseChangeSetExecuteIn<object>(
+                new(
                     requests: new IDataverseTransactableIn<object>[]
                     {
                         new DataverseEntityUpdateIn<StubRequestJson>(
@@ -76,7 +74,7 @@ partial class ApiClientTestDataSource
                             entityPluralName: "SomeEntities",
                             entityKey: new StubEntityKey("SomeKey"))
                     }),
-                new DataverseChangeSetRequest(
+                new(
                     url: "/api/data/v9.2/$batch",
                     batchId: Guid.Parse("1f23da9e-be1b-4967-9aff-f0723876d275"),
                     changeSetId: Guid.Parse("f2882787-a456-4ff5-bb13-87fdb377849f"),

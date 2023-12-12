@@ -4,25 +4,27 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text.Json;
 using AutoFixture;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EmailSendInputTestData
+    public static TheoryData<DataverseEmailSendIn, DataverseJsonRequest?, DataverseJsonRequest, DataverseEmailCreateJsonOut?> EmailSendInputTestData
     {
         get
         {
             var fixture = new Fixture();
+            var data = new TheoryData<DataverseEmailSendIn, DataverseJsonRequest?, DataverseJsonRequest, DataverseEmailCreateJsonOut?>();
+
             for (int i = 0; i < 5; i++)
             {
                 var emailId = fixture.Create<Guid>();
 
-                yield return new object?[]
-                {
-                    new DataverseEmailSendIn(emailId),
+                data.Add(
+                    new(emailId),
                     null,
-                    new DataverseJsonRequest(
+                    new(
                         verb: DataverseHttpVerb.Post,
                         url: $"/api/data/v9.2/emails({emailId:D})/Microsoft.Dynamics.CRM.SendEmail",
                         headers: FlatArray<DataverseHttpHeader>.Empty,
@@ -30,8 +32,7 @@ partial class ApiClientTestDataSource
                         {
                             IssueSend = true
                         }.InnerToJsonContentIn()),
-                    null
-                };
+                    null);
             }
 
             for (int i = 0; i < 20; i++)
@@ -40,19 +41,21 @@ partial class ApiClientTestDataSource
                 var emails = fixture.CreateMany<MailAddress>(3).Select(m => m.Address).ToArray();
                 var memberIds = fixture.CreateMany<Guid>(3).ToArray();
                 var emailGuid = fixture.Create<Guid>();
-                yield return new object[]
-                {
-                    new DataverseEmailSendIn(
+
+                data.Add(
+                    new(
                         subject: emailMessage.Subject,
                         body: emailMessage.Body,
                         sender: new(emails[0]),
-                        recipients: new FlatArray<DataverseEmailRecipient>(
+                        recipients: new DataverseEmailRecipient[]
+                        {
                             new(emails[1], DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[0], DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[1], DataverseEmailMemberType.Contact), DataverseEmailRecipientType.CcRecipient),
                             new(emailMember: new(memberIds[2], DataverseEmailMemberType.SystemUser), DataverseEmailRecipientType.BccRecipient),
-                            new(emails[2], DataverseEmailRecipientType.ToRecipient))),
-                    new DataverseJsonRequest(
+                            new(emails[2], DataverseEmailRecipientType.ToRecipient)
+                        }),
+                    new(
                         verb: DataverseHttpVerb.Post,
                         url: "/api/data/v9.2/emails?$select=activityid",
                         headers: DefaultSendEmailHeaders,
@@ -95,19 +98,18 @@ partial class ApiClientTestDataSource
                             },
                             ExtensionData = new()
                         }.InnerToJsonContentIn()),
-                new DataverseJsonRequest(
-                    verb: DataverseHttpVerb.Post,
-                    url: $"/api/data/v9.2/emails({emailGuid:D})/Microsoft.Dynamics.CRM.SendEmail",
-                    headers: default,
-                    content: new DataverseEmailSendJsonIn
+                    new(
+                        verb: DataverseHttpVerb.Post,
+                        url: $"/api/data/v9.2/emails({emailGuid:D})/Microsoft.Dynamics.CRM.SendEmail",
+                        headers: default,
+                        content: new DataverseEmailSendJsonIn
+                        {
+                            IssueSend = true
+                        }.InnerToJsonContentIn()),
+                    new()
                     {
-                        IssueSend = true
-                    }.InnerToJsonContentIn()),
-                new DataverseEmailCreateJsonOut()
-                {
-                    ActivityId = emailGuid
-                }
-                };
+                        ActivityId = emailGuid
+                    });
             }
 
             fixture.Register(() => JsonSerializer.SerializeToElement(fixture.Create<string>()));
@@ -143,15 +145,14 @@ partial class ApiClientTestDataSource
                     .DistinctBy(static k => k.Key)
                     .ToDictionary(static k => k.Key, static k => k.Value);
 
-                yield return new object[]
-                {
-                    new DataverseEmailSendIn(
+                data.Add(
+                    new(
                         subject: emailMessage2.Subject,
                         body: emailMessage2.Body,
                         sender: new(senderEmail),
                         recipients: recipients,
                         extensionData: extensionData.ToFlatArray()),
-                    new DataverseJsonRequest(
+                    new(
                         verb: DataverseHttpVerb.Post,
                         url: "/api/data/v9.2/emails?$select=activityid",
                         headers: DefaultSendEmailHeaders,
@@ -162,7 +163,7 @@ partial class ApiClientTestDataSource
                             ActivityParties = activityParties.ToFlatArray(),
                             ExtensionData = extensionData
                         }.InnerToJsonContentIn()),
-                    new DataverseJsonRequest(
+                    new(
                         verb: DataverseHttpVerb.Post,
                         url: $"/api/data/v9.2/emails({createdEmailId:D})/Microsoft.Dynamics.CRM.SendEmail",
                         headers: FlatArray<DataverseHttpHeader>.Empty,
@@ -170,12 +171,13 @@ partial class ApiClientTestDataSource
                         {
                             IssueSend = true
                         }.InnerToJsonContentIn()),
-                    new DataverseEmailCreateJsonOut()
+                    new()
                     {
                         ActivityId = createdEmailId
-                    }
-                };
+                    });
             }
+
+            return data;
         }
     }
 }

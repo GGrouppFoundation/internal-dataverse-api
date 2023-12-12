@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> SearchInputTestData
+    public static TheoryData<Guid?, DataverseSearchIn, DataverseJsonRequest> SearchInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 null,
-                new DataverseSearchIn("Some first text")
+                new("Some first text")
                 {
                     OrderBy = new("field 1"),
                     Top = 10,
@@ -24,7 +23,7 @@ partial class ApiClientTestDataSource
                     SearchMode = DataverseSearchMode.Any,
                     SearchType = DataverseSearchType.Full
                 },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: default,
@@ -42,16 +41,15 @@ partial class ApiClientTestDataSource
                         SearchType = DataverseSearchTypeJson.Full
                     }.InnerToJsonContentIn())
             },
-            new object?[]
             {
                 Guid.Parse("aa087335-0897-4d6e-82cb-0f07cb6fc2f4"),
-                new DataverseSearchIn("Some second text")
+                new("Some second text")
                 {
                     OrderBy = new("field 1", string.Empty),
                     SearchMode = DataverseSearchMode.All,
                     SearchType = DataverseSearchType.Simple
                 },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: new(
@@ -64,11 +62,10 @@ partial class ApiClientTestDataSource
                         SearchType = DataverseSearchTypeJson.Simple
                     }.InnerToJsonContentIn())
             },
-            new object?[]
             {
                 null,
-                new DataverseSearchIn(string.Empty),
-                new DataverseJsonRequest(
+                new(string.Empty),
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
                     headers: default,

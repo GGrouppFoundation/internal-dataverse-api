@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityCreateWithTOutInputTestData
+    public static TheoryData<Guid?, DataverseEntityCreateIn<StubRequestJson>, DataverseJsonRequest> EntityCreateWithTOutInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 null,
-                new DataverseEntityCreateIn<StubRequestJson>(
+                new(
                     entityPluralName: "SomeEntities",
                     selectFields: new[] { "field1", "field2" },
                     entityData:  new()
@@ -20,7 +19,7 @@ partial class ApiClientTestDataSource
                         Id = 17,
                         Name = "First request name"
                     }),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/SomeEntities?$select=field1,field2",
                     headers: new(PreferRepresentationHeader),
@@ -30,10 +29,9 @@ partial class ApiClientTestDataSource
                         Name = "First request name"
                     }.InnerToJsonContentIn())
             },
-            new object?[]
             {
                 Guid.Parse("cf6678d2-2963-4f14-8dff-21c956ae9695"),
-                new DataverseEntityCreateIn<StubRequestJson>(
+                new(
                     entityPluralName: "SomeEntities",
                     selectFields: new[] { string.Empty, "field 1" },
                     entityData: new())
@@ -51,7 +49,7 @@ partial class ApiClientTestDataSource
                     },
                     SuppressDuplicateDetection = false
                 },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/SomeEntities?$select=field 1" +
                         "&$expand=LookupOne($select=field1.1,field1.2),LookupTwo($expand=field2.1)",
@@ -61,17 +59,16 @@ partial class ApiClientTestDataSource
                         CreateSuppressDuplicateDetectionHeader("false")),
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
-            new object?[]
             {
                 null,
-                new DataverseEntityCreateIn<StubRequestJson>(
+                new(
                     entityPluralName: "Some/Entities",
                     selectFields: default,
                     entityData: new())
                 {
                     SuppressDuplicateDetection = true
                 },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/Some%2fEntities",
                     headers: new(

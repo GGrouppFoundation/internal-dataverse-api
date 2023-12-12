@@ -1,18 +1,16 @@
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> StubResponseJsonOutputTestData
+    public static TheoryData<StubResponseJson?> StubResponseJsonOutputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
-                default(StubResponseJson)
+                default
             },
-            new object?[]
             {
                 new StubResponseJson
                 {

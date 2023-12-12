@@ -1,18 +1,17 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityGetInputTestData
+    public static TheoryData<Guid?, DataverseEntityGetIn, DataverseJsonRequest> EntityGetInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 Guid.Parse("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                new DataverseEntityGetIn(
+                new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new("field1", "field2"),
@@ -22,7 +21,7 @@ partial class ApiClientTestDataSource
                         new(
                             fieldName: "LookupThree",
                             selectFields: new("field3.1")))),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2&" +
                         "$expand=LookupOne($select=field1.1,field1.2),LookupThree($select=field3.1)",
@@ -30,27 +29,25 @@ partial class ApiClientTestDataSource
                         CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")),
                     content: default)
             },
-            new object?[]
             {
                 null,
-                new DataverseEntityGetIn(
+                new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new(string.Empty, "field 1"))
                     {
                         IncludeAnnotations = "display.*"
                     },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field 1",
                     headers: new(
                         new DataverseHttpHeader("Prefer", "odata.include-annotations=display.*")),
                     content: default)
             },
-            new object?[]
             {
                 Guid.Parse("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                new DataverseEntityGetIn(
+                new(
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some=Key"),
                     selectFields: default,
@@ -67,7 +64,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "*"
                     },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some%2fEntities(Some=Key)?$expand=SomeField($expand=Lookup1($select=Field1,Field2;$expand=Lookup3))",
                     headers: new(
@@ -75,10 +72,9 @@ partial class ApiClientTestDataSource
                         new DataverseHttpHeader("Prefer", "odata.include-annotations=*")),
                     content: default)
             },
-            new object?[]
             {
                 Guid.Parse("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                new DataverseEntityGetIn(
+                new(
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some=Key"),
                     selectFields: default,
@@ -86,7 +82,7 @@ partial class ApiClientTestDataSource
                     {
                         IncludeAnnotations = "*"
                     },
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some%2fEntities(Some=Key)",
                     headers: new(
@@ -94,15 +90,14 @@ partial class ApiClientTestDataSource
                         new DataverseHttpHeader("Prefer", "odata.include-annotations=*")),
                     content: default)
             },
-            new object?[]
             {
                 Guid.Parse("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                new DataverseEntityGetIn(
+                new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new("field1", "field2"),
                     expandFields: new DataverseExpandedField("LookupOne").AsFlatArray()),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2&$expand=LookupOne",
                     headers: new(

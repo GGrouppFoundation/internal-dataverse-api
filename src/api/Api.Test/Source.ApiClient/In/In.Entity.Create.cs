@@ -1,15 +1,14 @@
 using System;
-using System.Collections.Generic;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class ApiClientTestDataSource
 {
-    public static IEnumerable<object?[]> EntityCreateInputTestData
+    public static TheoryData<Guid?, DataverseEntityCreateIn<StubRequestJson>, DataverseJsonRequest> EntityCreateInputTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
                 null,
                 new DataverseEntityCreateIn<StubRequestJson>(
@@ -29,7 +28,6 @@ partial class ApiClientTestDataSource
                         Name = "First request name"
                     }.InnerToJsonContentIn())
             },
-            new object?[]
             {
                 Guid.Parse("cf6678d2-2963-4f14-8dff-21c956ae9695"),
                 new DataverseEntityCreateIn<StubRequestJson>(
@@ -58,7 +56,6 @@ partial class ApiClientTestDataSource
                         CreateSuppressDuplicateDetectionHeader("false")),
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
-            new object?[]
             {
                 null,
                 new DataverseEntityCreateIn<StubRequestJson>(
