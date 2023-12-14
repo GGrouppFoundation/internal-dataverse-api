@@ -20,5 +20,7 @@ public enum DataverseFailureCode
 
     DuplicateRecord,
 
-    InvalidPayload
+    InvalidPayload,
+
+    RecipientEmailNotFound,
 }

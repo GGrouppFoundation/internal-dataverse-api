@@ -13,7 +13,7 @@ partial class DataverseHttpApi
     public async ValueTask<Result<DataverseJsonResponse, Failure<DataverseFailureCode>>> SendJsonAsync(
         DataverseJsonRequest request, CancellationToken cacncellationToken)
     {
-        using var httpClient = CreateHttpClient();
+        var httpClient = CreateHttpClient();
         using var httpRequest = CreateHttpRequestMessage(request);
 
         var httpResponse = await httpClient.SendAsync(httpRequest, cacncellationToken).ConfigureAwait(false);
@@ -26,11 +26,11 @@ partial class DataverseHttpApi
         {
             Method = request.Verb switch
             {
-                DataverseHttpVerb.Get       => HttpMethod.Get,
-                DataverseHttpVerb.Post      => HttpMethod.Post,
-                DataverseHttpVerb.Patch     => HttpMethod.Patch,
-                DataverseHttpVerb.Delete    => HttpMethod.Delete,
-                _                           => HttpMethod.Post
+                DataverseHttpVerb.Get => HttpMethod.Get,
+                DataverseHttpVerb.Post => HttpMethod.Post,
+                DataverseHttpVerb.Patch => HttpMethod.Patch,
+                DataverseHttpVerb.Delete => HttpMethod.Delete,
+                _ => HttpMethod.Post
             },
             RequestUri = new(dataverseBaseUri, request.Url),
             Version = new(HttpVersion)
