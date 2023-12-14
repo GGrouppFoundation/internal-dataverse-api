@@ -22,5 +22,5 @@ public enum DataverseFailureCode
 
     InvalidPayload,
 
-    EmailNotFound,
+    RecipientEmailNotFound,
 }

@@ -310,6 +310,22 @@ partial class HttpApiTestDataSource
                 Failure.Create(DataverseFailureCode.InvalidPayload, "Invalid argument.")
             };
 
+            var recipientEmailNotFoundFailure = new StubFailureJson
+            {
+                Failure = new()
+                {
+                    Code = "0x80040b0a",
+                    Message = "Recipient email not found failure"
+                }
+            };
+
+            yield return new object?[]
+            {
+                HttpStatusCode.BadRequest,
+                recipientEmailNotFoundFailure.ToJsonContent(),
+                Failure.Create(DataverseFailureCode.RecipientEmailNotFound, recipientEmailNotFoundFailure.Failure.Message)
+            };
+
             var unknownFailure = new StubFailureJson
             {
                 Failure = new()

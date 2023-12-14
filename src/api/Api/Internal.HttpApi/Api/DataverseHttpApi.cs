@@ -117,7 +117,7 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
             "0x8005F103" or "0x80072322" or "0x80072326" or "0x80072321" or "0x80060308" => DataverseFailureCode.Throttling,
             "0x80040333" or "0x80060892" => DataverseFailureCode.DuplicateRecord,
             "0x80040203" or "0x80048d19" => DataverseFailureCode.InvalidPayload,
-            "0x80040b0a" => DataverseFailureCode.EmailNotFound,
+            "0x80040b0a" => DataverseFailureCode.RecipientEmailNotFound,
             _ => DataverseFailureCode.Unknown
         };
     }

@@ -11,7 +11,7 @@ partial class DataverseHttpApi
     public async ValueTask<Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>>> SendChangeSetAsync(
         DataverseChangeSetRequest request, CancellationToken cancellationToken)
     {
-        using var httpClient = CreateHttpClient();
+        var httpClient = CreateHttpClient();
         using var httpRequest = CreateHttpRequestMessage(request);
 
         var httpResponse = await httpClient.SendAsync(httpRequest, cancellationToken).ConfigureAwait(false);
