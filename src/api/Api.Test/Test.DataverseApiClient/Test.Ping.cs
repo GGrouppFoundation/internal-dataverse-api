@@ -70,9 +70,9 @@ partial class DataverseApiClientTest
     {
         var success = new DataverseWhoAmIOutJson
         {
-            BusinessUnitId = Guid.Parse("7b91a1c5-0c9e-4f61-a604-11bffbed4d3d"),
-            UserId = Guid.Parse("c0ddd988-9085-47a6-bb84-08bbb8bd7424"),
-            OrganizationId = Guid.Parse("7ff765f3-3d0c-45bd-ba6c-f5646dd0b838")
+            BusinessUnitId = new("7b91a1c5-0c9e-4f61-a604-11bffbed4d3d"),
+            UserId = new("c0ddd988-9085-47a6-bb84-08bbb8bd7424"),
+            OrganizationId = new("7ff765f3-3d0c-45bd-ba6c-f5646dd0b838")
         };
 
         var mockHttpApi = CreateMockJsonHttpApi(success.InnerToJsonResponse());

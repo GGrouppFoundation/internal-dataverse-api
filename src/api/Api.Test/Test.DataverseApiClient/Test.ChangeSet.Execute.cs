@@ -54,9 +54,11 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var input = new DataverseChangeSetExecuteIn<object>(
-            requests: new FlatArray<IDataverseTransactableIn<object>>(
+            requests: new IDataverseTransactableIn<object>[]
+            {
                 new StubTransactableIn<object>(),
-                SomeDataverseEntityDeleteInput));
+                SomeDataverseEntityDeleteInput
+            });
 
         var actual = await dataverseApiClient.ExecuteChangeSetAsync(input, default);
         Assert.True(actual.IsFailure);

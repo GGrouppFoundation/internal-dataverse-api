@@ -27,7 +27,7 @@ partial class ApiClientTestDataSource
                     new(
                         verb: DataverseHttpVerb.Post,
                         url: $"/api/data/v9.2/emails({emailId:D})/Microsoft.Dynamics.CRM.SendEmail",
-                        headers: FlatArray<DataverseHttpHeader>.Empty,
+                        headers: default,
                         content: new DataverseEmailSendJsonIn
                         {
                             IssueSend = true
@@ -75,17 +75,17 @@ partial class ApiClientTestDataSource
                                     ParticipationTypeMask = 2,
                                     AddressUsed = emails[1]
                                 },
-                                new ()
+                                new()
                                 {
                                     AccountIdParty = $"/accounts({memberIds[0]:D})",
                                     ParticipationTypeMask = 2,
                                 },
-                                new ()
+                                new()
                                 {
                                     ContactIdParty = $"/contacts({memberIds[1]:D})",
                                     ParticipationTypeMask = 3,
                                 },
-                                new ()
+                                new()
                                 {
                                     SystemUserIdParty = $"/systemusers({memberIds[2]:D})",
                                     ParticipationTypeMask = 4,
@@ -122,16 +122,16 @@ partial class ApiClientTestDataSource
                     .Select(email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
                     .ToFlatArray();
 
-                var activityParties = new List<DataverseEmailActivityPartyJson>()
-                {
+                List<DataverseEmailActivityPartyJson> activityParties =
+                [
                     new()
                     {
                         AddressUsed = senderEmail,
                         ParticipationTypeMask = 1
                     }
-                };
+                ];
 
-                activityParties.AddRange(recipientEmails.Select(e => new DataverseEmailActivityPartyJson()
+                activityParties.AddRange(recipientEmails.Select(e => new DataverseEmailActivityPartyJson
                 {
                     AddressUsed = e,
                     ParticipationTypeMask = 2

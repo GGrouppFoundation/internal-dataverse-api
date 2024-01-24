@@ -17,15 +17,18 @@ public static partial class DataverseApiClientTest
         new(
             entityPluralName: "SomeEntities",
             entityKey: new StubEntityKey("Some key"),
-            selectFields: new[] { "Some field name" });
+            selectFields: new("Some field name"));
 
     private static readonly DataverseEntitySetGetIn SomeDataverseEntitySetGetInput
         =
         new(
             entityPluralName: "SomeEntities",
-            selectFields: new[] { "Some field name" },
+            selectFields: new("Some field name"),
             filter: "Some filter",
-            orderBy: new DataverseOrderParameter[] { new("one", DataverseOrderDirection.Default) },
+            orderBy: new DataverseOrderParameter[]
+            {
+                new("one", DataverseOrderDirection.Default)
+            },
             top: 5);
 
     private static readonly DataverseEntityUpdateIn<StubRequestJson> SomeDataverseEntityUpdateInput
@@ -33,7 +36,7 @@ public static partial class DataverseApiClientTest
         new(
             entityPluralName: "SomeEntities",
             entityKey: new StubEntityKey("Some key"),
-            selectFields: new[] { "Some field name" },
+            selectFields: new("Some field name"),
             entityData: new()
             {
                 Id = 1,
@@ -44,7 +47,7 @@ public static partial class DataverseApiClientTest
         =
         new(
             entityPluralName: "SomeEntities",
-            selectFields: new[] { "Some field name" },
+            selectFields: new("Some field name"),
             entityData: new()
             {
                 Id = 75,
@@ -61,7 +64,7 @@ public static partial class DataverseApiClientTest
         =
         new("Some search text")
         {
-            OrderBy = new[] { "field 1" },
+            OrderBy = new("field 1"),
             Top = 10,
             Skip = 5,
             ReturnTotalRecordCount = false,
@@ -82,17 +85,19 @@ public static partial class DataverseApiClientTest
         =
         new()
         {
-            Value = new(
-                new StubResponseJson
+            Value = new StubResponseJson[]
+            {
+                new()
                 {
                     Id = 1,
                     Name = "First"
                 },
-                new StubResponseJson(),
-                new StubResponseJson
+                new(),
+                new()
                 {
                     Id = 5
-                })
+                }
+            }
         };
 
     private static readonly DataverseSearchJsonOut SomeSearchJsonOut
@@ -100,35 +105,37 @@ public static partial class DataverseApiClientTest
         new()
         {
             TotalRecordCount = 100,
-            Value = new(
+            Value = new DataverseSearchJsonItem[]
+            {
                 new()
                 {
                     SearchScore = 100.71,
                     EntityName = "First Enity",
-                    ObjectId = Guid.Parse("1f1fb6e6-90a7-4d42-b58d-5e9ac450b37d")
+                    ObjectId = new("1f1fb6e6-90a7-4d42-b58d-5e9ac450b37d")
                 },
                 new()
                 {
                     SearchScore = -31798.19,
                     EntityName = "Second",
-                    ObjectId = Guid.Parse("d922c096-7ec7-4d0a-a4a4-28b0ced5640e")
-                })
+                    ObjectId = new("d922c096-7ec7-4d0a-a4a4-28b0ced5640e")
+                }
+            }
         };
 
     private static readonly DataverseWhoAmIOutJson SomeWhoAmIOutJson
         =
         new()
         {
-            BusinessUnitId = Guid.Parse("e0a59544-ba99-43ce-9b57-ed5602c9498c"),
-            UserId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843"),
-            OrganizationId = Guid.Parse("4ab18f9f-84a5-4b38-a217-cfd0e774cd53")
+            BusinessUnitId = new("e0a59544-ba99-43ce-9b57-ed5602c9498c"),
+            UserId = new("73efd7b1-4fc4-4793-92f1-aed45ec04843"),
+            OrganizationId = new("4ab18f9f-84a5-4b38-a217-cfd0e774cd53")
         };
 
     private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJsonOut
         =
         new()
         {
-            ActivityId = Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b") 
+            ActivityId = new("9b4a0982-a852-4944-b1db-9b2154d6740b") 
         };
 
     private static readonly DataverseEmailCreateIn SomeEmailCreateIn
@@ -137,15 +144,21 @@ public static partial class DataverseApiClientTest
             subject: "subject",
             body: "body",
             sender: new("email@email.com"),
-            recipients: new FlatArray<DataverseEmailRecipient>(
+            recipients: new DataverseEmailRecipient[]
+            {
                 new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
-                new(emailMember: new(Guid.NewGuid(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)),
+                new(
+                    emailMember: new(
+                        memberId: new("b93c4b03-6067-401d-9a01-b033827d32e9"),
+                        memberType: DataverseEmailMemberType.Account),
+                    emailRecipientType: DataverseEmailRecipientType.ToRecipient)
+            },
             extensionData: default);
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
         =
         new(
-            emailId: Guid.Parse("9b4a0982-a852-4944-b1db-9b2154d6740b"));
+            emailId: new("9b4a0982-a852-4944-b1db-9b2154d6740b"));
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithoutEmailId
         =
@@ -153,23 +166,27 @@ public static partial class DataverseApiClientTest
             subject: "subject",
             body: "body",
             sender: new("email@email.com"),
-            recipients: new(
+            recipients: new DataverseEmailRecipient[]
+            {
                 new(
                     email: "email2@email.com",
                     emailRecipientType: DataverseEmailRecipientType.ToRecipient),
                 new(
                     emailMember: new(
-                        memberId: Guid.Parse("00d23c27-b73f-402d-9d0b-b590a513d2aa"),
+                        memberId: new("00d23c27-b73f-402d-9d0b-b590a513d2aa"),
                         memberType: DataverseEmailMemberType.Account),
-                    emailRecipientType: DataverseEmailRecipientType.ToRecipient)));
+                    emailRecipientType: DataverseEmailRecipientType.ToRecipient)
+            });
 
     private static readonly DataverseChangeSetExecuteIn<object> SomeChangeSetInput
         =
         new(
-            requests: new FlatArray<IDataverseTransactableIn<object>>(
+            requests: new IDataverseTransactableIn<object>[]
+            {
                 SomeDataverseEntityCreateInput,
                 SomeDataverseEntityUpdateInput,
-                SomeDataverseEntityDeleteInput));
+                SomeDataverseEntityDeleteInput
+            });
 
     private static readonly DataverseChangeSetResponse SomeChangeSetResponse
         =
@@ -184,7 +201,7 @@ public static partial class DataverseApiClientTest
         =
         new()
         {
-            ActivityId = Guid.Parse("73efd7b1-4fc4-4793-92f1-aed45ec04843")
+            ActivityId = new("73efd7b1-4fc4-4793-92f1-aed45ec04843")
         };
 
     private static IDataverseApiClient CreateDataverseApiClient(
@@ -201,7 +218,9 @@ public static partial class DataverseApiClientTest
 
     private static IGuidProvider CreateGuidProvider()
         =>
-        CreateGuidProvider(Guid.Parse("1415478f-b154-4cc0-9687-90b698d77be4"), Guid.Parse("33160122-a578-456d-8c8d-e4746296cf1d"));
+        CreateGuidProvider(
+            new("1415478f-b154-4cc0-9687-90b698d77be4"),
+            new("33160122-a578-456d-8c8d-e4746296cf1d"));
 
     private static IGuidProvider CreateGuidProvider(params Guid[] guids)
     {

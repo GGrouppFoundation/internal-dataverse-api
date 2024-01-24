@@ -14,7 +14,7 @@ partial class ApiClientTestDataSource
                 new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
-                    selectFields: new[] { "field1", "field2" },
+                    selectFields: new("field1", "field2"),
                     entityData: new StubRequestJson
                     {
                         Id = 101,
@@ -26,10 +26,12 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2",
-                    headers: new(
+                    headers: new[]
+                    {
                         CreateCallerIdHeader("9fdea890-f164-47c1-bb51-d3865229fa9b"),
                         PreferRepresentationHeader,
-                        CreateSuppressDuplicateDetectionHeader("true")),
+                        CreateSuppressDuplicateDetectionHeader("true")
+                    },
                     content: new StubRequestJson
                     {
                         Id = 101,
@@ -41,7 +43,7 @@ partial class ApiClientTestDataSource
                 new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
-                    selectFields: new[] { string.Empty, "field 1" },
+                    selectFields: new(string.Empty, "field 1"),
                     entityData: new StubRequestJson())
                 {
                     SuppressDuplicateDetection = false
@@ -49,9 +51,11 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field 1",
-                    headers: new(
+                    headers: new[]
+                    {
                         PreferRepresentationHeader,
-                        CreateSuppressDuplicateDetectionHeader("false")),
+                        CreateSuppressDuplicateDetectionHeader("false")
+                    },
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
             {

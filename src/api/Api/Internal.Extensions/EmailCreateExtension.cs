@@ -28,7 +28,7 @@ internal static class EmailCreateExtension
 
     private static DataverseEmailActivityPartyJson MapSender(DataverseEmailSender sender)
         =>
-        new DataverseEmailActivityPartyJson()
+        new DataverseEmailActivityPartyJson
         {
             ParticipationTypeMask = 1,
             AddressUsed = string.IsNullOrEmpty(sender.SenderEmail) ? null : sender.SenderEmail
@@ -37,7 +37,7 @@ internal static class EmailCreateExtension
 
     private static DataverseEmailActivityPartyJson MapRecipient(DataverseEmailRecipient recipient)
         =>
-        new DataverseEmailActivityPartyJson()
+        new DataverseEmailActivityPartyJson
         {
             AddressUsed = string.IsNullOrEmpty(recipient.SenderRecipientEmail) ? null : recipient.SenderRecipientEmail,
             ParticipationTypeMask = recipient.EmailRecipientType.MapRecipientType()

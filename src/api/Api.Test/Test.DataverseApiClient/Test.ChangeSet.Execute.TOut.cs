@@ -54,9 +54,11 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var input = new DataverseChangeSetExecuteIn<StubRequestJson>(
-            requests: new FlatArray<IDataverseTransactableIn<StubRequestJson>>(
+            requests: new IDataverseTransactableIn<StubRequestJson>[]
+            {
                 SomeDataverseEntityCreateInput,
-                new StubTransactableIn<StubRequestJson>()));
+                new StubTransactableIn<StubRequestJson>()
+            });
 
         var actual = await dataverseApiClient.ExecuteChangeSetAsync<StubRequestJson, StubResponseJson>(input, default);
         Assert.True(actual.IsFailure);
@@ -125,9 +127,7 @@ partial class DataverseApiClientTest
         var mockHttpApi = CreateMockChangeSetHttpApi(default(DataverseChangeSetResponse));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
-        var input = SomeChangeSetInput;
-
-        var actual = await dataverseApiClient.ExecuteChangeSetAsync<object, StubResponseJson>(input, default);
+        var actual = await dataverseApiClient.ExecuteChangeSetAsync<object, StubResponseJson>(SomeChangeSetInput, default);
         var expected = default(DataverseChangeSetExecuteOut<StubResponseJson>);
 
         Assert.StrictEqual(expected, actual);
@@ -141,15 +141,14 @@ partial class DataverseApiClientTest
             {
                 default,
                 SomeResponseJson.InnerToJsonResponse(),
-                new DataverseJsonResponse(
+                new(
                     content: new(string.Empty))
             });
 
         var mockHttpApi = CreateMockChangeSetHttpApi(changeSetResponse);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
-        var input = SomeChangeSetInput;
-        var actual = await dataverseApiClient.ExecuteChangeSetAsync<object, StubResponseJson>(input, default);
+        var actual = await dataverseApiClient.ExecuteChangeSetAsync<object, StubResponseJson>(SomeChangeSetInput, default);
 
         var expected = new DataverseChangeSetExecuteOut<StubResponseJson>(
             values: new(null, SomeResponseJson, null));

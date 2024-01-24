@@ -11,7 +11,7 @@ partial class ApiClientTestDataSource
         {
             {
                 null,
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/WhoAmI",
                     headers: default,
@@ -19,7 +19,7 @@ partial class ApiClientTestDataSource
             },
             {
                 Guid.Parse("23f5ed72-b140-4022-a05f-54366719828f"),
-                new DataverseJsonRequest(
+                new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/WhoAmI",
                     headers: new(

@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
@@ -17,32 +16,36 @@ partial class ApiClientTestDataSource
                 new()
                 {
                     TotalRecordCount = 11,
-                    Value = new(
+                    Value = new DataverseSearchJsonItem[]
+                    {
                         new()
                         {
                             SearchScore = 151.91,
                             EntityName = "First entity name",
-                            ObjectId = Guid.Parse("870c75fa-fbaa-4678-875f-062050f3812c"),
+                            ObjectId = new("870c75fa-fbaa-4678-875f-062050f3812c"),
                             ExtensionData = default
                         },
                         new()
                         {
-                            ObjectId = Guid.Parse("38927590-1799-4ded-b922-a2cf38033c38")
-                        })
+                            ObjectId = new("38927590-1799-4ded-b922-a2cf38033c38")
+                        }
+                    }
                 },
                 new(
                     totalRecordCount: 11,
-                    value: new(
+                    value: new DataverseSearchItem[]
+                    {
                         new(
                             searchScore: 151.91,
-                            objectId: Guid.Parse("870c75fa-fbaa-4678-875f-062050f3812c"),
+                            objectId: new("870c75fa-fbaa-4678-875f-062050f3812c"),
                             entityName: "First entity name",
                             extensionData: default),
                         new(
                             searchScore: default,
-                            objectId: Guid.Parse("38927590-1799-4ded-b922-a2cf38033c38"),
+                            objectId: new("38927590-1799-4ded-b922-a2cf38033c38"),
                             entityName: string.Empty,
-                            extensionData: default)))
+                            extensionData: default)
+                    })
             }
         };
 }

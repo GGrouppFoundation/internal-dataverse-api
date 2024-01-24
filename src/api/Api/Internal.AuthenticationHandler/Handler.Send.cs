@@ -9,7 +9,7 @@ partial class AuthenticationHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        var scopes = new[] { option.ServiceUrl + "/.default" };
+        string[] scopes = [option.ServiceUrl + "/.default"];
         var token = await GetClientApplication(option).AcquireTokenForClient(scopes).ExecuteAsync(cancellationToken).ConfigureAwait(false);
 
         request.Headers.Authorization = AuthenticationHeaderValue.Parse(token.CreateAuthorizationHeader());

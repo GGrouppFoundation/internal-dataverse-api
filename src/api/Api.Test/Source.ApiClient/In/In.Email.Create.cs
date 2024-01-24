@@ -28,7 +28,7 @@ partial class ApiClientTestDataSource
                         subject: emailMessage.Subject,
                         body: emailMessage.Body,
                         sender: new(emails[0]),
-                        recipients: new FlatArray<DataverseEmailRecipient>(
+                        recipients: new(
                             new(emails[1], DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[0], DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[1], DataverseEmailMemberType.Contact), DataverseEmailRecipientType.CcRecipient),
@@ -74,7 +74,7 @@ partial class ApiClientTestDataSource
                                     ParticipationTypeMask = 2,
                                     AddressUsed = emails[2]
                                 }),
-                            ExtensionData = new()
+                            ExtensionData = []
                         }.InnerToJsonContentIn()));
             }
 
@@ -143,10 +143,11 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: null!,
-                recipients: new FlatArray<DataverseEmailRecipient>(
+                recipients: new DataverseEmailRecipient[]
+                {
                     new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
-                    new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
-                        DataverseEmailRecipientType.ToRecipient)),
+                    new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)
+                },
                 extensionData: default);
 
             var noSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is missing");
@@ -156,10 +157,11 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: new(string.Empty),
-                recipients: new FlatArray<DataverseEmailRecipient>(
+                recipients: new DataverseEmailRecipient[]
+                {
                     new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
-                    new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account),
-                        DataverseEmailRecipientType.ToRecipient)),
+                    new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)
+                },
                 extensionData: default);
 
             var invalidSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is invalid");
@@ -169,7 +171,7 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: new(fixture.Create<MailAddress>().Address),
-                recipients: FlatArray<DataverseEmailRecipient>.Empty,
+                recipients: default,
                 extensionData: default);
 
             var noRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are missing");
@@ -179,8 +181,10 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: new(fixture.Create<MailAddress>().Address),
-                recipients: new FlatArray<DataverseEmailRecipient>(
-                    new DataverseEmailRecipient(string.Empty, DataverseEmailRecipientType.ToRecipient)),
+                recipients: new DataverseEmailRecipient[]
+                {
+                    new(string.Empty, DataverseEmailRecipientType.ToRecipient)
+                },
                 extensionData: default);
 
             var invalidRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are invalid");
