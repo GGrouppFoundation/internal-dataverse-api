@@ -15,18 +15,20 @@ partial class ApiClientTestDataSource
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new("field1", "field2"),
-                    expandFields: new(
+                    expandFields: new DataverseExpandedField[]
+                    {
                         new("LookupOne", new("field1.1", "field1.2", string.Empty)),
                         new(string.Empty, new("field 2.1", "field 2.2")),
-                        new(
-                            fieldName: "LookupThree",
-                            selectFields: new("field3.1")))),
+                        new("LookupThree", new("field3.1"))
+                    }),
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2&" +
                         "$expand=LookupOne($select=field1.1,field1.2),LookupThree($select=field3.1)",
-                    headers: new(
-                        CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")),
+                    headers: new[]
+                    {
+                        CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")
+                    },
                     content: default)
             },
             {
@@ -41,8 +43,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field 1",
-                    headers: new(
-                        new DataverseHttpHeader("Prefer", "odata.include-annotations=display.*")),
+                    headers: new DataverseHttpHeader[]
+                    {
+                        new("Prefer", "odata.include-annotations=display.*")
+                    },
                     content: default)
             },
             {
@@ -51,25 +55,33 @@ partial class ApiClientTestDataSource
                     entityPluralName: "Some/Entities",
                     entityKey: new StubEntityKey("Some=Key"),
                     selectFields: default,
-                    expandFields: new(
-                        new DataverseExpandedField(
+                    expandFields: new DataverseExpandedField[]
+                    {
+                        new(
                             fieldName: "SomeField",
                             selectFields: default,
-                            expandFields: new(
-                                new DataverseExpandedField(
+                            expandFields: new DataverseExpandedField[]
+                            {
+                                new(
                                     fieldName: "Lookup1",
                                     selectFields: new("Field1", "Field2"),
-                                    expandFields: new(
-                                        new DataverseExpandedField("Lookup3", default)))))))
+                                    expandFields: new DataverseExpandedField[]
+                                    {
+                                        new("Lookup3", default)
+                                    })
+                            })
+                    })
                     {
                         IncludeAnnotations = "*"
                     },
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some%2fEntities(Some=Key)?$expand=SomeField($expand=Lookup1($select=Field1,Field2;$expand=Lookup3))",
-                    headers: new(
+                    headers: new[]
+                    {
                         CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                        new DataverseHttpHeader("Prefer", "odata.include-annotations=*")),
+                        new DataverseHttpHeader("Prefer", "odata.include-annotations=*")
+                    },
                     content: default)
             },
             {
@@ -85,9 +97,11 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some%2fEntities(Some=Key)",
-                    headers: new(
+                    headers: new[]
+                    {
                         CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27"),
-                        new DataverseHttpHeader("Prefer", "odata.include-annotations=*")),
+                        new DataverseHttpHeader("Prefer", "odata.include-annotations=*")
+                    },
                     content: default)
             },
             {
@@ -96,12 +110,17 @@ partial class ApiClientTestDataSource
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
                     selectFields: new("field1", "field2"),
-                    expandFields: new DataverseExpandedField("LookupOne").AsFlatArray()),
+                    expandFields: new DataverseExpandedField[]
+                    {
+                        new("LookupOne")
+                    }),
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2&$expand=LookupOne",
-                    headers: new(
-                        CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")),
+                    headers: new[]
+                    {
+                        CreateCallerIdHeader("18945ff7-9433-4e74-a403-abd6db25ef27")
+                    },
                     content: default)
             },
         };

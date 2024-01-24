@@ -1,34 +1,27 @@
-using System.Collections.Generic;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> JsonSuccessTestData
-    {
-        get
+    public static TheoryData<StringContent?, DataverseJsonResponse> JsonSuccessTestData
+        =>
+        new()
         {
-            yield return new object?[]
             {
                 null,
-                default(DataverseJsonResponse)
-            };
-
-            yield return new object?[]
+                default
+            },
             {
-                new StringContent(string.Empty),
-                default(DataverseJsonResponse)
-            };
-
-            yield return new object?[]
+                new(string.Empty),
+                default
+            },
             {
-                new StringContent("Some text"),
-                new DataverseJsonResponse(
+                new("Some text"),
+                new(
                     content: new("Some text"))
-            };
-
-            yield return new object?[]
+            },
             {
                 new StubResponseJson
                 {
@@ -36,7 +29,7 @@ partial class HttpApiTestDataSource
                     Name = "Some name"
                 }
                 .CreateResponseContentJson(),
-                new DataverseJsonResponse(
+                new(
                     content: new(
                         new StubResponseJson
                         {
@@ -44,7 +37,6 @@ partial class HttpApiTestDataSource
                             Name = "Some name"
                         }
                         .Serialize()))
-            };
-        }
-    }
+            }
+        };
 }

@@ -1,23 +1,21 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object[]> ChangeSetSuccessTestData
+    public static TheoryData<MultipartContent, DataverseChangeSetResponse> ChangeSetSuccessTestData
         =>
-        new[]
+        new()
         {
-            new object[]
             {
-                new MultipartContent("mixed", "batch_GGJH123GJ"),
-                default(DataverseChangeSetResponse)
+                new("mixed", "batch_GGJH123GJ"),
+                default
             },
-            new object[]
             {
-                new MultipartContent("mixed", "batch_ajhsgd191ka1")
+                new("mixed", "batch_ajhsgd191ka1")
                 {
                     new HttpResponseMessage
                     {
@@ -44,7 +42,7 @@ partial class HttpApiTestDataSource
                     }
                     .ToMessageContent()
                 },
-                new DataverseChangeSetResponse(
+                new(
                     responses: new DataverseJsonResponse[]
                     {
                         default,

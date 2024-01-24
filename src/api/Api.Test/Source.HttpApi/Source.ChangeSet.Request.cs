@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object[]> ChangeSetRequestTestData
+    public static TheoryData<Uri, DataverseChangeSetRequest, StubHttpRequestData> ChangeSetRequestTestData
     {
         get
         {
@@ -19,21 +20,25 @@ partial class HttpApiTestDataSource
                 "\r\n\r\n--batch_7a5584dd-0b9a-4439-b4a8-594eb84378a2--" +
                 "\r\n";
 
-            yield return new object[]
+            var data = new TheoryData<Uri, DataverseChangeSetRequest, StubHttpRequestData>
             {
-                new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
-                new DataverseChangeSetRequest(
-                    url: "/api/$batch",
-                    batchId: Guid.Parse("7a5584dd-0b9a-4439-b4a8-594eb84378a2"),
-                    changeSetId: Guid.Parse("3a8b6f47-98a1-42b7-8a04-cb28aeabae9c"),
-                    headers: default,
-                    requests: default),
-                new StubHttpRequestData(HttpMethod.Post, "https://some.crm4.dynamics.com/api/$batch")
                 {
-                    Headers = new(
-                        new("Content-Type", "multipart/mixed; boundary=\"batch_7a5584dd-0b9a-4439-b4a8-594eb84378a2\""),
-                        new("Content-Length", emptyChangeSetContent.Length.ToString())),
-                    Content = emptyChangeSetContent
+                    new("https://some.crm4.dynamics.com/", UriKind.Absolute),
+                    new(
+                        url: "/api/$batch",
+                        batchId: new("7a5584dd-0b9a-4439-b4a8-594eb84378a2"),
+                        changeSetId: new("3a8b6f47-98a1-42b7-8a04-cb28aeabae9c"),
+                        headers: default,
+                        requests: default),
+                    new(HttpMethod.Post, "https://some.crm4.dynamics.com/api/$batch")
+                    {
+                        Headers = new KeyValuePair<string, string>[]
+                        {
+                            new("Content-Type", "multipart/mixed; boundary=\"batch_7a5584dd-0b9a-4439-b4a8-594eb84378a2\""),
+                            new("Content-Length", emptyChangeSetContent.Length.ToString())
+                        },
+                        Content = emptyChangeSetContent
+                    }
                 }
             };
 
@@ -60,17 +65,18 @@ partial class HttpApiTestDataSource
                 "\r\n\r\n--batch_3d3a0ba3-6533-495d-a1e4-bdaa14b593f4--" +
                 "\r\n";
 
-            yield return new object[]
-            {
-                new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
-                new DataverseChangeSetRequest(
+            data.Add(
+                new("https://some.crm4.dynamics.com/", UriKind.Absolute),
+                new(
                     url: "/api/$batch?f=1",
-                    batchId: Guid.Parse("3d3a0ba3-6533-495d-a1e4-bdaa14b593f4"),
-                    changeSetId: Guid.Parse("c57e60f8-3133-415f-8ade-93993d63b91e"),
-                    headers: new(
+                    batchId: new("3d3a0ba3-6533-495d-a1e4-bdaa14b593f4"),
+                    changeSetId: new("c57e60f8-3133-415f-8ade-93993d63b91e"),
+                    headers: new DataverseHttpHeader[]
+                    {
                         new("first", "one "),
                         new("second", "two"),
-                        new("first", "three,fourth")),
+                        new("first", "three,fourth")
+                    },
                     requests: new DataverseJsonRequest[]
                     {
                         new(
@@ -83,16 +89,17 @@ partial class HttpApiTestDataSource
                             },
                             content: new(secondJsonContent))
                     }),
-                new StubHttpRequestData(HttpMethod.Post, "https://some.crm4.dynamics.com/api/$batch?f=1")
+                new(HttpMethod.Post, "https://some.crm4.dynamics.com/api/$batch?f=1")
                 {
-                    Headers = new(
+                    Headers = new KeyValuePair<string, string>[]
+                    {
                         new("first", "one ,three,fourth"),
                         new("second", "two"),
                         new("Content-Type", "multipart/mixed; boundary=\"batch_3d3a0ba3-6533-495d-a1e4-bdaa14b593f4\""),
-                        new("Content-Length", secondChangeSetContent.Length.ToString())),
+                        new("Content-Length", secondChangeSetContent.Length.ToString())
+                    },
                     Content = secondChangeSetContent
-                }
-            };
+                });
 
             const string thirdChangeSetContent
                 =
@@ -116,13 +123,12 @@ partial class HttpApiTestDataSource
                 "\r\n\r\n--batch_0f595005-0d61-4fda-9071-321fdcdba6a2--" +
                 "\r\n";
 
-            yield return new object[]
-            {
-                new Uri("https://some.crm4.dynamics.com/", UriKind.Absolute),
-                new DataverseChangeSetRequest(
+            data.Add(
+                new("https://some.crm4.dynamics.com/", UriKind.Absolute),
+                new(
                     url: "/api/batch",
-                    batchId: Guid.Parse("0f595005-0d61-4fda-9071-321fdcdba6a2"),
-                    changeSetId: Guid.Parse("12b2176b-1a84-4b5e-89e9-277764ad074b"),
+                    batchId: new("0f595005-0d61-4fda-9071-321fdcdba6a2"),
+                    changeSetId: new("12b2176b-1a84-4b5e-89e9-277764ad074b"),
                     headers: default,
                     requests: new DataverseJsonRequest[]
                     {
@@ -140,14 +146,17 @@ partial class HttpApiTestDataSource
                             },
                             content: new("Some Json content"))
                     }),
-                new StubHttpRequestData(HttpMethod.Post, "https://some.crm4.dynamics.com/api/batch")
+                new(HttpMethod.Post, "https://some.crm4.dynamics.com/api/batch")
                 {
-                    Headers = new(
+                    Headers = new KeyValuePair<string, string>[]
+                    {
                         new("Content-Type", "multipart/mixed; boundary=\"batch_0f595005-0d61-4fda-9071-321fdcdba6a2\""),
-                        new("Content-Length", thirdChangeSetContent.Length.ToString())),
+                        new("Content-Length", thirdChangeSetContent.Length.ToString())
+                    },
                     Content = thirdChangeSetContent
-                }
-            };
+                });
+
+            return data;
         }
     }
 }

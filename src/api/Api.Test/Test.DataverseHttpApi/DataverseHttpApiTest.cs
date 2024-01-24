@@ -17,9 +17,11 @@ public static partial class DataverseHttpApiTest
         new(
             verb: DataverseHttpVerb.Post,
             url: "/data?$select=field1,field2&$filter=a eq 1",
-            headers: new(
+            headers: new DataverseHttpHeader[]
+            {
                 new("first", "one "),
-                new("second", "two")),
+                new("second", "two")
+            },
             content: new("{\"id\": 1, \"name\": \"Some name\"}"));
 
     private static readonly DataverseChangeSetRequest SomeChangeSetRequest
@@ -28,10 +30,15 @@ public static partial class DataverseHttpApiTest
             url: "/api/data/v9.2/$batch",
             batchId: Guid.Parse("ef3a07fb-4036-4f9c-b79b-441ec1a53e54"),
             changeSetId: Guid.Parse("4d177bb6-49bc-41f5-b3cf-158b3848f7ca"),
-            headers: new(
+            headers: new DataverseHttpHeader[]
+            {
                 new("first", "one"),
-                new("second", "two")),
-            requests: SomeJsonRequest.AsFlatArray());
+                new("second", "two")
+            },
+            requests: new[]
+            {
+                SomeJsonRequest
+            });
 
     private static async ValueTask<string?> ReadStringContentAsync(this HttpRequestMessage requestMessage)
     {

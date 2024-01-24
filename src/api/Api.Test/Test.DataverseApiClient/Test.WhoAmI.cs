@@ -69,9 +69,9 @@ partial class DataverseApiClientTest
     {
         var success = new DataverseWhoAmIOutJson
         {
-            BusinessUnitId = Guid.Parse("51ea96d6-5119-4059-b649-d90c0a4aeab6"),
-            UserId = Guid.Parse("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
-            OrganizationId = Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae")
+            BusinessUnitId = new("51ea96d6-5119-4059-b649-d90c0a4aeab6"),
+            UserId = new("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
+            OrganizationId = new("92847989-5772-4ff9-851b-661dc66720ae")
         };
 
         var mockHttpApi = CreateMockJsonHttpApi(success.InnerToJsonResponse());
@@ -80,9 +80,9 @@ partial class DataverseApiClientTest
         var actual = await dataverseApiClient.WhoAmIAsync(default, CancellationToken.None);
 
         var expected = new DataverseWhoAmIOut(
-            businessUnitId: Guid.Parse("51ea96d6-5119-4059-b649-d90c0a4aeab6"),
-            userId: Guid.Parse("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
-            organizationId: Guid.Parse("92847989-5772-4ff9-851b-661dc66720ae"));
+            businessUnitId: new("51ea96d6-5119-4059-b649-d90c0a4aeab6"),
+            userId: new("6ac49276-357d-441f-89c4-c118cbaa5ee3"),
+            organizationId: new("92847989-5772-4ff9-851b-661dc66720ae"));
 
         Assert.StrictEqual(expected, actual);
     }

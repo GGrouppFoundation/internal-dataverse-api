@@ -30,13 +30,13 @@ partial class ApiClientTestDataSource
                     content: new DataverseSearchJsonIn
                     {
                         Search = "Some first text",
-                        OrderBy = new[] { "field 1" },
+                        OrderBy = new("field 1"),
                         Top = 10,
                         Skip = 5,
                         ReturnTotalRecordCount = false,
                         Filter = "Some filter",
-                        Facets = new[] { "one", "two" },
-                        Entities = new[] { "first", "second", "third" },
+                        Facets = new("one", "two"),
+                        Entities = new("first", "second", "third"),
                         SearchMode = DataverseSearchModeJson.Any,
                         SearchType = DataverseSearchTypeJson.Full
                     }.InnerToJsonContentIn())
@@ -52,12 +52,14 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
-                    headers: new(
-                        CreateCallerIdHeader("aa087335-0897-4d6e-82cb-0f07cb6fc2f4")),
+                    headers: new[]
+                    {
+                        CreateCallerIdHeader("aa087335-0897-4d6e-82cb-0f07cb6fc2f4")
+                    },
                     content: new DataverseSearchJsonIn
                     {
                         Search = "Some second text",
-                        OrderBy = new[] { "field 1" },
+                        OrderBy = new("field 1"),
                         SearchMode = DataverseSearchModeJson.All,
                         SearchType = DataverseSearchTypeJson.Simple
                     }.InnerToJsonContentIn())

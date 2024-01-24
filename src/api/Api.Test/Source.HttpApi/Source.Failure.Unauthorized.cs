@@ -1,19 +1,21 @@
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> UnauthorizedTestData
+    public static TheoryData<StringContent?, string> UnauthorizedTestData
     {
         get
         {
-            yield return new object?[]
+            var data = new TheoryData<StringContent?, string>
             {
-                null,
-                HttpStatusCode.Unauthorized.GetDefaultFailureMessage()
+                {
+                    null,
+                    HttpStatusCode.Unauthorized.GetDefaultFailureMessage()
+                }
             };
 
             var content = new StubFailureJson
@@ -23,22 +25,18 @@ partial class HttpApiTestDataSource
             }
             .Serialize();
 
-            yield return new object?[]
-            {
-                new StringContent(content),
-                content
-            };
+            data.Add(
+                new(content),
+                content);
 
             var exceptionFailure = new StubFailureJson
             {
                 ExceptionMessage = "Some exception message"
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 exceptionFailure.ToJsonContent(),
-                exceptionFailure.ExceptionMessage
-            };
+                exceptionFailure.ExceptionMessage);
 
             var recordNotFoundByEntityKeyFailure = new StubFailureJson
             {
@@ -49,11 +47,9 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 recordNotFoundByEntityKeyFailure.ToJsonContent(),
-                recordNotFoundByEntityKeyFailure.Error.Description
-            };
+                recordNotFoundByEntityKeyFailure.Error.Description);
 
             var objectDoesNotExistFailure = new StubFailureJson
             {
@@ -64,22 +60,18 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 objectDoesNotExistFailure.ToJsonContent(),
-                objectDoesNotExistFailure.Failure.Message
-            };
+                objectDoesNotExistFailure.Failure.Message);
 
             var picklistValueOutOfRangeFailure = new StubFailureJson
             {
                 ErrorCode = "0x8004431A"
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 picklistValueOutOfRangeFailure.ToJsonContent(),
-                picklistValueOutOfRangeFailure.Serialize()
-            };
+                picklistValueOutOfRangeFailure.Serialize());
 
             var privilegeDeniedFailure = new StubFailureJson
             {
@@ -89,11 +81,9 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 privilegeDeniedFailure.ToJsonContent(),
-                privilegeDeniedFailure.Serialize()
-            };
+                privilegeDeniedFailure.Serialize());
 
             var unManagedIdsAccessDeniedFailure = new StubFailureJson
             {
@@ -103,11 +93,11 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 unManagedIdsAccessDeniedFailure.ToJsonContent(),
-                unManagedIdsAccessDeniedFailure.Serialize()
-            };
+                unManagedIdsAccessDeniedFailure.Serialize());
+
+            return data;
         }
     }
 }

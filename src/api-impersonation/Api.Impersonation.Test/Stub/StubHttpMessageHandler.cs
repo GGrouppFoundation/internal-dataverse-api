@@ -5,14 +5,8 @@ using System.Threading.Tasks;
 
 namespace GarageGroup.Infra.Dataverse.Api.Impersonation.Test;
 
-internal sealed class StubHttpMessageHandler : HttpMessageHandler
+internal sealed class StubHttpMessageHandler(IAsyncFunc<HttpRequestMessage, HttpResponseMessage> proxyHandler) : HttpMessageHandler
 {
-    private readonly IAsyncFunc<HttpRequestMessage, HttpResponseMessage> proxyHandler;
-
-    public StubHttpMessageHandler(IAsyncFunc<HttpRequestMessage, HttpResponseMessage> proxyHandler)
-        =>
-        this.proxyHandler = proxyHandler;
-
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         =>
         proxyHandler.InvokeAsync(request, cancellationToken);

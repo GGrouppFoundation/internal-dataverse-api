@@ -1,23 +1,20 @@
-using System.Collections.Generic;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> UnitJsonSuccessTestData
+    public static TheoryData<StringContent?> UnitJsonSuccessTestData
         =>
-        new[]
+        new()
         {
-            new object?[]
             {
-                new StringContent("Some string")
+                new("Some string")
             },
-            new object?[]
             {
-                new StringContent(string.Empty)
+                new(string.Empty)
             },
-            new object?[]
             {
                 null
             }

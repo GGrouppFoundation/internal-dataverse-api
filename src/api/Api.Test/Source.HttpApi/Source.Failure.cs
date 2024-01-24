@@ -1,21 +1,23 @@
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using Xunit;
 
 namespace GarageGroup.Infra.Dataverse.Api.Test;
 
 partial class HttpApiTestDataSource
 {
-    public static IEnumerable<object?[]> FailureTestData
+    public static TheoryData<HttpStatusCode, StringContent?, Failure<DataverseFailureCode>> FailureTestData
     {
         get
         {
-            yield return new object?[]
+            var data = new TheoryData<HttpStatusCode, StringContent?, Failure<DataverseFailureCode>>
             {
-                HttpStatusCode.NotFound,
-                null,
-                Failure.Create(DataverseFailureCode.Unknown, HttpStatusCode.NotFound.GetDefaultFailureMessage())
+                {
+                    HttpStatusCode.NotFound,
+                    null,
+                    new(DataverseFailureCode.Unknown, HttpStatusCode.NotFound.GetDefaultFailureMessage())
+                }
             };
 
             var content = new StubFailureJson
@@ -25,24 +27,20 @@ partial class HttpApiTestDataSource
             }
             .Serialize();
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.InternalServerError,
                 new StringContent(content),
-                Failure.Create(DataverseFailureCode.Unknown, content)
-            };
+                new(DataverseFailureCode.Unknown, content));
 
             var exceptionFailure = new StubFailureJson
             {
                 ExceptionMessage = "Some exception message"
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 exceptionFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Unknown, exceptionFailure.ExceptionMessage)
-            };
+                new(DataverseFailureCode.Unknown, exceptionFailure.ExceptionMessage));
 
             var recordNotFoundByEntityKeyFailure = new StubFailureJson
             {
@@ -53,12 +51,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.TooManyRequests,
                 recordNotFoundByEntityKeyFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.RecordNotFound, recordNotFoundByEntityKeyFailure.Error.Description)
-            };
+                new(DataverseFailureCode.RecordNotFound, recordNotFoundByEntityKeyFailure.Error.Description));
 
             var objectDoesNotExistFailure = new StubFailureJson
             {
@@ -69,13 +65,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
-
+            data.Add(
                 HttpStatusCode.Forbidden,
                 objectDoesNotExistFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.RecordNotFound, objectDoesNotExistFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.RecordNotFound, objectDoesNotExistFailure.Failure.Message));
 
             var picklistValueOutOfRangeFailure = new StubFailureJson
             {
@@ -83,13 +76,10 @@ partial class HttpApiTestDataSource
                 ExceptionMessage = "Some pick list value is out of range"
             };
 
-            yield return new object?[]
-            {
-
+            data.Add(
                 HttpStatusCode.BadRequest,
                 picklistValueOutOfRangeFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.PicklistValueOutOfRange, picklistValueOutOfRangeFailure.ExceptionMessage)
-            };
+                new(DataverseFailureCode.PicklistValueOutOfRange, picklistValueOutOfRangeFailure.ExceptionMessage));
 
             var privilegeDeniedFailure = new StubFailureJson
             {
@@ -100,12 +90,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.NotAcceptable,
                 privilegeDeniedFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.PrivilegeDenied, privilegeDeniedFailure.Error.Description)
-            };
+                new(DataverseFailureCode.PrivilegeDenied, privilegeDeniedFailure.Error.Description));
 
             var unManagedIdsAccessDeniedFailure = new StubFailureJson
             {
@@ -116,12 +104,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.InternalServerError,
                 unManagedIdsAccessDeniedFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.PrivilegeDenied, unManagedIdsAccessDeniedFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.PrivilegeDenied, unManagedIdsAccessDeniedFailure.Failure.Message));
 
             var unManagedIdsUserNotEnabledFailure = new StubFailureJson
             {
@@ -129,12 +115,10 @@ partial class HttpApiTestDataSource
                 Message = "Some user is disabled"
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.NotFound,
                 unManagedIdsUserNotEnabledFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.UserNotEnabled, unManagedIdsUserNotEnabledFailure.Message)
-            };
+                new(DataverseFailureCode.UserNotEnabled, unManagedIdsUserNotEnabledFailure.Message));
 
             var userNotAssignedLicenseFailure = new StubFailureJson
             {
@@ -145,12 +129,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.Conflict,
                 userNotAssignedLicenseFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.UserNotEnabled, userNotAssignedLicenseFailure.Error.Description)
-            };
+                new(DataverseFailureCode.UserNotEnabled, userNotAssignedLicenseFailure.Error.Description));
 
             var searchableEntityNotFoundFailure = new StubFailureJson
             {
@@ -161,12 +143,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.NotFound,
                 searchableEntityNotFoundFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.SearchableEntityNotFound, searchableEntityNotFoundFailure.Error.Description)
-            };
+                new(DataverseFailureCode.SearchableEntityNotFound, searchableEntityNotFoundFailure.Error.Description));
 
             var throttlingFailure = new StubFailureJson
             {
@@ -177,12 +157,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.InternalServerError,
                 throttlingFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Throttling, throttlingFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.Throttling, throttlingFailure.Failure.Message));
 
             var throttlingBurstRequestLimitExceededErrorFailure = new StubFailureJson
             {
@@ -191,12 +169,10 @@ partial class HttpApiTestDataSource
                 ExceptionMessage = "Some throttling exception message"
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 throttlingBurstRequestLimitExceededErrorFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Throttling, throttlingBurstRequestLimitExceededErrorFailure.Message)
-            };
+                new(DataverseFailureCode.Throttling, throttlingBurstRequestLimitExceededErrorFailure.Message));
 
             var throttlingConcurrencyLimitExceededErrorFailure = new StubFailureJson
             {
@@ -207,12 +183,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadGateway,
                 throttlingConcurrencyLimitExceededErrorFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Throttling, throttlingConcurrencyLimitExceededErrorFailure.Error.Description)
-            };
+                new(DataverseFailureCode.Throttling, throttlingConcurrencyLimitExceededErrorFailure.Error.Description));
 
             var throttlingTimeExceededErrorFailure = new StubFailureJson
             {
@@ -223,12 +197,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.PaymentRequired,
                 throttlingTimeExceededErrorFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Throttling, throttlingTimeExceededErrorFailure.Error.Description)
-            };
+                new(DataverseFailureCode.Throttling, throttlingTimeExceededErrorFailure.Error.Description));
 
             var throttlingCodeFailure = new StubFailureJson
             {
@@ -239,12 +211,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.ExpectationFailed,
                 throttlingCodeFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Throttling, throttlingCodeFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.Throttling, throttlingCodeFailure.Failure.Message));
 
             var duplicateRecordsFoundFailure = new StubFailureJson
             {
@@ -255,12 +225,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.InternalServerError,
                 duplicateRecordsFoundFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.DuplicateRecord, duplicateRecordsFoundFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.DuplicateRecord, duplicateRecordsFoundFailure.Failure.Message));
 
             var duplicateRecordEntityKeyFailure = new StubFailureJson
             {
@@ -271,12 +239,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 duplicateRecordEntityKeyFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.DuplicateRecord, duplicateRecordEntityKeyFailure.Error.Description)
-            };
+                new(DataverseFailureCode.DuplicateRecord, duplicateRecordEntityKeyFailure.Error.Description));
 
             var clientPayloadFailure = new StubFailureJson
             {
@@ -287,12 +253,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 clientPayloadFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.InvalidPayload, "Error identified in Payload provided by the user for Entity :''")
-            };
+                new(DataverseFailureCode.InvalidPayload, "Error identified in Payload provided by the user for Entity :''"));
 
             var invalidArgumentFailure = new StubFailureJson
             {
@@ -303,12 +267,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 invalidArgumentFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.InvalidPayload, "Invalid argument.")
-            };
+                new(DataverseFailureCode.InvalidPayload, "Invalid argument."));
 
             var recipientEmailNotFoundFailure = new StubFailureJson
             {
@@ -319,12 +281,10 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 recipientEmailNotFoundFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.RecipientEmailNotFound, recipientEmailNotFoundFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.RecipientEmailNotFound, recipientEmailNotFoundFailure.Failure.Message));
 
             var unknownFailure = new StubFailureJson
             {
@@ -335,12 +295,12 @@ partial class HttpApiTestDataSource
                 }
             };
 
-            yield return new object?[]
-            {
+            data.Add(
                 HttpStatusCode.BadRequest,
                 unknownFailure.ToJsonContent(),
-                Failure.Create(DataverseFailureCode.Unknown, unknownFailure.Failure.Message)
-            };
+                new(DataverseFailureCode.Unknown, unknownFailure.Failure.Message));
+
+            return data;
         }
     }
 }

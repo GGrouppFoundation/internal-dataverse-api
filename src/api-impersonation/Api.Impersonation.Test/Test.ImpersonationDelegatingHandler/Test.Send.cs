@@ -14,7 +14,7 @@ partial class ImpersonationDelegatingHandlerTest
     public static async Task SendAsync_RequestIsNull_ExpectArgumentNullException()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
-        
+
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response);
 
@@ -33,7 +33,7 @@ partial class ImpersonationDelegatingHandlerTest
     public static void SendAsync_CancellationTokenIsCanceled_ResultTaskIsCanceled()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
-        
+
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response);
 
@@ -57,7 +57,7 @@ partial class ImpersonationDelegatingHandlerTest
     {
         const string callerId = "ac3a51a1-c8e1-4848-a556-ca75935d9e8c";
         var mockCallerIdProvider = CreateMockCallerIdProvider(Guid.Parse(callerId));
-        
+
         using var response = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(response, Callback);
 
@@ -88,7 +88,7 @@ partial class ImpersonationDelegatingHandlerTest
     public static async Task SendAsync_CancellationTokenIsNotCanceled_ExpectSourceResponse()
     {
         var mockCallerIdProvider = CreateMockCallerIdProvider(SomeCallerId);
-        
+
         using var sourceResponse = new HttpResponseMessage();
         var mockProxyHandler = CreateMockProxyHandler(sourceResponse);
 

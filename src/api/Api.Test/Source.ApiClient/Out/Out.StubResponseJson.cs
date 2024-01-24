@@ -12,7 +12,7 @@ partial class ApiClientTestDataSource
                 default
             },
             {
-                new StubResponseJson
+                new()
                 {
                     Id = 15,
                     Name = "Some name"

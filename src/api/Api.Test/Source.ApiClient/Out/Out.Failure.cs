@@ -10,34 +10,34 @@ partial class ApiClientTestDataSource
         new()
         {
             {
-                Failure.Create(DataverseFailureCode.Unknown, string.Empty)
+                new(DataverseFailureCode.Unknown, string.Empty)
             },
             {
-                Failure.Create(DataverseFailureCode.Unknown, "Some text")
+                new(DataverseFailureCode.Unknown, "Some text")
             },
             {
-                Failure.Create(DataverseFailureCode.Unauthorized, "Some unauthorized failure")
+                new(DataverseFailureCode.Unauthorized, "Some unauthorized failure")
             },
             {
-                Failure.Create(DataverseFailureCode.RecordNotFound, "Some Failure Message")
+                new(DataverseFailureCode.RecordNotFound, "Some Failure Message")
             },
             {
-                Failure.Create(DataverseFailureCode.PicklistValueOutOfRange, "Error message")
+                new(DataverseFailureCode.PicklistValueOutOfRange, "Error message")
             },
             {
-                Failure.Create(DataverseFailureCode.UserNotEnabled, "User was not found")
+                new(DataverseFailureCode.UserNotEnabled, "User was not found")
             },
             {
-                Failure.Create(DataverseFailureCode.PrivilegeDenied, "Some failure")
+                new(DataverseFailureCode.PrivilegeDenied, "Some failure")
             },
             {
-                Failure.Create(DataverseFailureCode.Throttling, "Some Throttling Failure")
+                new(DataverseFailureCode.Throttling, "Some Throttling Failure")
             },
             {
-                Failure.Create(DataverseFailureCode.SearchableEntityNotFound, "Some failure")
+                new(DataverseFailureCode.SearchableEntityNotFound, "Some failure")
             },
             {
-                Failure.Create(DataverseFailureCode.InvalidPayload, "Some invalid data")
+                new(DataverseFailureCode.InvalidPayload, "Some invalid data")
             }
         };
 }

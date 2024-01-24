@@ -139,19 +139,19 @@ partial class DataverseApiClientTest
     {
         var emailOut = new DataverseEmailCreateJsonOut
         {
-            ActivityId = Guid.Parse("c09815c5-3670-478d-bd2b-b4df0de171a3")
+            ActivityId = new("c09815c5-3670-478d-bd2b-b4df0de171a3")
         };
 
         var mockHttpApi = CreateMockEmailHttpApi(emailOut.InnerToJsonResponse(), default(DataverseJsonResponse));
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var input = new DataverseEmailSendIn(
-            emailId: Guid.Parse("ba7ac741-2b81-4caa-b25b-9cdbb43ca959"));
+            emailId: new("ba7ac741-2b81-4caa-b25b-9cdbb43ca959"));
 
         var actual = await dataverseApiClient.SendEmailAsync(input, default);
 
         var expected = new DataverseEmailSendOut(
-            emailId: Guid.Parse("ba7ac741-2b81-4caa-b25b-9cdbb43ca959"));
+            emailId: new("ba7ac741-2b81-4caa-b25b-9cdbb43ca959"));
 
         Assert.StrictEqual(expected, actual);
     }
@@ -161,7 +161,7 @@ partial class DataverseApiClientTest
     {
         var emailOut = new DataverseEmailCreateJsonOut
         {
-            ActivityId = Guid.Parse("cf59c0e0-e358-4433-be06-321bbf08cb05")
+            ActivityId = new("cf59c0e0-e358-4433-be06-321bbf08cb05")
         };
 
         var mockHttpApi = CreateMockEmailHttpApi(emailOut.InnerToJsonResponse(), default(DataverseJsonResponse));
@@ -171,7 +171,7 @@ partial class DataverseApiClientTest
         var actual = await dataverseApiClient.SendEmailAsync(input, default);
 
         var expected = new DataverseEmailSendOut(
-            emailId: Guid.Parse("cf59c0e0-e358-4433-be06-321bbf08cb05"));
+            emailId: new("cf59c0e0-e358-4433-be06-321bbf08cb05"));
 
         Assert.StrictEqual(expected, actual);
     }

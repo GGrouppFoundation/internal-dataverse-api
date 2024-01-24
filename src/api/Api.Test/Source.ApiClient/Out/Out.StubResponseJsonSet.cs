@@ -30,17 +30,19 @@ partial class ApiClientTestDataSource
                     }
                 },
                 new(
-                    value: new(
-                    new StubResponseJson
+                    value: new StubResponseJson[]
                     {
-                        Id = 15,
-                        Name = "Some first"
-                    },
-                    new StubResponseJson
-                    {
-                        Id = 101,
-                        Name = "Some second"
-                    }))
+                        new()
+                        {
+                            Id = 15,
+                            Name = "Some first"
+                        },
+                        new()
+                        {
+                            Id = 101,
+                            Name = "Some second"
+                        }
+                    })
             },
             {
                 new()
@@ -75,7 +77,8 @@ partial class ApiClientTestDataSource
                     NextLink = "Some Link"
                 },
                 new(
-                    value: new(
+                    value: new StubResponseJson[]
+                    {
                         new()
                         {
                             Id = 171,
@@ -90,7 +93,8 @@ partial class ApiClientTestDataSource
                         {
                             Id = -105,
                             Name = "Third"
-                        }),
+                        }
+                    },
                     nextLink: "Some Link")
             }
         };

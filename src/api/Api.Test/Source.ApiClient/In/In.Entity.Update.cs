@@ -25,9 +25,11 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)",
-                    headers: new(
+                    headers: new[]
+                    {
                         CreateCallerIdHeader("9fdea890-f164-47c1-bb51-d3865229fa9b"),
-                        CreateSuppressDuplicateDetectionHeader("true")),
+                        CreateSuppressDuplicateDetectionHeader("true")
+                    },
                     content: new StubRequestJson
                     {
                         Id = 101,
@@ -39,7 +41,7 @@ partial class ApiClientTestDataSource
                 new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
-                    selectFields: new[] { string.Empty, "field 1" },
+                    selectFields: new(string.Empty, "field 1"),
                     entityData: new())
                 {
                     SuppressDuplicateDetection = false
@@ -47,8 +49,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)",
-                    headers: new(
-                        CreateSuppressDuplicateDetectionHeader("false")),
+                    headers: new[]
+                    {
+                        CreateSuppressDuplicateDetectionHeader("false")
+                    },
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
             {
