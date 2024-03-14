@@ -55,11 +55,12 @@ partial class DataverseApiClient
 
         var queryString = queryParameters.BuildQueryString();
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var isUpsert = input.OperationType is DataverseUpdateOperationType.Upsert;
 
         return new(
             verb: DataverseHttpVerb.Patch,
             url: BuildDataRequestUrl($"{encodedPluralName}({input.EntityKey.Value}){queryString}"),
-            headers: GetAllHeadersWithRepresentation(input.SuppressDuplicateDetection),
+            headers: GetAllHeadersWithRepresentation(input.SuppressDuplicateDetection, isUpsert).ToFlatArray(),
             content: input.EntityData.SerializeOrThrow());
     }
 }

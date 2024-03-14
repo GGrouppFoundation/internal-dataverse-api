@@ -67,7 +67,7 @@ internal sealed partial class DataverseApiClient
         var request = new DataverseJsonRequest(
             verb: DataverseHttpVerb.Post,
             url: BuildDataRequestUrl($"emails({emailId:D})/Microsoft.Dynamics.CRM.SendEmail"),
-            headers: default,
+            headers: GetAllHeaders(),
             content: emailSendJsonIn.SerializeOrThrow());
 
         var result = await httpApi.SendJsonAsync(request, cancellationToken).ConfigureAwait(false);

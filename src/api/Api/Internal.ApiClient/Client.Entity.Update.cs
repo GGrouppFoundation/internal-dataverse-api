@@ -42,11 +42,12 @@ partial class DataverseApiClient
         where TInJson : notnull
     {
         var encodedPluralName = HttpUtility.UrlEncode(input.EntityPluralName);
+        var isUpsert = input.OperationType is DataverseUpdateOperationType.Upsert;
 
         return new(
             verb: DataverseHttpVerb.Patch,
             url: BuildDataRequestUrl($"{encodedPluralName}({input.EntityKey.Value})"),
-            headers: GetAllHeadersWithoutRepresentation(input.SuppressDuplicateDetection),
+            headers: GetAllHeadersWithoutRepresentation(input.SuppressDuplicateDetection, isUpsert).ToFlatArray(),
             content: input.EntityData.SerializeOrThrow());
     }
 }

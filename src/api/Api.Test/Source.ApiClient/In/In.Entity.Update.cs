@@ -20,7 +20,8 @@ partial class ApiClientTestDataSource
                         Name = "First request name"
                     })
                 {
-                    SuppressDuplicateDetection = true
+                    SuppressDuplicateDetection = true,
+                    OperationType = DataverseUpdateOperationType.Update
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
@@ -28,7 +29,8 @@ partial class ApiClientTestDataSource
                     headers: new[]
                     {
                         CreateCallerIdHeader("9fdea890-f164-47c1-bb51-d3865229fa9b"),
-                        CreateSuppressDuplicateDetectionHeader("true")
+                        CreateSuppressDuplicateDetectionHeader("true"),
+                        new("If-Match", "*")
                     },
                     content: new StubRequestJson
                     {
@@ -44,14 +46,16 @@ partial class ApiClientTestDataSource
                     selectFields: new(string.Empty, "field 1"),
                     entityData: new())
                 {
-                    SuppressDuplicateDetection = false
+                    SuppressDuplicateDetection = false,
+                    OperationType = (DataverseUpdateOperationType)2
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)",
                     headers: new[]
                     {
-                        CreateSuppressDuplicateDetectionHeader("false")
+                        CreateSuppressDuplicateDetectionHeader("false"),
+                        new("If-Match", "*")
                     },
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
@@ -66,7 +70,8 @@ partial class ApiClientTestDataSource
                     ExpandFields = new DataverseExpandedField[]
                     {
                         new("Field1", new("Lookup Field"))
-                    }
+                    },
+                    OperationType = DataverseUpdateOperationType.Upsert
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,

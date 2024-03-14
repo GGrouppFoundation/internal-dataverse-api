@@ -68,7 +68,8 @@ partial class ApiClientTestDataSource
                             ExpandFields = new DataverseExpandedField[]
                             {
                                 new("Field1", new("Lookup Field"))
-                            }
+                            },
+                            OperationType = DataverseUpdateOperationType.Upsert
                         },
                         new DataverseEntityDeleteIn(
                             entityPluralName: "SomeEntities",

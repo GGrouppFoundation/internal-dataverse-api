@@ -15,6 +15,8 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
 
     private const string BatchRelativeUrl = "$batch";
 
+    private const string AcceptHeaderName = "Accept";
+
     private const string CallerIdHeaderName = "MSCRMCallerID";
 
     private const string PreferHeaderName = "Prefer";
@@ -22,6 +24,10 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
     private const string ReturnRepresentationValue = "return=representation";
 
     private const string SuppressDuplicateDetectionHeaderName = "MSCRM.SuppressDuplicateDetection";
+
+    private const string IfMatchHeaderName = "If-Match";
+
+    private const string IfMatchHeaderValueAll = "*";
 
     private const string SearchRequestUrl = "/api/search/v1.0/query";
 
@@ -50,62 +56,77 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
         =>
         $"/api/{ApiTypeData}/v{ApiVersionData}/{dataUrl}";
 
-    private FlatArray<DataverseHttpHeader> GetAllHeadersWithRepresentation(bool? suppressDuplicateDetection)
-    {
-        var preferHeader = new DataverseHttpHeader(PreferHeaderName, ReturnRepresentationValue);
-        if (suppressDuplicateDetection is null)
-        {
-            return GetAllHeaders(preferHeader);
-        }
-
-        return GetAllHeaders(
-            preferHeader,
-            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection.Value));
-    }
-
-    private FlatArray<DataverseHttpHeader> GetAllHeadersWithoutRepresentation(bool? suppressDuplicateDetection)
-    {
-        if (suppressDuplicateDetection is null)
-        {
-            return GetAllHeaders();
-        }
-
-        return GetAllHeaders(
-            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection.Value));
-    }
-
-    private FlatArray<DataverseHttpHeader> GetAllHeaders(params DataverseHttpHeader[] headers)
-    {
-        if (callerId is null && headers.Length is 0)
-        {
-            return default;
-        }
-
-        if (callerId is null)
-        {
-            return new(headers);
-        }
-
-        var array = new DataverseHttpHeader[headers.Length + 1];
-        array[0] = new(CallerIdHeaderName, callerId.Value.ToString("D"));
-
-        for (var i = 0; i < headers.Length; i++)
-        {
-            array[i + 1] = headers[i];
-        }
-
-        return array;
-    }
-
-    private static DataverseHttpHeader GetSuppressDuplicateDetectionHeader(bool suppressDuplicateDetection)
+    private IEnumerable<DataverseHttpHeader> GetAllHeadersWithRepresentation(bool? suppressDuplicateDetection, bool? isUpsert = null)
         =>
-        new(
-            SuppressDuplicateDetectionHeaderName,
-            GetHeaderValue(suppressDuplicateDetection));
+        GetAllHeaders(
+            new(PreferHeaderName, ReturnRepresentationValue),
+            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection),
+            GetIfMatchHeader(isUpsert));
 
-    private static string BuildPreferValue(string? includeAnnotations, int? maxPageSize = null)
+    private IEnumerable<DataverseHttpHeader> GetAllHeadersWithoutRepresentation(bool? suppressDuplicateDetection, bool? isUpsert = null)
+        =>
+        GetAllHeaders(
+            GetSuppressDuplicateDetectionHeader(suppressDuplicateDetection),
+            GetIfMatchHeader(isUpsert));
+
+    private IEnumerable<DataverseHttpHeader> GetAllHeaders(params DataverseHttpHeader?[] headers)
     {
-        return string.Join(',', GetPreferValues());
+        var callerIdHeader = GetCallerIdHeader(callerId);
+        if (callerIdHeader is not null)
+        {
+            yield return callerIdHeader;
+        }
+
+        foreach (var header in headers)
+        {
+            if (header is null)
+            {
+                continue;
+            }
+
+            yield return header;
+        }
+    }
+
+    private FlatArray<DataverseHttpHeader> GetAllHeaders()
+    {
+        var callerIdHeader = GetCallerIdHeader(callerId);
+        return callerIdHeader is null ? default : new(callerIdHeader);
+    }
+
+    private static DataverseHttpHeader? GetCallerIdHeader(Guid? callerId)
+        =>
+        callerId is null ? null : new(CallerIdHeaderName, callerId.Value.ToString("D"));
+
+    private static DataverseHttpHeader? GetSuppressDuplicateDetectionHeader(bool? suppressDuplicateDetection)
+    {
+        if (suppressDuplicateDetection is null)
+        {
+            return null;
+        }
+
+        return new(SuppressDuplicateDetectionHeaderName, suppressDuplicateDetection.Value ? "true" : "false");
+    }
+
+    private static DataverseHttpHeader? GetIfMatchHeader(bool? isUpsert)
+    {
+        if (isUpsert is not false)
+        {
+            return null;
+        }
+
+        return new(IfMatchHeaderName, IfMatchHeaderValueAll);
+    }
+
+    private static DataverseHttpHeader? BuildPreferHeader(string? includeAnnotations, int? maxPageSize = null)
+    {
+        var value = string.Join(',', GetPreferValues());
+        if (string.IsNullOrEmpty(value))
+        {
+            return null;
+        }
+
+        return new(PreferHeaderName, value);
 
         IEnumerable<string> GetPreferValues()
         {
@@ -120,10 +141,6 @@ internal sealed partial class DataverseApiClient : IDataverseApiClient
             }
         }
     }
-
-    private static string GetHeaderValue(bool value)
-        =>
-        value ? "true" : "false";
 
     private static Failure<DataverseFailureCode> ToDataverseFailure(Exception exception, string message)
         =>

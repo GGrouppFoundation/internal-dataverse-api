@@ -38,7 +38,7 @@ partial class DataverseApiClient
             var request = new DataverseJsonRequest(
                 verb: DataverseHttpVerb.Get,
                 url: BuildDataRequestUrl($"{encodedPluralName}({input.EntityKey.Value}){queryString}"),
-                headers: GetHeaders(),
+                headers: GetAllHeaders(BuildPreferHeader(input.IncludeAnnotations)).ToFlatArray(),
                 content: default);
 
             var result = await httpApi.SendJsonAsync(request, cancellationToken).ConfigureAwait(false);
@@ -53,18 +53,5 @@ partial class DataverseApiClient
             =>
             new(
                 value: response.Content.DeserializeOrThrow<TJson>());
-
-        FlatArray<DataverseHttpHeader> GetHeaders()
-        {
-            var preferValue = BuildPreferValue(input.IncludeAnnotations);
-
-            if (string.IsNullOrEmpty(preferValue))
-            {
-                return GetAllHeaders();
-            }
-
-            return GetAllHeaders(
-                new DataverseHttpHeader(PreferHeaderName, preferValue));
-        }
     }
 }

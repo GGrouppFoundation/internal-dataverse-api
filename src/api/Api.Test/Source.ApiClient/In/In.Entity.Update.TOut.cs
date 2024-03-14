@@ -21,7 +21,8 @@ partial class ApiClientTestDataSource
                         Name = "First request name"
                     })
                 {
-                    SuppressDuplicateDetection = true
+                    SuppressDuplicateDetection = true,
+                    OperationType = DataverseUpdateOperationType.Upsert
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
@@ -46,7 +47,8 @@ partial class ApiClientTestDataSource
                     selectFields: new(string.Empty, "field 1"),
                     entityData: new StubRequestJson())
                 {
-                    SuppressDuplicateDetection = false
+                    SuppressDuplicateDetection = false,
+                    OperationType = (DataverseUpdateOperationType)(-1)
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
@@ -54,7 +56,8 @@ partial class ApiClientTestDataSource
                     headers: new[]
                     {
                         PreferRepresentationHeader,
-                        CreateSuppressDuplicateDetectionHeader("false")
+                        CreateSuppressDuplicateDetectionHeader("false"),
+                        new("If-Match", "*")
                     },
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
@@ -69,12 +72,17 @@ partial class ApiClientTestDataSource
                     ExpandFields = new DataverseExpandedField[]
                     {
                         new("Field1", new("Lookup Field"))
-                    }
+                    },
+                    OperationType = DataverseUpdateOperationType.Update
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/Some%2fEntities(Some Key)?$expand=Field1($select=Lookup Field)",
-                    headers: new(PreferRepresentationHeader),
+                    headers: new[]
+                    {
+                        PreferRepresentationHeader,
+                        new("If-Match", "*")
+                    },
                     content: new StubRequestJson().InnerToJsonContentIn())
             }
         };
