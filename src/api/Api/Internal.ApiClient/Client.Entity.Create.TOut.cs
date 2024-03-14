@@ -59,7 +59,7 @@ partial class DataverseApiClient
         return new(
             verb: DataverseHttpVerb.Post,
             url: BuildDataRequestUrl($"{encodedPluralName}{queryString}"),
-            headers: GetAllHeadersWithRepresentation(input.SuppressDuplicateDetection),
+            headers: GetAllHeadersWithRepresentation(input.SuppressDuplicateDetection).ToFlatArray(),
             content: input.EntityData.SerializeOrThrow());
     }
 }

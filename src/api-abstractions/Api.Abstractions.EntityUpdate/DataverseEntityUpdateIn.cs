@@ -39,4 +39,6 @@ public sealed record class DataverseEntityUpdateIn<TInJson> : IDataverseEntityUp
     public FlatArray<DataverseExpandedField> ExpandFields { get; init; }
 
     public bool? SuppressDuplicateDetection { get; init; }
+
+    public DataverseUpdateOperationType OperationType { get; init; }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -32,9 +33,9 @@ internal sealed partial class DataverseApiClient
             var request = new DataverseJsonRequest(
                 verb: DataverseHttpVerb.Post,
                 url: BuildDataRequestUrl("emails?$select=activityid"),
-                headers: new FlatArray<DataverseHttpHeader>(
-                    new("Accept", "application/json"), 
-                    new("Prefer", "return=representation")), 
+                headers: GetAllHeaders(
+                    new(AcceptHeaderName, MediaTypeNames.Application.Json), 
+                    new(PreferHeaderName, ReturnRepresentationValue)).ToFlatArray(), 
                 content: input.SerializeOrThrow());
 
             var result = await httpApi.SendJsonAsync(request, cancellationToken).ConfigureAwait(false);

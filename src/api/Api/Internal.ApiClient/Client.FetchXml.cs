@@ -30,7 +30,7 @@ internal sealed partial class DataverseApiClient
             var request = new DataverseJsonRequest(
                 verb: DataverseHttpVerb.Get,
                 url: BuildFetchXmlUri(input),
-                headers: GetHeaders(),
+                headers: GetAllHeaders(BuildPreferHeader(input.IncludeAnnotations)).ToFlatArray(),
                 content: default);
 
             var result = await httpApi.SendJsonAsync(request, cancellationToken).ConfigureAwait(false);
@@ -66,19 +66,6 @@ internal sealed partial class DataverseApiClient
             {
                 MoreRecords = moreRecords
             };
-        }
-
-        FlatArray<DataverseHttpHeader> GetHeaders()
-        {
-            var preferValue = BuildPreferValue(input.IncludeAnnotations);
-
-            if (string.IsNullOrEmpty(preferValue))
-            {
-                return GetAllHeaders();
-            }
-
-            return GetAllHeaders(
-                new DataverseHttpHeader(PreferHeaderName, preferValue));
         }
     }
     

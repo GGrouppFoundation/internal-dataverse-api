@@ -40,7 +40,8 @@ partial class ApiClientTestDataSource
                             url: "/api/data/v9.2/SomeEntities(SomeKey)",
                             headers: new(
                                 CreateCallerIdHeader("947700e6-39fd-411a-a6f8-a39300416985"),
-                                CreateSuppressDuplicateDetectionHeader("true")),
+                                CreateSuppressDuplicateDetectionHeader("true"),
+                                new("If-Match", "*")),
                             content: new StubRequestJson
                             {
                                 Id = 101,

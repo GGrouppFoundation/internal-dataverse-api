@@ -17,6 +17,8 @@ public interface IDataverseEntityUpdateIn<out TInJson> : IDataverseTransactableI
 
     bool? SuppressDuplicateDetection { get; }
 
+    DataverseUpdateOperationType OperationType { get; }
+
     TInJson? IDataverseTransactableIn<TInJson>.Entity
         =>
         EntityData;
