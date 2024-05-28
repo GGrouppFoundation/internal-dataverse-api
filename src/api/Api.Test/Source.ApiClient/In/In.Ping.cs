@@ -18,12 +18,14 @@ partial class ApiClientTestDataSource
                     content: default)
             },
             {
-                Guid.Parse("23f5ed72-b140-4022-a05f-54366719828f"),
+                new("23f5ed72-b140-4022-a05f-54366719828f"),
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/WhoAmI",
-                    headers: new(
-                        CreateCallerIdHeader("23f5ed72-b140-4022-a05f-54366719828f")),
+                    headers:
+                    [
+                        CreateCallerIdHeader("23f5ed72-b140-4022-a05f-54366719828f")
+                    ],
                     content: default)
             }
         };

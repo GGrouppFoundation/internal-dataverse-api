@@ -54,11 +54,11 @@ partial class DataverseApiClientTest
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
 
         var input = new DataverseChangeSetExecuteIn<StubRequestJson>(
-            requests: new IDataverseTransactableIn<StubRequestJson>[]
-            {
+            requests:
+            [
                 SomeDataverseEntityCreateInput,
                 new StubTransactableIn<StubRequestJson>()
-            });
+            ]);
 
         var actual = await dataverseApiClient.ExecuteChangeSetAsync<StubRequestJson, StubResponseJson>(input, default);
         Assert.True(actual.IsFailure);
@@ -137,13 +137,13 @@ partial class DataverseApiClientTest
     public static async Task ExecuteChangeSetAsyncWithTOut_ResponseIsSuccess_ExpectSuccess()
     {
         var changeSetResponse = new DataverseChangeSetResponse(
-            responses: new[]
-            {
+            responses:
+            [
                 default,
                 SomeResponseJson.InnerToJsonResponse(),
                 new(
                     content: new(string.Empty))
-            });
+            ]);
 
         var mockHttpApi = CreateMockChangeSetHttpApi(changeSetResponse);
         var dataverseApiClient = CreateDataverseApiClient(mockHttpApi.Object, CreateGuidProvider());
@@ -151,7 +151,7 @@ partial class DataverseApiClientTest
         var actual = await dataverseApiClient.ExecuteChangeSetAsync<object, StubResponseJson>(SomeChangeSetInput, default);
 
         var expected = new DataverseChangeSetExecuteOut<StubResponseJson>(
-            values: new(null, SomeResponseJson, null));
+            values: [null, SomeResponseJson, null]);
 
         Assert.StrictEqual(expected, actual);
     }

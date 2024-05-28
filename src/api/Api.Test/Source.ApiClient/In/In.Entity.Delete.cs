@@ -10,15 +10,17 @@ partial class ApiClientTestDataSource
         new()
         {
             {
-                Guid.Parse("91526fc6-1491-4ee9-8b7a-a4ed536de862"),
+                new("91526fc6-1491-4ee9-8b7a-a4ed536de862"),
                 new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey")),
                 new(
                     verb: DataverseHttpVerb.Delete,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)",
-                    headers: new(
-                        CreateCallerIdHeader("91526fc6-1491-4ee9-8b7a-a4ed536de862")),
+                    headers:
+                    [
+                        CreateCallerIdHeader("91526fc6-1491-4ee9-8b7a-a4ed536de862")
+                    ],
                     content: default)
             },
             {

@@ -23,4 +23,6 @@ public enum DataverseFailureCode
     InvalidPayload,
 
     RecipientEmailNotFound,
+
+    InvalidFileSize
 }

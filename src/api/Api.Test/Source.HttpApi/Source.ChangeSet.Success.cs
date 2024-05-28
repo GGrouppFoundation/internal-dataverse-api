@@ -43,13 +43,13 @@ partial class HttpApiTestDataSource
                     .ToMessageContent()
                 },
                 new(
-                    responses: new DataverseJsonResponse[]
-                    {
+                    responses:
+                    [
                         default,
                         new(new("Second conetnt")),
                         default,
                         new(new("The Fourth"))
-                    })
+                    ])
             }
         };
 }

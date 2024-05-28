@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Net;
 using AutoFixture;
@@ -31,7 +30,7 @@ partial class ApiClientTestDataSource
                         url: $"/api/data/v9.2/{WebUtility.UrlEncode(input.EntityPluralName)}?fetchXml={input.FetchXmlQueryString}",
                         headers: input.IncludeAnnotations switch
                         {
-                            not null => new DataverseHttpHeader("Prefer", $"odata.include-annotations={input.IncludeAnnotations}").AsFlatArray(),
+                            not null => [new("Prefer", $"odata.include-annotations={input.IncludeAnnotations}")],
                             _ => default
                         },
                         content: default));

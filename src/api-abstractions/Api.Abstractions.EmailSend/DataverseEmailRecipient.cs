@@ -19,8 +19,8 @@ public sealed record class DataverseEmailRecipient
     }
 
     public string SenderRecipientEmail { get; }
-    
+
     public DataverseEmailMember? EmailMember { get; }
-    
+
     public DataverseEmailRecipientType EmailRecipientType { get; }
 }

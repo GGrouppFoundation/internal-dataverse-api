@@ -16,7 +16,7 @@ partial class DataverseAlternateKeyTest
     public void Constructor_ArgumentsAreEmpty_ExpectEmpty()
     {
         var entityKey = new DataverseAlternateKey(
-            idArguments: new Dictionary<string, string>());
+            idArguments: []);
         Assert.Empty(entityKey.Value);
     }
 

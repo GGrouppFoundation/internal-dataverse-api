@@ -14,24 +14,24 @@ partial class ApiClientTestDataSource
                 new(
                     entityPluralName: "SomeEntities",
                     selectFields: new("field1", "field2"),
-                    expandFields: new DataverseExpandedField[]
-                    {
+                    expandFields:
+                    [
                         new("LookupOne", new("field1.1", "field1.2")),
                         new(
                             fieldName: "LookupTwo",
                             selectFields: default,
-                            expandFields: new DataverseExpandedField[]
-                            {
+                            expandFields:
+                            [
                                 new("field2.1", default)
-                            })
-                    },
+                            ])
+                    ],
                     filter: "id eq 15",
-                    orderBy: new DataverseOrderParameter[]
-                    {
+                    orderBy:
+                    [
                         new("field3", DataverseOrderDirection.Descending),
                         new("field4"),
                         new("field5", DataverseOrderDirection.Ascending)
-                    },
+                    ],
                     top: 15),
                 new(
                     verb: DataverseHttpVerb.Get,
@@ -55,10 +55,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some+Entities?$select=field 1&$top=1",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.include-annotations=display.*")
-                    },
+                    ],
                     content: default)
             },
             {
@@ -73,10 +73,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/Some%2fEntities?$filter=date gt 2020-01-01",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.include-annotations=*")
-                    },
+                    ],
                     content: default)
             },
             {
@@ -91,21 +91,21 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities?$select=FieldOne",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.maxpagesize=10")
-                    },
+                    ],
                     content: default)
             },
             {
-                Guid.Parse("d44c6578-1f2e-4edd-8897-77aaf8bd524a"),
+                new("d44c6578-1f2e-4edd-8897-77aaf8bd524a"),
                 new(
                     entityPluralName: "SomeEntities",
                     selectFields: default,
-                    expandFields: new DataverseExpandedField[]
-                    {
+                    expandFields:
+                    [
                         new("Field1", new("Lookup Field"))
-                    },
+                    ],
                     filter: default)
                     {
                         MaxPageSize = -5,
@@ -114,11 +114,11 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/data/v9.2/SomeEntities?$expand=Field1($select=Lookup Field)",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         CreateCallerIdHeader("d44c6578-1f2e-4edd-8897-77aaf8bd524a"),
                         new("Prefer", "odata.maxpagesize=-5,odata.include-annotations=*")
-                    },
+                    ],
                     content: default)
             },
             {
@@ -131,10 +131,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "http://garage.ru/api/someLink",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.maxpagesize=15,odata.include-annotations=*")
-                    },
+                    ],
                     content: default)
             },
             {
@@ -146,10 +146,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "https://garage.ru/api/someLink",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.maxpagesize=7")
-                    },
+                    ],
                     content: default)
             },
             {
@@ -161,22 +161,22 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "/api/someLink",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("Prefer", "odata.include-annotations=*")
-                    },
+                    ],
                     content: default)
             },
             {
-                Guid.Parse("be070c0c-3cf5-44a4-8eb2-b9b4a686024b"),
+                new("be070c0c-3cf5-44a4-8eb2-b9b4a686024b"),
                 new("http://garage.ru/api/someLink"),
                 new(
                     verb: DataverseHttpVerb.Get,
                     url: "http://garage.ru/api/someLink",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         CreateCallerIdHeader("be070c0c-3cf5-44a4-8eb2-b9b4a686024b")
-                    },
+                    ],
                     content: default)
             }
         };

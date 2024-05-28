@@ -20,7 +20,7 @@ partial class ApiClientTestDataSource
             for (int i = 0; i < 20; i++)
             {
                 var emailMessage = fixture.Create<MailMessage>();
-                var emails = fixture.CreateMany<MailAddress>(3).Select(m => m.Address).ToArray();
+                var emails = fixture.CreateMany<MailAddress>(3).Select(static m => m.Address).ToArray();
                 var memberIds = fixture.CreateMany<Guid>(3).ToArray();
 
                 data.Add(
@@ -28,12 +28,14 @@ partial class ApiClientTestDataSource
                         subject: emailMessage.Subject,
                         body: emailMessage.Body,
                         sender: new(emails[0]),
-                        recipients: new(
+                        recipients:
+                        [
                             new(emails[1], DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[0], DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[1], DataverseEmailMemberType.Contact), DataverseEmailRecipientType.CcRecipient),
                             new(emailMember: new(memberIds[2], DataverseEmailMemberType.SystemUser), DataverseEmailRecipientType.BccRecipient),
-                            new(emails[2], DataverseEmailRecipientType.ToRecipient)),
+                            new(emails[2], DataverseEmailRecipientType.ToRecipient)
+                        ],
                         extensionData: default),
                     new(
                         verb: DataverseHttpVerb.Post,
@@ -43,7 +45,8 @@ partial class ApiClientTestDataSource
                         {
                             Description = emailMessage.Body,
                             Subject = emailMessage.Subject,
-                            ActivityParties = new FlatArray<DataverseEmailActivityPartyJson>(
+                            ActivityParties =
+                            [
                                 new()
                                 {
                                     ParticipationTypeMask = 1,
@@ -73,7 +76,8 @@ partial class ApiClientTestDataSource
                                 {
                                     ParticipationTypeMask = 2,
                                     AddressUsed = emails[2]
-                                }),
+                                }
+                            ],
                             ExtensionData = []
                         }.InnerToJsonContentIn()));
             }
@@ -96,6 +100,7 @@ partial class ApiClientTestDataSource
                         ParticipationTypeMask = 1
                     }
                 };
+
                 activityParties.AddRange(recipientEmails.Select(static e => new DataverseEmailActivityPartyJson()
                 {
                     AddressUsed = e,
@@ -157,11 +162,11 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: new(string.Empty),
-                recipients: new DataverseEmailRecipient[]
-                {
+                recipients:
+                [
                     new(fixture.Create<MailAddress>().Address, DataverseEmailRecipientType.ToRecipient),
                     new(emailMember: new(new Fixture().Create<Guid>(), DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient)
-                },
+                ],
                 extensionData: default);
 
             var invalidSenderFailure = Failure.Create(DataverseFailureCode.Unknown, "Input sender is invalid");
@@ -181,10 +186,10 @@ partial class ApiClientTestDataSource
                 subject: fixture.Create<MailMessage>().Subject,
                 body: fixture.Create<MailMessage>().Body,
                 sender: new(fixture.Create<MailAddress>().Address),
-                recipients: new DataverseEmailRecipient[]
-                {
+                recipients:
+                [
                     new(string.Empty, DataverseEmailRecipientType.ToRecipient)
-                },
+                ],
                 extensionData: default);
 
             var invalidRecipientFailure = Failure.Create(DataverseFailureCode.Unknown, "Input recipients are invalid");

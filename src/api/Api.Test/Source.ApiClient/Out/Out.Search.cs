@@ -16,8 +16,8 @@ partial class ApiClientTestDataSource
                 new()
                 {
                     TotalRecordCount = 11,
-                    Value = new DataverseSearchJsonItem[]
-                    {
+                    Value =
+                    [
                         new()
                         {
                             SearchScore = 151.91,
@@ -29,12 +29,12 @@ partial class ApiClientTestDataSource
                         {
                             ObjectId = new("38927590-1799-4ded-b922-a2cf38033c38")
                         }
-                    }
+                    ]
                 },
                 new(
                     totalRecordCount: 11,
-                    value: new DataverseSearchItem[]
-                    {
+                    value:
+                    [
                         new(
                             searchScore: 151.91,
                             objectId: new("870c75fa-fbaa-4678-875f-062050f3812c"),
@@ -45,7 +45,7 @@ partial class ApiClientTestDataSource
                             objectId: new("38927590-1799-4ded-b922-a2cf38033c38"),
                             entityName: string.Empty,
                             extensionData: default)
-                    })
+                    ])
             }
         };
 }

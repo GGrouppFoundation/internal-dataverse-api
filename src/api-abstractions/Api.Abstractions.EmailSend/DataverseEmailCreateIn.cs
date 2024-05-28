@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-#if NET7_0_OR_GREATER
 using System.Diagnostics.CodeAnalysis;
-#endif
 
 namespace GarageGroup.Infra;
 
 public sealed record class DataverseEmailCreateIn
 {
-#if NET7_0_OR_GREATER
     [SetsRequiredMembers]
-#endif
     public DataverseEmailCreateIn(
         string subject,
         string body,
@@ -26,9 +22,7 @@ public sealed record class DataverseEmailCreateIn
         ExtensionData = extensionData;
     }
 
-#if NET7_0_OR_GREATER
     [SetsRequiredMembers]
-#endif
     public DataverseEmailCreateIn(
         string subject,
         string body,
@@ -41,7 +35,6 @@ public sealed record class DataverseEmailCreateIn
         Recipients = recipients;
     }
 
-#if NET7_0_OR_GREATER
     public DataverseEmailCreateIn(
         string subject,
         string body,
@@ -51,7 +44,6 @@ public sealed record class DataverseEmailCreateIn
         Body = body ?? string.Empty;
         Sender = sender;
     }
-#endif
 
     public string Subject { get; }
 
@@ -59,11 +51,7 @@ public sealed record class DataverseEmailCreateIn
 
     public DataverseEmailSender Sender { get; }
 
-#if NET7_0_OR_GREATER
     public required FlatArray<DataverseEmailRecipient> Recipients { get; init; }
-#else
-    public FlatArray<DataverseEmailRecipient> Recipients { get; }
-#endif
 
     public FlatArray<KeyValuePair<string, JsonElement>> ExtensionData { get; init; }
 }
