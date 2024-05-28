@@ -15,8 +15,8 @@ partial class ApiClientTestDataSource
             {
                 new()
                 {
-                    Value = new StubResponseJson[]
-                    {
+                    Value =
+                    [
                         new()
                         {
                             Id = 15,
@@ -27,11 +27,11 @@ partial class ApiClientTestDataSource
                             Id = 101,
                             Name = "Some second"
                         }
-                    }
+                    ]
                 },
                 new(
-                    value: new StubResponseJson[]
-                    {
+                    value:
+                    [
                         new()
                         {
                             Id = 15,
@@ -42,7 +42,7 @@ partial class ApiClientTestDataSource
                             Id = 101,
                             Name = "Some second"
                         }
-                    })
+                    ])
             },
             {
                 new()
@@ -56,8 +56,8 @@ partial class ApiClientTestDataSource
             {
                 new()
                 {
-                    Value = new StubResponseJson[]
-                    {
+                    Value =
+                    [
                         new()
                         {
                             Id = 171,
@@ -73,12 +73,12 @@ partial class ApiClientTestDataSource
                             Id = -105,
                             Name = "Third"
                         }
-                    },
+                    ],
                     NextLink = "Some Link"
                 },
                 new(
-                    value: new StubResponseJson[]
-                    {
+                    value:
+                    [
                         new()
                         {
                             Id = 171,
@@ -94,7 +94,7 @@ partial class ApiClientTestDataSource
                             Id = -105,
                             Name = "Third"
                         }
-                    },
+                    ],
                     nextLink: "Some Link")
             }
         };

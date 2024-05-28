@@ -38,7 +38,7 @@ partial class ApiClientTestDataSource
             for (int i = 0; i < 20; i++)
             {
                 var emailMessage = fixture.Create<MailMessage>();
-                var emails = fixture.CreateMany<MailAddress>(3).Select(m => m.Address).ToArray();
+                var emails = fixture.CreateMany<MailAddress>(3).Select(static m => m.Address).ToArray();
                 var memberIds = fixture.CreateMany<Guid>(3).ToArray();
                 var emailGuid = fixture.Create<Guid>();
 
@@ -47,14 +47,14 @@ partial class ApiClientTestDataSource
                         subject: emailMessage.Subject,
                         body: emailMessage.Body,
                         sender: new(emails[0]),
-                        recipients: new DataverseEmailRecipient[]
-                        {
+                        recipients:
+                        [
                             new(emails[1], DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[0], DataverseEmailMemberType.Account), DataverseEmailRecipientType.ToRecipient),
                             new(emailMember: new(memberIds[1], DataverseEmailMemberType.Contact), DataverseEmailRecipientType.CcRecipient),
                             new(emailMember: new(memberIds[2], DataverseEmailMemberType.SystemUser), DataverseEmailRecipientType.BccRecipient),
                             new(emails[2], DataverseEmailRecipientType.ToRecipient)
-                        }),
+                        ]),
                     new(
                         verb: DataverseHttpVerb.Post,
                         url: "/api/data/v9.2/emails?$select=activityid",
@@ -63,8 +63,8 @@ partial class ApiClientTestDataSource
                         {
                             Description = emailMessage.Body,
                             Subject = emailMessage.Subject,
-                            ActivityParties = new DataverseEmailActivityPartyJson[]
-                            {
+                            ActivityParties =
+                            [
                                 new()
                                 {
                                     ParticipationTypeMask = 1,
@@ -95,8 +95,8 @@ partial class ApiClientTestDataSource
                                     ParticipationTypeMask = 2,
                                     AddressUsed = emails[2]
                                 }
-                            },
-                            ExtensionData = new()
+                            ],
+                            ExtensionData = []
                         }.InnerToJsonContentIn()),
                     new(
                         verb: DataverseHttpVerb.Post,
@@ -119,7 +119,7 @@ partial class ApiClientTestDataSource
                 var senderEmail = fixture.Create<MailAddress>().Address;
                 var recipientEmails = fixture.CreateMany<MailAddress>(i + 1).Select(ma => ma.Address).ToArray();
                 var recipients = recipientEmails
-                    .Select(email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
+                    .Select(static email => new DataverseEmailRecipient(email, DataverseEmailRecipientType.ToRecipient))
                     .ToFlatArray();
 
                 List<DataverseEmailActivityPartyJson> activityParties =
@@ -166,7 +166,7 @@ partial class ApiClientTestDataSource
                     new(
                         verb: DataverseHttpVerb.Post,
                         url: $"/api/data/v9.2/emails({createdEmailId:D})/Microsoft.Dynamics.CRM.SendEmail",
-                        headers: FlatArray<DataverseHttpHeader>.Empty,
+                        headers: default,
                         content: new DataverseEmailSendJsonIn
                         {
                             IssueSend = true

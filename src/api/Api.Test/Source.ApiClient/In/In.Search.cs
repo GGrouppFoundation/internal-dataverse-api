@@ -42,7 +42,7 @@ partial class ApiClientTestDataSource
                     }.InnerToJsonContentIn())
             },
             {
-                Guid.Parse("aa087335-0897-4d6e-82cb-0f07cb6fc2f4"),
+                new("aa087335-0897-4d6e-82cb-0f07cb6fc2f4"),
                 new("Some second text")
                 {
                     OrderBy = new("field 1", string.Empty),
@@ -52,10 +52,10 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/search/v1.0/query",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         CreateCallerIdHeader("aa087335-0897-4d6e-82cb-0f07cb6fc2f4")
-                    },
+                    ],
                     content: new DataverseSearchJsonIn
                     {
                         Search = "Some second text",

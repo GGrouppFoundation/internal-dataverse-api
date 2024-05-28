@@ -11,11 +11,10 @@ internal static partial class ApiClientTestDataSource
 
     private static readonly FlatArray<DataverseHttpHeader> DefaultSendEmailHeaders
         =
-        new DataverseHttpHeader[]
-        {
+        [
             new("Accept", "application/json"),
             new("Prefer", "return=representation")
-        };
+        ];
 
     private static readonly DataverseHttpHeader PreferRepresentationHeader
         =

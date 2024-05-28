@@ -10,7 +10,7 @@ partial class ApiClientTestDataSource
         new()
         {
             {
-                Guid.Parse("9fdea890-f164-47c1-bb51-d3865229fa9b"),
+                new("9fdea890-f164-47c1-bb51-d3865229fa9b"),
                 new(
                     entityPluralName: "SomeEntities",
                     entityKey: new StubEntityKey("SomeKey"),
@@ -27,12 +27,12 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field1,field2",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         CreateCallerIdHeader("9fdea890-f164-47c1-bb51-d3865229fa9b"),
                         PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("true")
-                    },
+                    ],
                     content: new StubRequestJson
                     {
                         Id = 101,
@@ -53,12 +53,12 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/SomeEntities(SomeKey)?$select=field 1",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         PreferRepresentationHeader,
                         CreateSuppressDuplicateDetectionHeader("false"),
                         new("If-Match", "*")
-                    },
+                    ],
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
             {
@@ -69,20 +69,20 @@ partial class ApiClientTestDataSource
                     selectFields: default,
                     entityData: new StubRequestJson())
                 {
-                    ExpandFields = new DataverseExpandedField[]
-                    {
+                    ExpandFields =
+                    [
                         new("Field1", new("Lookup Field"))
-                    },
+                    ],
                     OperationType = DataverseUpdateOperationType.Update
                 },
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "/api/data/v9.2/Some%2fEntities(Some Key)?$expand=Field1($select=Lookup Field)",
-                    headers: new[]
-                    {
+                    headers:
+                    [
                         PreferRepresentationHeader,
                         new("If-Match", "*")
-                    },
+                    ],
                     content: new StubRequestJson().InnerToJsonContentIn())
             }
         };

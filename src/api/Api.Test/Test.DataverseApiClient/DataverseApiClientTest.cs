@@ -25,10 +25,10 @@ public static partial class DataverseApiClientTest
             entityPluralName: "SomeEntities",
             selectFields: new("Some field name"),
             filter: "Some filter",
-            orderBy: new DataverseOrderParameter[]
-            {
+            orderBy:
+            [
                 new("one", DataverseOrderDirection.Default)
-            },
+            ],
             top: 5);
 
     private static readonly DataverseEntityUpdateIn<StubRequestJson> SomeDataverseEntityUpdateInput
@@ -85,8 +85,8 @@ public static partial class DataverseApiClientTest
         =
         new()
         {
-            Value = new StubResponseJson[]
-            {
+            Value =
+            [
                 new()
                 {
                     Id = 1,
@@ -97,7 +97,7 @@ public static partial class DataverseApiClientTest
                 {
                     Id = 5
                 }
-            }
+            ]
         };
 
     private static readonly DataverseSearchJsonOut SomeSearchJsonOut
@@ -105,8 +105,8 @@ public static partial class DataverseApiClientTest
         new()
         {
             TotalRecordCount = 100,
-            Value = new DataverseSearchJsonItem[]
-            {
+            Value =
+            [
                 new()
                 {
                     SearchScore = 100.71,
@@ -119,7 +119,7 @@ public static partial class DataverseApiClientTest
                     EntityName = "Second",
                     ObjectId = new("d922c096-7ec7-4d0a-a4a4-28b0ced5640e")
                 }
-            }
+            ]
         };
 
     private static readonly DataverseWhoAmIOutJson SomeWhoAmIOutJson
@@ -144,15 +144,15 @@ public static partial class DataverseApiClientTest
             subject: "subject",
             body: "body",
             sender: new("email@email.com"),
-            recipients: new DataverseEmailRecipient[]
-            {
+            recipients:
+            [
                 new("email2@email.com", DataverseEmailRecipientType.ToRecipient),
                 new(
                     emailMember: new(
                         memberId: new("b93c4b03-6067-401d-9a01-b033827d32e9"),
                         memberType: DataverseEmailMemberType.Account),
                     emailRecipientType: DataverseEmailRecipientType.ToRecipient)
-            },
+            ],
             extensionData: default);
 
     private static readonly DataverseEmailSendIn SomeEmailSendInWithEmailId
@@ -166,8 +166,8 @@ public static partial class DataverseApiClientTest
             subject: "subject",
             body: "body",
             sender: new("email@email.com"),
-            recipients: new DataverseEmailRecipient[]
-            {
+            recipients:
+            [
                 new(
                     email: "email2@email.com",
                     emailRecipientType: DataverseEmailRecipientType.ToRecipient),
@@ -176,26 +176,26 @@ public static partial class DataverseApiClientTest
                         memberId: new("00d23c27-b73f-402d-9d0b-b590a513d2aa"),
                         memberType: DataverseEmailMemberType.Account),
                     emailRecipientType: DataverseEmailRecipientType.ToRecipient)
-            });
+            ]);
 
     private static readonly DataverseChangeSetExecuteIn<object> SomeChangeSetInput
         =
         new(
-            requests: new IDataverseTransactableIn<object>[]
-            {
+            requests:
+            [
                 SomeDataverseEntityCreateInput,
                 SomeDataverseEntityUpdateInput,
                 SomeDataverseEntityDeleteInput
-            });
+            ]);
 
     private static readonly DataverseChangeSetResponse SomeChangeSetResponse
         =
         new(
-            responses: new[]
-            {
+            responses:
+            [
                 SomeResponseJson.InnerToJsonResponse(),
                 default
-            });
+            ]);
 
     private static readonly DataverseEmailCreateJsonOut SomeEmailCreateJson
         =
@@ -232,7 +232,7 @@ public static partial class DataverseApiClientTest
     }
 
     private static Mock<IDataverseHttpApi> CreateMockJsonHttpApi(
-        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> result,
+        in Result<DataverseJsonResponse, Failure<DataverseFailureCode>> result,
         Action<DataverseJsonRequest>? callback = null)
     {
         var mock = new Mock<IDataverseHttpApi>();
@@ -251,8 +251,8 @@ public static partial class DataverseApiClientTest
     }
 
     private static Mock<IDataverseHttpApi> CreateMockEmailHttpApi(
-        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> creationResult,
-        Result<DataverseJsonResponse, Failure<DataverseFailureCode>> sendingResult,
+        in Result<DataverseJsonResponse, Failure<DataverseFailureCode>> creationResult,
+        in Result<DataverseJsonResponse, Failure<DataverseFailureCode>> sendingResult,
         Action<DataverseJsonRequest>? creationCallback = null)
     {
         var mock = new Mock<IDataverseHttpApi>();
@@ -279,7 +279,7 @@ public static partial class DataverseApiClientTest
     }
 
     private static Mock<IDataverseHttpApi> CreateMockChangeSetHttpApi(
-        Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>> result)
+        in Result<DataverseChangeSetResponse, Failure<DataverseFailureCode>> result)
     {
         var mock = new Mock<IDataverseHttpApi>();
 

@@ -10,12 +10,12 @@ partial class ApiClientTestDataSource
         new()
         {
             {
-                Guid.Parse("947700e6-39fd-411a-a6f8-a39300416985"),
-                Guid.Parse("894354d2-9669-4b19-9998-ae704c68f2b9"),
-                Guid.Parse("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
+                new("947700e6-39fd-411a-a6f8-a39300416985"),
+                new("894354d2-9669-4b19-9998-ae704c68f2b9"),
+                new("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
                 new(
-                    requests: new IDataverseTransactableIn<object>[]
-                    {
+                    requests:
+                    [
                         new DataverseEntityUpdateIn<StubRequestJson>(
                             entityPluralName: "SomeEntities",
                             entityKey: new StubEntityKey("SomeKey"),
@@ -27,14 +27,14 @@ partial class ApiClientTestDataSource
                         {
                             SuppressDuplicateDetection = true
                         }
-                    }),
+                    ]),
                 new(
                     url: "/api/data/v9.2/$batch",
-                    batchId: Guid.Parse("894354d2-9669-4b19-9998-ae704c68f2b9"),
-                    changeSetId: Guid.Parse("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
+                    batchId: new("894354d2-9669-4b19-9998-ae704c68f2b9"),
+                    changeSetId: new("08ad1bcd-50c1-4fb7-bbe9-ff315a5fcf8f"),
                     headers: CreateCallerIdHeader("947700e6-39fd-411a-a6f8-a39300416985").AsFlatArray(),
-                    requests: new DataverseJsonRequest[]
-                    {
+                    requests:
+                    [
                         new(
                             verb: DataverseHttpVerb.Patch,
                             url: "/api/data/v9.2/SomeEntities(SomeKey)",
@@ -47,15 +47,15 @@ partial class ApiClientTestDataSource
                                 Id = 101,
                                 Name = "First request name"
                             }.InnerToJsonContentIn())
-                    })
+                    ])
             },
             {
                 null,
-                Guid.Parse("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
-                Guid.Parse("97a5109b-347b-4ea7-bd3a-790cfed94268"),
+                new("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
+                new("97a5109b-347b-4ea7-bd3a-790cfed94268"),
                 new(
-                    requests: new IDataverseTransactableIn<object>[]
-                    {
+                    requests:
+                    [
                         new DataverseEntityDeleteIn(
                             entityPluralName: "Some/Entities",
                             entityKey: new StubEntityKey("Some=Key")),
@@ -66,14 +66,14 @@ partial class ApiClientTestDataSource
                                 Id = 17,
                                 Name = "First request name"
                             })
-                    }),
+                    ]),
                 new(
                     url: "/api/data/v9.2/$batch",
-                    batchId: Guid.Parse("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
-                    changeSetId: Guid.Parse("97a5109b-347b-4ea7-bd3a-790cfed94268"),
+                    batchId: new("90ca0c0f-caf8-44b5-aa01-034da39d0953"),
+                    changeSetId: new("97a5109b-347b-4ea7-bd3a-790cfed94268"),
                     headers: default,
-                    requests: new DataverseJsonRequest[]
-                    {
+                    requests:
+                    [
                         new(
                             verb: DataverseHttpVerb.Delete,
                             url: "/api/data/v9.2/Some%2fEntities(Some=Key)",
@@ -88,7 +88,7 @@ partial class ApiClientTestDataSource
                                 Id = 17,
                                 Name = "First request name"
                             }.InnerToJsonContentIn())
-                    })
+                    ])
             }
         };
 }

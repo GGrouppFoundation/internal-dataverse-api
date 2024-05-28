@@ -13,7 +13,7 @@ partial class ApiClientTestDataSource
                 null,
                 new(
                     entityPluralName: "SomeEntities",
-                    selectFields: new[] { "field1", "field2" },
+                    selectFields: [ "field1", "field2" ],
                     entityData:  new()
                     {
                         Id = 17,
@@ -33,30 +33,32 @@ partial class ApiClientTestDataSource
                 Guid.Parse("cf6678d2-2963-4f14-8dff-21c956ae9695"),
                 new(
                     entityPluralName: "SomeEntities",
-                    selectFields: new[] { string.Empty, "field 1" },
+                    selectFields: [ string.Empty, "field 1" ],
                     entityData: new())
                 {
-                    ExpandFields = new DataverseExpandedField[]
-                    {
+                    ExpandFields =
+                    [
                         new("LookupOne", new("field1.1", "field1.2")),
                         new(
                             fieldName: "LookupTwo",
                             selectFields: default,
-                            expandFields: new DataverseExpandedField[]
-                            {
+                            expandFields:
+                            [
                                 new("field2.1", default)
-                            })
-                    },
+                            ])
+                    ],
                     SuppressDuplicateDetection = false
                 },
                 new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/SomeEntities?$select=field 1" +
                         "&$expand=LookupOne($select=field1.1,field1.2),LookupTwo($expand=field2.1)",
-                    headers: new(
+                    headers:
+                    [
                         CreateCallerIdHeader("cf6678d2-2963-4f14-8dff-21c956ae9695"),
                         PreferRepresentationHeader,
-                        CreateSuppressDuplicateDetectionHeader("false")),
+                        CreateSuppressDuplicateDetectionHeader("false")
+                    ],
                     content: new StubRequestJson().InnerToJsonContentIn())
             },
             {
@@ -71,9 +73,11 @@ partial class ApiClientTestDataSource
                 new(
                     verb: DataverseHttpVerb.Post,
                     url: "/api/data/v9.2/Some%2fEntities",
-                    headers: new(
+                    headers:
+                    [
                         PreferRepresentationHeader,
-                        CreateSuppressDuplicateDetectionHeader("true")),
+                        CreateSuppressDuplicateDetectionHeader("true")
+                    ],
                     content: new StubRequestJson().InnerToJsonContentIn())
             }
         };

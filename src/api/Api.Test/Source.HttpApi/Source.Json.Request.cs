@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using Xunit;
 
@@ -45,11 +44,11 @@ partial class HttpApiTestDataSource
                     content: new(secondContentJson)),
                 new(HttpMethod.Post, "http://site.com/some/data?$select=field1,field2&$filter=a eq 1")
                 {
-                    Headers = new KeyValuePair<string, string>[]
-                    {
+                    Headers =
+                    [
                         new("Content-Type", "application/json; charset=utf-8"),
                         new("Content-Length", secondContentJson.Length.ToString())
-                    },
+                    ],
                     Content = secondContentJson
                 });
 
@@ -58,20 +57,20 @@ partial class HttpApiTestDataSource
                 new(
                     verb: DataverseHttpVerb.Patch,
                     url: "some/data",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new("first", "one "),
                         new("second", "two"),
                         new("first", "three,fourth")
-                    },
+                    ],
                     content: new(string.Empty)),
                 new(HttpMethod.Patch, "https://some.crm4.dynamics.com/some/data")
                 {
-                    Headers = new KeyValuePair<string, string>[]
-                    {
+                    Headers =
+                    [
                         new("first", "one ,three,fourth"),
                         new("second", "two")
-                    },
+                    ],
                     Content = default
                 });
 
@@ -80,21 +79,21 @@ partial class HttpApiTestDataSource
                 new(
                     verb: DataverseHttpVerb.Delete,
                     url: "/some/data?$select=field 1,field 2#1",
-                    headers: new DataverseHttpHeader[]
-                    {
+                    headers:
+                    [
                         new(" first ", "one"),
                         new("second", string.Empty),
                         new("third", " three ")
-                    },
+                    ],
                     content: default),
                 new(HttpMethod.Delete, "http://some.crm4.dynamics.com/some/data?$select=field 1,field 2#1")
                 {
-                    Headers = new KeyValuePair<string, string>[]
-                    {
+                    Headers =
+                    [
                         new("first", "one"),
                         new("second", string.Empty),
                         new("third", " three ")
-                    },
+                    ],
                     Content = default
                 });
 

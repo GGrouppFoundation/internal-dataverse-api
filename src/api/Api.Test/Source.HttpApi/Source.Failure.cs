@@ -286,6 +286,20 @@ partial class HttpApiTestDataSource
                 recipientEmailNotFoundFailure.ToJsonContent(),
                 new(DataverseFailureCode.RecipientEmailNotFound, recipientEmailNotFoundFailure.Failure.Message));
 
+            var invalidFileSizeFailure = new StubFailureJson
+            {
+                Failure = new()
+                {
+                    Code = "0x80044a02",
+                    Message = "Attachment file size is too big."
+                }
+            };
+
+            data.Add(
+                HttpStatusCode.BadRequest,
+                invalidFileSizeFailure.ToJsonContent(),
+                new(DataverseFailureCode.InvalidFileSize, "Attachment file size is too big."));
+
             var unknownFailure = new StubFailureJson
             {
                 Failure = new()

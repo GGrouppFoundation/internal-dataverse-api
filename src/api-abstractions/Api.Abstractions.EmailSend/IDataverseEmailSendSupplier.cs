@@ -8,7 +8,7 @@ public interface IDataverseEmailSendSupplier
 {
     ValueTask<Result<DataverseEmailCreateOut, Failure<DataverseFailureCode>>> CreateEmailAsync(
        DataverseEmailCreateIn input, CancellationToken cancellationToken = default);
-    
+
     ValueTask<Result<DataverseEmailSendOut, Failure<DataverseFailureCode>>> SendEmailAsync(
         DataverseEmailSendIn input, CancellationToken cancellationToken = default);
 }

@@ -38,6 +38,12 @@ partial class ApiClientTestDataSource
             },
             {
                 new(DataverseFailureCode.InvalidPayload, "Some invalid data")
+            },
+            {
+                new(DataverseFailureCode.RecipientEmailNotFound, "Email was not found")
+            },
+            {
+                new(DataverseFailureCode.InvalidFileSize, "Some invalid file size message")
             }
         };
 }

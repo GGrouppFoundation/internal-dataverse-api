@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 namespace GarageGroup.Infra;
@@ -15,7 +16,7 @@ public sealed record class DataverseAlternateKey : IDataverseEntityKey
 
     public string Value { get; }
 
-    private static string BuildValue(IReadOnlyCollection<KeyValuePair<string, string>>? idArguments)
+    private static string BuildValue([AllowNull] IReadOnlyCollection<KeyValuePair<string, string>> idArguments)
     {
         if (idArguments?.Count is not > 0)
         {

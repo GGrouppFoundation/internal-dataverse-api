@@ -118,6 +118,7 @@ internal sealed partial class DataverseHttpApi : IDataverseHttpApi
             "0x80040333" or "0x80060892" => DataverseFailureCode.DuplicateRecord,
             "0x80040203" or "0x80048d19" => DataverseFailureCode.InvalidPayload,
             "0x80040b0a" => DataverseFailureCode.RecipientEmailNotFound,
+            "0x80044a02" => DataverseFailureCode.InvalidFileSize,
             _ => DataverseFailureCode.Unknown
         };
     }
