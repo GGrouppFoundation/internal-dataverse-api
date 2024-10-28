@@ -1,7 +1,7 @@
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Azure.Core;
 
 namespace GarageGroup.Infra;
 
@@ -9,10 +9,10 @@ partial class AuthenticationHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        string[] scopes = [option.ServiceUrl + "/.default"];
-        var token = await GetClientApplication(option).AcquireTokenForClient(scopes).ExecuteAsync(cancellationToken).ConfigureAwait(false);
+        var context = new TokenRequestContext(scopes: [option.ServiceUrl + "/.default"]);
+        var token = await GetClientCredential(option).GetTokenAsync(context, cancellationToken).ConfigureAwait(false);
 
-        request.Headers.Authorization = AuthenticationHeaderValue.Parse(token.CreateAuthorizationHeader());
+        request.Headers.Authorization = new(token.TokenType, token.Token);
         return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
     }
 }

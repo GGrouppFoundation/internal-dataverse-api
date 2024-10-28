@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 using System.Net.Http;
-using Microsoft.Identity.Client;
+using Azure.Identity;
 
 namespace GarageGroup.Infra;
 
@@ -8,11 +8,9 @@ internal sealed partial class AuthenticationHandler : DelegatingHandler
 {
     static AuthenticationHandler()
         =>
-        ClientApplications = new();
+        ClientCredentials = new();
 
-    private static readonly ConcurrentDictionary<DataverseApiClientAuthOption, IConfidentialClientApplication> ClientApplications;
-
-    private const string LoginMsOnlineServiceBaseUrl = "https://login.microsoftonline.com/";
+    private static readonly ConcurrentDictionary<DataverseApiClientAuthOption, ClientSecretCredential> ClientCredentials;
 
     private readonly DataverseApiClientAuthOption option;
 
@@ -21,15 +19,15 @@ internal sealed partial class AuthenticationHandler : DelegatingHandler
         =>
         this.option = option;
 
-    private static IConfidentialClientApplication GetClientApplication(DataverseApiClientAuthOption option)
+    private static ClientSecretCredential GetClientCredential(DataverseApiClientAuthOption option)
     {
-        return ClientApplications.GetOrAdd(option, CreateClientApplication);
+        return ClientCredentials.GetOrAdd(option, CreateClientCredential);
 
-        static IConfidentialClientApplication CreateClientApplication(DataverseApiClientAuthOption option)
+        static ClientSecretCredential CreateClientCredential(DataverseApiClientAuthOption option)
             =>
-            ConfidentialClientApplicationBuilder.Create(option.AuthClientId)
-            .WithClientSecret(option.AuthClientSecret)
-            .WithAuthority(LoginMsOnlineServiceBaseUrl + option.AuthTenantId)
-            .Build();
+            new(
+                tenantId: option.AuthTenantId.ToString(),
+                clientId: option.AuthClientId,
+                clientSecret: option.AuthClientSecret);
     }
 }

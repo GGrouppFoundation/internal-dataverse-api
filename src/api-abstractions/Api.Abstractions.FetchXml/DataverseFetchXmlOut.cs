@@ -6,7 +6,7 @@ namespace GarageGroup.Infra;
 public sealed record class DataverseFetchXmlOut<TEntityJson>
 {
     public DataverseFetchXmlOut(
-        FlatArray<TEntityJson> value, 
+        FlatArray<TEntityJson> value,
         [AllowNull] string pagingCookie = null)
     {
         Value = value;
@@ -15,7 +15,7 @@ public sealed record class DataverseFetchXmlOut<TEntityJson>
 
     public FlatArray<TEntityJson> Value { get; }
 
-    public string? PagingCookie { get; init; }
+    public string? PagingCookie { get; }
 
     public bool MoreRecords { get; init; }
 }
