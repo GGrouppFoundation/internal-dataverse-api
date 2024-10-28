@@ -9,8 +9,8 @@ public sealed record class DataverseFetchXmlIn
     }
 
     public string FetchXmlQueryString { get; }
-    
+
     public string EntityPluralName { get; }
-    
+
     public string? IncludeAnnotations { get; init; }
 }

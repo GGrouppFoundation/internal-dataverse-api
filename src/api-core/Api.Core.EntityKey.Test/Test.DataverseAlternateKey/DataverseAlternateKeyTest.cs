@@ -1,5 +1,3 @@
 ﻿namespace GarageGroup.Infra.Dataverse.Api.Core.EntityKey.Test;
 
-public sealed partial class DataverseAlternateKeyTest
-{
-}
+public sealed partial class DataverseAlternateKeyTest;

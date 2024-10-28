@@ -6,7 +6,7 @@ namespace GarageGroup.Infra;
 
 public sealed record class DataverseAlternateKey : IDataverseEntityKey
 {
-    public DataverseAlternateKey(IReadOnlyCollection<KeyValuePair<string, string>> idArguments)
+    public DataverseAlternateKey(params IReadOnlyCollection<KeyValuePair<string, string>> idArguments)
         =>
         Value = BuildValue(idArguments);
 
